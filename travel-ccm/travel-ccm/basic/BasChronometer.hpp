@@ -1,13 +1,14 @@
-#ifndef __RMOL_COM_BAS_BASCHRONOMETER_HPP
-#define __RMOL_COM_BAS_BASCHRONOMETER_HPP
+#ifndef __TRAVEL_CCM_COM_BAS_BASCHRONOMETER_HPP
+#define __TRAVEL_CCM_COM_BAS_BASCHRONOMETER_HPP
 
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
+// Boost (STL Extension)
 // Boost Date-Time (http://boost.org/doc/html/date_time/posix_time.html)
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-namespace RMOL {
+namespace TRAVEL_CCM {
 
   /** Structure allowing measuring the time elapsed between two events. */
   struct BasChronometer {
@@ -37,4 +38,4 @@ namespace RMOL {
   };
 
 }
-#endif // __RMOL_COM_BAS_BASCHRONOMETER_HPP
+#endif // __TRAVEL_CCM_COM_BAS_BASCHRONOMETER_HPP

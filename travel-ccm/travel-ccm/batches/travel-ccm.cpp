@@ -10,22 +10,22 @@
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/program_options.hpp>
 // TRAVEL-CCM
-#include <travel-ccm/TRAVEL-CCM_Service.hpp>
+#include <travel-ccm/TRAVEL_CCM_Service.hpp>
 #include <travel-ccm/config/travel-ccm-paths.hpp>
 
 
 // //////// Constants //////
 /** Default name and location for the log file. */
-const std::string K_TRAVEL-CCM_DEFAULT_LOG_FILENAME ("travel-ccm.log");
+const std::string K_TRAVEL_CCM_DEFAULT_LOG_FILENAME ("travel-ccm.log");
 
 /** Default name and location for the (CSV) input file. */
-const std::string K_TRAVEL-CCM_DEFAULT_INPUT_FILENAME ("class.csv");
+const std::string K_TRAVEL_CCM_DEFAULT_INPUT_FILENAME ("class.csv");
 
 /** Default number of random draws to be generated (best if over 100). */
-const int K_TRAVEL-CCM_DEFAULT_RANDOM_DRAWS = 100000;
+const int K_TRAVEL_CCM_DEFAULT_RANDOM_DRAWS = 100000;
 
 /** Default value for the capacity of the resource (e.g., a flight cabin). */
-const double K_TRAVEL-CCM_DEFAULT_CAPACITY = 500.0;
+const double K_TRAVEL_CCM_DEFAULT_CAPACITY = 500.0;
 
 /** Default name and location for the Revenue Management method to be used.
     <br>
@@ -36,7 +36,7 @@ const double K_TRAVEL-CCM_DEFAULT_CAPACITY = 500.0;
       <li>3 = EMSR-a</li>
       <li>4 = EMSR-b</li>
     </ul> */
-const short K_TRAVEL-CCM_DEFAULT_METHOD = 0;
+const short K_TRAVEL_CCM_DEFAULT_METHOD = 0;
 
 
 // ///////// Parsing of Options & Configuration /////////
@@ -48,7 +48,7 @@ template<class T> std::ostream& operator<< (std::ostream& os,
 }
 
 /** Early return status (so that it can be differentiated from an error). */
-const int K_TRAVEL-CCM_EARLY_RETURN_STATUS = 99;
+const int K_TRAVEL_CCM_EARLY_RETURN_STATUS = 99;
 
 /** Read and parse the command line options. */
 int readConfiguration (int argc, char* argv[], int& lRandomDraws, 
@@ -68,19 +68,19 @@ int readConfiguration (int argc, char* argv[], int& lRandomDraws,
   boost::program_options::options_description config ("Configuration");
   config.add_options()
     ("draws,d",
-     boost::program_options::value<int>(&lRandomDraws)->default_value(K_TRAVEL-CCM_DEFAULT_RANDOM_DRAWS), 
+     boost::program_options::value<int>(&lRandomDraws)->default_value(K_TRAVEL_CCM_DEFAULT_RANDOM_DRAWS), 
      "Number of to-be-generated random draws")
     ("capacity,c",
-     boost::program_options::value<double>(&lCapacity)->default_value(K_TRAVEL-CCM_DEFAULT_CAPACITY), 
+     boost::program_options::value<double>(&lCapacity)->default_value(K_TRAVEL_CCM_DEFAULT_CAPACITY), 
      "Resource capacity (e.g., for a flight leg)")
     ("method,m",
-     boost::program_options::value<short>(&lMethod)->default_value(K_TRAVEL-CCM_DEFAULT_METHOD), 
+     boost::program_options::value<short>(&lMethod)->default_value(K_TRAVEL_CCM_DEFAULT_METHOD), 
      "Revenue Management method to be used (0 = Monte-Carlo, 1 = Dynamic Programming, 2 = EMSR, 3 = EMSR-a, 4 = EMSR-b)")
     ("input,i",
-     boost::program_options::value< std::string >(&lInputFilename)->default_value(K_TRAVEL-CCM_DEFAULT_INPUT_FILENAME),
+     boost::program_options::value< std::string >(&lInputFilename)->default_value(K_TRAVEL_CCM_DEFAULT_INPUT_FILENAME),
      "(CVS) input file for the demand distributions")
     ("log,l",
-     boost::program_options::value< std::string >(&lLogFilename)->default_value(K_TRAVEL-CCM_DEFAULT_LOG_FILENAME),
+     boost::program_options::value< std::string >(&lLogFilename)->default_value(K_TRAVEL_CCM_DEFAULT_LOG_FILENAME),
      "Filename for the logs")
     ;
 
@@ -116,17 +116,17 @@ int readConfiguration (int argc, char* argv[], int& lRandomDraws,
     
   if (vm.count ("help")) {
     std::cout << visible << std::endl;
-    return K_TRAVEL-CCM_EARLY_RETURN_STATUS;
+    return K_TRAVEL_CCM_EARLY_RETURN_STATUS;
   }
 
   if (vm.count ("version")) {
     std::cout << PACKAGE_NAME << ", version " << PACKAGE_VERSION << std::endl;
-    return K_TRAVEL-CCM_EARLY_RETURN_STATUS;
+    return K_TRAVEL_CCM_EARLY_RETURN_STATUS;
   }
 
   if (vm.count ("prefix")) {
     std::cout << "Installation prefix: " << PREFIXDIR << std::endl;
-    return K_TRAVEL-CCM_EARLY_RETURN_STATUS;
+    return K_TRAVEL_CCM_EARLY_RETURN_STATUS;
   }
 
   if (vm.count ("input")) {
@@ -170,9 +170,9 @@ int main (int argc, char* argv[]) {
     // Call the command-line option parser
     const int lOptionParserStatus = 
       readConfiguration (argc, argv, lRandomDraws, lCapacity, lMethod,
-			 lInputFilename, lLogFilename);
+                         lInputFilename, lLogFilename);
 
-    if (lOptionParserStatus == K_TRAVEL-CCM_EARLY_RETURN_STATUS) {
+    if (lOptionParserStatus == K_TRAVEL_CCM_EARLY_RETURN_STATUS) {
       return 0;
     }
 
@@ -189,60 +189,7 @@ int main (int argc, char* argv[]) {
     logOutputFile.clear();
     
     // Initialise the list of classes/buckets
-    TRAVEL-CCM::TRAVEL-CCM_Service travel-ccmService (logOutputFile, lCapacity);
-    travel-ccmService.setUpStudyStatManager();
-    
-    if (hasInputFile) {
-      // Read the input file
-      travel-ccmService.readFromInputFile (lInputFilename);
-      
-    } else {
-      // No input file has been provided. So, process a sample.
-      
-      // STEP 0.
-      // List of demand distribution parameters (mean and standard deviation)
-      
-      // Class/bucket 1: N (20, 9), p1 = 100
-      travel-ccmService.addBucket (100.0, 20, 9);
-      
-      // Class/bucket 2: N (45, 12), p2 = 70
-      travel-ccmService.addBucket (70.0, 45, 12);
-      
-      // Class/bucket 3: no need to define a demand distribution, p3 = 42
-      travel-ccmService.addBucket (42.0, 0, 0);
-    }
-    
-    switch (lMethod) {
-    case 0: {
-      // Calculate the optimal protections by the Monte Carlo
-      // Integration approach
-      travel-ccmService.optimalOptimisationByMCIntegration (lRandomDraws);
-      break;
-    }
-    case 1: {
-      // Calculate the optimal protections by DP.
-      travel-ccmService.optimalOptimisationByDP ();
-      break;
-    }
-    case 2: {
-      // Calculate the Bid-Price Vector by EMSR
-      travel-ccmService.heuristicOptimisationByEmsr ();
-      break;
-    }
-    case 3: {
-      // Calculate the protections by EMSR-a
-      travel-ccmService.heuristicOptimisationByEmsrA ();
-      break;
-    }
-    case 4: {
-      // Calculate the protections by EMSR-b
-      travel-ccmService.heuristicOptimisationByEmsrB ();
-      break;
-    }
-    default: {
-      travel-ccmService.optimalOptimisationByMCIntegration (lRandomDraws);
-    }
-    }
+    // TRAVEL_CCM::TRAVEL_CCM_Service travel_ccmService (logOutputFile);
     
   } catch (const std::exception& stde) {
     std::cerr << "Standard exception: " << stde.what() << std::endl;

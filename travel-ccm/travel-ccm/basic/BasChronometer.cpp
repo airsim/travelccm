@@ -3,11 +3,11 @@
 // //////////////////////////////////////////////////////////////////////
 // C
 #include <assert.h>
-// Rmol
-#include <rmol/basic/BasChronometer.hpp>
-#include <rmol/service/Logger.hpp>
+// Travel-Ccm
+#include <travel-ccm/basic/BasChronometer.hpp>
+#include <travel-ccm/service/Logger.hpp>
 
-namespace RMOL {
+namespace TRAVEL_CCM {
 
   // //////////////////////////////////////////////////////////////////////
   BasChronometer::BasChronometer () : _startTimeLaunched (false) {
@@ -39,7 +39,7 @@ namespace RMOL {
     const double lElapsedTimeInMicroSeconds =
       static_cast<const double> (lElapsedTime.total_microseconds());
     
-    /*RMOL_LOG_DEBUG ("Elapsed: " << lElapsedTime
+    /*TRAVEL_CCM_LOG_DEBUG ("Elapsed: " << lElapsedTime
       << "; (micros): "
       << lElapsedTimeInMicroSeconds / 1e6);*/
     
