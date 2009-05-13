@@ -1,2 +1,4 @@
-cmd_h_sources = 
-cmd_cc_sources = 
+cmd_h_sources = $(top_srcdir)/travel-ccm/command/CmdAbstract.hpp \
+				$(top_srcdir)/travel-ccm/command/Simulator.hpp
+cmd_cc_sources = $(top_srcdir)/travel-ccm/command/CmdAbstract.cpp \
+				$(top_srcdir)/travel-ccm/command/Simulator.cpp

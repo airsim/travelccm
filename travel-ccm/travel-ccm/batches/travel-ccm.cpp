@@ -24,20 +24,6 @@ const std::string K_TRAVEL_CCM_DEFAULT_INPUT_FILENAME ("class.csv");
 /** Default number of random draws to be generated (best if over 100). */
 const int K_TRAVEL_CCM_DEFAULT_RANDOM_DRAWS = 100000;
 
-/** Default value for the capacity of the resource (e.g., a flight cabin). */
-const double K_TRAVEL_CCM_DEFAULT_CAPACITY = 500.0;
-
-/** Default name and location for the Revenue Management method to be used.
-    <br>
-    <ul>
-      <li>0 = Monte-Carlo</li>
-      <li>1 = Dynamic Programming</li> 
-      <li>2 = EMSR</li>
-      <li>3 = EMSR-a</li>
-      <li>4 = EMSR-b</li>
-    </ul> */
-const short K_TRAVEL_CCM_DEFAULT_METHOD = 0;
-
 
 // ///////// Parsing of Options & Configuration /////////
 // A helper function to simplify the main part.
@@ -52,8 +38,7 @@ const int K_TRAVEL_CCM_EARLY_RETURN_STATUS = 99;
 
 /** Read and parse the command line options. */
 int readConfiguration (int argc, char* argv[], int& lRandomDraws, 
-		       double& lCapacity, short& lMethod,
-		       std::string& lInputFilename, std::string& lLogFilename) {
+                       std::string& lInputFilename, std::string& lLogFilename) {
   
     
   // Declare a group of options that will be allowed only on command line
@@ -70,12 +55,6 @@ int readConfiguration (int argc, char* argv[], int& lRandomDraws,
     ("draws,d",
      boost::program_options::value<int>(&lRandomDraws)->default_value(K_TRAVEL_CCM_DEFAULT_RANDOM_DRAWS), 
      "Number of to-be-generated random draws")
-    ("capacity,c",
-     boost::program_options::value<double>(&lCapacity)->default_value(K_TRAVEL_CCM_DEFAULT_CAPACITY), 
-     "Resource capacity (e.g., for a flight leg)")
-    ("method,m",
-     boost::program_options::value<short>(&lMethod)->default_value(K_TRAVEL_CCM_DEFAULT_METHOD), 
-     "Revenue Management method to be used (0 = Monte-Carlo, 1 = Dynamic Programming, 2 = EMSR, 3 = EMSR-a, 4 = EMSR-b)")
     ("input,i",
      boost::program_options::value< std::string >(&lInputFilename)->default_value(K_TRAVEL_CCM_DEFAULT_INPUT_FILENAME),
      "(CVS) input file for the demand distributions")
@@ -107,7 +86,7 @@ int readConfiguration (int argc, char* argv[], int& lRandomDraws,
   boost::program_options::variables_map vm;
   boost::program_options::
     store (boost::program_options::command_line_parser (argc, argv).
-	   options (cmdline_options).positional(p).run(), vm);
+           options (cmdline_options).positional(p).run(), vm);
 
   std::ifstream ifs ("travel-ccm.cfg");
   boost::program_options::store (parse_config_file (ifs, config_file_options),
@@ -140,8 +119,6 @@ int readConfiguration (int argc, char* argv[], int& lRandomDraws,
   }
 
   std::cout << "The number of random draws is: " << lRandomDraws << std::endl;
-  std::cout << "The resource capacity is: " << lCapacity << std::endl;
-  std::cout << "The Revenue Management method is: " << lMethod << std::endl;
   
   return 0;
 }
@@ -154,13 +131,6 @@ int main (int argc, char* argv[]) {
     // Number of random draws to be generated (best if greater than 100)
     int lRandomDraws = 0;
     
-    // Methods of optimisation (0 = Monte-Carlo, 1 = Dynamic Programming, 
-    // 2 = EMSR, 3 = EMSR-a, 4 = EMSR-b)
-    short lMethod = 0;
-    
-    // Cabin Capacity (it must be greater then 100 here)
-    double lCapacity = 0.0;
-    
     // Input file name
     std::string lInputFilename;
 
@@ -169,8 +139,7 @@ int main (int argc, char* argv[]) {
 
     // Call the command-line option parser
     const int lOptionParserStatus = 
-      readConfiguration (argc, argv, lRandomDraws, lCapacity, lMethod,
-                         lInputFilename, lLogFilename);
+      readConfiguration (argc, argv, lRandomDraws, lInputFilename, lLogFilename);
 
     if (lOptionParserStatus == K_TRAVEL_CCM_EARLY_RETURN_STATUS) {
       return 0;
@@ -189,7 +158,10 @@ int main (int argc, char* argv[]) {
     logOutputFile.clear();
     
     // Initialise the list of classes/buckets
-    // TRAVEL_CCM::TRAVEL_CCM_Service travel_ccmService (logOutputFile);
+    TRAVEL_CCM::TRAVEL_CCM_Service travel_ccmService (logOutputFile);
+
+    // Start a mini-simulation
+    travel_ccmService.simulate();
     
   } catch (const std::exception& stde) {
     std::cerr << "Standard exception: " << stde.what() << std::endl;

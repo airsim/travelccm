@@ -10,6 +10,7 @@
 // TRAVEL-CCM
 #include <travel-ccm/basic/BasConst_TRAVEL_CCM_Service.hpp>
 #include <travel-ccm/factory/FacTRAVEL_CCMServiceContext.hpp>
+#include <travel-ccm/command/Simulator.hpp>
 #include <travel-ccm/service/TRAVEL_CCM_ServiceContext.hpp>
 #include <travel-ccm/service/Logger.hpp>
 #include <travel-ccm/TRAVEL_CCM_Service.hpp>
@@ -51,6 +52,12 @@ namespace TRAVEL_CCM {
   void TRAVEL_CCM_Service::logInit (const LOG::EN_LogLevel iLogLevel,
                                     std::ostream& ioLogOutputFile) {
     Logger::instance().setLogParameters (iLogLevel, ioLogOutputFile);
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  void TRAVEL_CCM_Service::simulate() const {
+    // Call the underlying Use Case (command)
+    Simulator::simulate();
   }
 
 }

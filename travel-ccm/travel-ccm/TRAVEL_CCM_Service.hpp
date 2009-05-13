@@ -22,6 +22,9 @@ namespace TRAVEL_CCM {
     /** Destructor. */
     ~TRAVEL_CCM_Service();
 
+    /** Perform a small simulation, which uses the Customer Choice Model.*/
+    void simulate() const;
+
   private:
     /** Default Constructors. */
     TRAVEL_CCM_Service ();
