@@ -1,23 +1,17 @@
-#ifndef __TRAVEL_CCM_BOM_TRAVELPRODUCT_HPP
-#define __TRAVEL_CCM_BOM_TRAVELPRODUCT_HPP
+#ifndef __TRAVEL_CCM_BOM_REQUEST_HPP
+#define __TRAVEL_CCM_BOM_REQUEST_HPP
 
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// STL
-#include <string>
-// TRAVEL-CCM
+// TRAVEL_CCM 
 #include <travel-ccm/bom/BomAbstract.hpp>
 
 namespace TRAVEL_CCM {
 
-  /** Class representing a travel product, i.e., a list of segment-classes.
-      <br>For instance, the travel product
-      (BA341, 20JAN2009, NCE-LHR, H class)-(BA179, 20JAN2009, LHR-JFK, K class)
-      represents a trip departing from Nice on the 20th January and arriving
-      at New York through London Heathrow, taking British Airways flights.
-  */
-  class TravelProduct : public BomAbstract {
+  /** Object description here. */
+  class Request : public BomAbstract {
+    friend class FacRequest;
   public:
 
     // /////////// Display support methods /////////
@@ -40,9 +34,21 @@ namespace TRAVEL_CCM {
         at the same level). */
     const std::string describeShortKey() const;
 
+    /** Get the travel solutions which meet the request */
+    TravelSolutionHolder getTravelSolutions();
+
   private:
+    /** Constructors are private so as to force the usage of the Factory
+        layer. */
+    /** Default constructors. */
+    Request ();
+    Request (const Request&);
+
+    /** Destructor. */
+    virtual ~Request();
 
   };
 
 }
-#endif // __TRAVEL_CCM_COM_BOM_TRAVELPRODUCT_HPP
+#endif // __TRAVEL_CCM_BOM_REQUEST_HPP
+

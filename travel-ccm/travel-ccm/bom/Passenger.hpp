@@ -1,23 +1,20 @@
-#ifndef __TRAVEL_CCM_BOM_TRAVELPRODUCT_HPP
-#define __TRAVEL_CCM_BOM_TRAVELPRODUCT_HPP
+#ifndef __TRAVEL_CCM_BOM_PASSENGER_HPP
+#define __TRAVEL_CCM_BOM_PASSENGER_HPP
 
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// STL
-#include <string>
-// TRAVEL-CCM
+// TRAVEL_CCM 
 #include <travel-ccm/bom/BomAbstract.hpp>
+#include <travel-ccm/bom/RestrictionHolder.hpp>
 
 namespace TRAVEL_CCM {
+  //forward declaration
+  class Request; 
 
-  /** Class representing a travel product, i.e., a list of segment-classes.
-      <br>For instance, the travel product
-      (BA341, 20JAN2009, NCE-LHR, H class)-(BA179, 20JAN2009, LHR-JFK, K class)
-      represents a trip departing from Nice on the 20th January and arriving
-      at New York through London Heathrow, taking British Airways flights.
-  */
-  class TravelProduct : public BomAbstract {
+  /** Object description here. */
+  class Passenger : public BomAbstract {
+    friend class FacPassenger;
   public:
 
     // /////////// Display support methods /////////
@@ -40,9 +37,31 @@ namespace TRAVEL_CCM {
         at the same level). */
     const std::string describeShortKey() const;
 
+    /** Get the type of the passenger  */
+    const std::string getPassengerType() const;
+
+    /** to get the oredered list of restrictions of the passenger,
+        regarding his type */
+    /*const RestrictionHolder getPassengerRestriction() const;*/
+ 
+
   private:
+    /** A passenger is caracterized by both its type and booking request when
+        simulated */
+    Request* _request;
+    std::string _passengerType;
+    
+    /** Constructors are private so as to force the usage of the Factory
+        layer. */
+    /** Default constructors. */
+    Passenger ();
+    Passenger (const Passenger&);
+
+    /** Destructor. */
+    virtual ~Passenger();
 
   };
 
 }
-#endif // __TRAVEL_CCM_COM_BOM_TRAVELPRODUCT_HPP
+#endif // __TRAVEL_CCM_BOM_PASSENGER_HPP
+
