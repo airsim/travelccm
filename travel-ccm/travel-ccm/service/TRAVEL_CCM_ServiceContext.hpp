@@ -11,6 +11,9 @@
 #include <travel-ccm/service/ServiceAbstract.hpp>
 
 namespace TRAVEL_CCM {
+  // Forward declarations.
+  class Passenger;
+  class TravelSolutionHolder; 
 
   /** Inner class holding the context for the TRAVEL_CCM Service object. */
   class TRAVEL_CCM_ServiceContext : public ServiceAbstract {
@@ -33,6 +36,8 @@ namespace TRAVEL_CCM {
 
   private:
     // /////// Attributes ///////
+    Passenger* passenger;
+    TravelSolutionHolder* travelSolutionHolder;
   };
 
 }

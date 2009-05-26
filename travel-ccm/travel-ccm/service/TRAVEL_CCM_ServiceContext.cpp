@@ -11,7 +11,9 @@
 namespace TRAVEL_CCM {
   
   // //////////////////////////////////////////////////////////////////////
-  TRAVEL_CCM_ServiceContext::TRAVEL_CCM_ServiceContext () {
+  TRAVEL_CCM_ServiceContext::TRAVEL_CCM_ServiceContext () :
+    passenger (NULL),
+    travelSolutionHolder (NULL) {
     init ();
   }
   

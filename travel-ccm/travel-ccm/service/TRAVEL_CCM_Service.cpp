@@ -56,6 +56,11 @@ namespace TRAVEL_CCM {
 
   // //////////////////////////////////////////////////////////////////////
   void TRAVEL_CCM_Service::simulate() const {
+    // Retrive the travel solution holder in the service context.
+
+    // Retrive the restriction holder in the passenger object in the
+    // service context.
+    
     // Call the underlying Use Case (command)
     Simulator::simulate();
   }
