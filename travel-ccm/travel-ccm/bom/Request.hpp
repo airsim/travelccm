@@ -6,6 +6,7 @@
 // //////////////////////////////////////////////////////////////////////
 // TRAVEL_CCM 
 #include <travel-ccm/bom/BomAbstract.hpp>
+#include <travel-ccm/bom/TravelSolutionHolder.hpp>
 
 namespace TRAVEL_CCM {
 
@@ -35,7 +36,7 @@ namespace TRAVEL_CCM {
     const std::string describeShortKey() const;
 
     /** Get the travel solutions which meet the request */
-    TravelSolutionHolder getTravelSolutions();
+    /*TravelSolutionHolder getTravelSolutions();*/
 
   private:
     /** Constructors are private so as to force the usage of the Factory

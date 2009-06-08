@@ -3,22 +3,27 @@
 // //////////////////////////////////////////////////////////////////////
 // C
 #include <assert.h>
+// STL
+#include <iostream>
+#include <iomanip>
 // TRAVEL_CCM 
 #include <travel-ccm/bom/TravelSolution.hpp>
 
 namespace TRAVEL_CCM {
 
   // ////////////////////////////////////////////////////////////////////
-  TravelSolution::TravelSolution (std::string dAirport, std::string aAirport,
-                                  Time depTime, Time arTime, Time dur,
-                                  bool Ref, std::string airline,
-                                  std::string cabin,
-                                  int flightNum, double fare, int lagsNum,
+  TravelSolution::TravelSolution (std::string& dAirport, std::string& aAirport,
+                                  Date_T depDate,
+                                  Duration_T& depTime, Duration_T& arTime, 
+                                  Duration_T& dur, bool Ref,
+                                  std::string& airline, std::string& cabin,
+                                  int& flightNum, double& fare, int& lagsNum,
                                   bool SNS, bool change){
 
      _departureAirport = dAirport;
      _arrivalAirport = aAirport;
-     _departureTime = DepTime;
+     _departureDate = depDate;
+     _departureTime = depTime;
      _arrivalTime = arTime;
      _duration = dur;
      _refundable = Ref;
@@ -32,6 +37,10 @@ namespace TRAVEL_CCM {
     
 
     }
+
+  // /////////////////////////////////////////////////////////////////////
+  TravelSolution::TravelSolution () {
+  }
 
   // ////////////////////////////////////////////////////////////////////
   TravelSolution::~TravelSolution () {
@@ -47,64 +56,83 @@ namespace TRAVEL_CCM {
 
   // //////////////////////////////////////////////////////////////////////
   std::string TravelSolution::toString() const {
-    std::string oString;
-
-    return oString;
+    std::ostringstream oString;
+    oString << "travel solution: (" << _departureAirport << ", "
+            << _arrivalAirport << ") ; departure date: "
+            << boost::gregorian::to_simple_string(_departureDate) << "; "
+            << _numberOfLags << " stop(s); "
+            << "flight " << _airlineName << _flightNumber << "; "
+            << "departure time: " << _departureTime << ", arrival time: "
+            << _arrivalTime << ", duration: " << _duration << "; " << "cabin: "
+            << _cabinName << "; ";
+    if (_refundable){
+     oString << "refundable fare; ";
+    } else {
+     oString << "nonrefundable fare; ";
+    }
+    if (_changeable){
+      oString << "changeable fare; ";
+    } else {
+      oString << "nonchangeable fare; ";
+    }
+    if (_saturdayNightStay){
+      oString << "Saturday Night Stay mandatory; ";
+    } else {
+      oString << "Saturday Night Stay non mandatory; ";
+    }
+    oString << "price: " << _fare <<  " \n";
+    return oString.str();
   }
     
   // //////////////////////////////////////////////////////////////////////
   const std::string TravelSolution::describeKey() const {
     std::string oKey;
-
     return oKey;
   }
 
   // //////////////////////////////////////////////////////////////////////
   const std::string TravelSolution::describeShortKey() const {
     std::string oKey;
-
     return oKey;
   }
 
    // //////////////////////////////////////////////////////////////////////
-  const std::string  TravelSolution::getDepartureAirport() const {
-    assert (_departureAirport != NULL);
-    return _departureAirpot;
+  const std::string TravelSolution::getDepartureAirport() const {
+    return _departureAirport;
   }
 
   // //////////////////////////////////////////////////////////////////////
-  const std::string  TravelSolution::getArrivalAirport() const {
-    assert (_arrivalAirport != NULL);
-    return _arrivalAirpot;
+  const std::string TravelSolution::getArrivalAirport() const {
+    return _arrivalAirport;
   }
 
   // //////////////////////////////////////////////////////////////////////
-  const Time  TravelSolution::getDepartureTime() const {
-    assert (_departureTime != NULL);
+  const Date_T TravelSolution::getDepartureDate() const {
+    return _departureDate;
+  }
+  
+  // //////////////////////////////////////////////////////////////////////
+  const Duration_T TravelSolution::getDepartureTime() const {
     return _departureTime;
   }
 
   // //////////////////////////////////////////////////////////////////////
-  const Time  TravelSolution::getArrivalTime() const {
-    assert (_arrivalTime != NULL);
+  const Duration_T TravelSolution::getArrivalTime() const {
     return _arrivalTime;
   }
 
   // //////////////////////////////////////////////////////////////////////
-  const Time  TravelSolution::getDuration() const {
-    assert (_duration != NULL);
+  const Duration_T TravelSolution::getDuration() const {
     return _duration;
   }
 
   // //////////////////////////////////////////////////////////////////////
-  const bool  TravelSolution::getRefundable() const {
-    assert (_refundable != NULL);
+  const bool TravelSolution::getRefundable() const {
     return _refundable;
   } 
 
   // //////////////////////////////////////////////////////////////////////
-  const std::string  TravelSolution::getAirlineName() const {
-    assert (_airlineName != NULL);
+  const std::string TravelSolution::getAirlineName() const {
     return _airlineName;
   }
 
@@ -115,32 +143,62 @@ namespace TRAVEL_CCM {
 
   // //////////////////////////////////////////////////////////////////////
   const int  TravelSolution::getFlightNumber() const {
-    assert (_flightNumber != NULL);
     return _flightNumber;
   }
 
   // //////////////////////////////////////////////////////////////////////
   const double  TravelSolution::getFare() const {
-    assert (_fare != NULL);
     return _fare;
   }
   
   // //////////////////////////////////////////////////////////////////////
   const int  TravelSolution::getNumberOfLags() const {
-    assert (_numberOfLags != NULL);
     return _numberOfLags;
   }
 
   // //////////////////////////////////////////////////////////////////////
   const bool TravelSolution::getSaturdayNightStay() const {
-    assert (_saturdayNightStay != NULL);
     return _saturdayNightStay;
   }
 
   // //////////////////////////////////////////////////////////////////////
   const bool TravelSolution::getChangeable() const {
-    assert (_changeable != NULL);
     return _changeable;
+  }
+
+   // /////////////////////////////////////////////////////////////////////
+  bool TravelSolution::restrictionMeetsTravelSolution (Restriction& res) const {
+    /** need to consider all the different kind of restrictions in a
+        separate way
+    */
+    if (res.getRestrictionType() == "refundability")
+      {
+      if (getRefundable())
+        return true;
+      else
+        return false;
+      }
+    else if (res.getRestrictionType() == "preferredAirline")
+      {
+        // be careful on how you write the airline (airline code or no?)
+        if (getAirlineName() == res.getPreferredAirline() )
+          return true;
+        else
+          return false;
+      }
+    else if (res.getRestrictionType() == "preferredCabin")
+      {
+        /* today we look for the perfect match. A better solution would be
+           to allow thee overclassing */
+        if (getCabin() == res.getPreferredCabin() )
+          return true;
+        else
+          return false;
+      }
+    
+    /** the function return true by default in order not to loose any
+        correct travel solution */
+    else return true;
   }
 
     

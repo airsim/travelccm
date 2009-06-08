@@ -7,6 +7,15 @@
 #include <travel-ccm/bom/Request.hpp>
 
 namespace TRAVEL_CCM {
+
+  // /////////////////////////////////////////////////////////////////////
+  Request::Request () {
+  }
+
+  // ////////////////////////////////////////////////////////////////////
+  Request::Request (const Request&) {
+  }
+  
   // ////////////////////////////////////////////////////////////////////
   Request::~Request () {
   }
@@ -41,10 +50,10 @@ namespace TRAVEL_CCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
-  TravelSolutionHolder Request::getTravelSolutions() {
+  /*TravelSolutionHolder Request::getTravelSolutions() {
     /** need other methods which are in the simulator */
-    return NULL;
-  }
+  /*return NULL;
+    }*/
 
 }
 

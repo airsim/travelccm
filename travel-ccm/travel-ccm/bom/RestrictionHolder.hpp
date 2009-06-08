@@ -38,17 +38,17 @@ namespace TRAVEL_CCM {
         at the same level). */
     const std::string describeShortKey() const;
 
+    //////////////////// Setters ///////////////////
+    /** Add a restriction to the restriction holder. */
+    //void addRestriction (Restriction&); 
+
   private:
     /** the list of (N) restrictions for a given passenger */
     RestrictionList_T _restrictionList;
 
     /** Iterator for the current restriction/class */
     RestrictionList_T::iterator _itCurrentRestriction;
-    RestrictionList_T::iterator _itNextRestriction;
-    RestrictionList_T::iterator _itTaggedRestriction;
     
-
-
   private:
     /** Constructors are private so as to force the usage of the Factory
         layer. */
@@ -61,19 +61,19 @@ namespace TRAVEL_CCM {
 
   public:
     Restriction& getCurrentRestriction () const;
-    Restriction& getNextRestriction () const;
-    Restriction& getTaggedRestriction () const;
 
     void begin ();
-    void tag ();
     bool hasNotReachedEnd () const;
     void iterate ();
+    void addRestriction (Restriction&);
+    void eraseCurrentRestriction ();
 
     
      /** given a list of restriction, the function returns if the
          travel solution in argument meets the different restrictions
       */
-    bool travelSolutionMeetRestrictionList(TravelSolution& TS);
+    // obsolete method
+    //bool travelSolutionMeetRestrictionList(TravelSolution& TS);
 
   };
 

@@ -3,16 +3,33 @@
 // //////////////////////////////////////////////////////////////////////
 // C
 #include <assert.h>
+// STL
+#include <iostream>
+#include <iomanip>
 // TRAVEL_CCM 
+#include <travel-ccm/service/Logger.hpp>
 #include <travel-ccm/bom/Restriction.hpp>
 
 namespace TRAVEL_CCM {
+
+  // //////////////////////////////////////////////////////////////////////
+  Restriction::Restriction () {
+  }
 
   // /////////////////////////////////////////////////////////////////////
   Restriction:: Restriction(std::string restrictionType){
     _restrictionType = restrictionType;
   }
 
+  // /////////////////////////////////////////////////////////////////////
+  Restriction:: Restriction(std::string restrictionType,
+                            std::string namePreference){
+    _restrictionType = restrictionType;
+    if (restrictionType == "preferredAirline")
+      _preferredAirline = namePreference;
+    if (restrictionType == "preferredCabin")
+      _preferredCabin == namePreference;
+  }
   
   // ////////////////////////////////////////////////////////////////////
   Restriction::~Restriction () {
@@ -28,22 +45,26 @@ namespace TRAVEL_CCM {
 
   // //////////////////////////////////////////////////////////////////////
   std::string Restriction::toString() const {
-    std::string oString;
-
-    return oString;
+    std::ostringstream oString;
+    /* only the type of restriction is printed for the moment */
+    oString << "restriction type: " << _restrictionType;
+    if (_restrictionType == "preferredAirline")
+      oString << " (" << _preferredAirline << ") ";
+    if (_restrictionType == "preferredCabin")
+      oString << " (" << _preferredCabin << ") ";
+    oString << std::endl;
+    return oString.str();
   }
     
   // //////////////////////////////////////////////////////////////////////
   const std::string Restriction::describeKey() const {
     std::string oKey;
-
     return oKey;
   }
 
   // //////////////////////////////////////////////////////////////////////
   const std::string Restriction::describeShortKey() const {
     std::string oKey;
-
     return oKey;
   }
 
@@ -63,10 +84,10 @@ namespace TRAVEL_CCM {
   }
   
   // /////////////////////////////////////////////////////////////////////
-  bool Restriction::travelSolutionMeetRestriction(TravelSolution& TS){
-    /** need to consider all the different kind of restrictions in a
+  /*bool Restriction::travelSolutionMeetRestriction (TravelSolution& TS) const {
+    ** need to consider all the different kind of restrictions in a
         separate way
-    */
+    *
     if (getRestrictionType() == "refundability")
       {
       if (TS.getRefundable())
@@ -84,18 +105,19 @@ namespace TRAVEL_CCM {
       }
     else if (getRestrictionType() == "preferredCabin")
       {
-        /* today we look for the perfect match. A better solution would be
-           to allow thee overclassing */
+        * today we look for the perfect match. A better solution would be
+           to allow thee overclassing *
         if (TS.getCabin() == getPreferredCabin() )
           return true;
         else
           return false;
       }
-    /** the function return true by default in order not to loose any
-        correct travel solution */
+    
+    ** the function return true by default in order not to loose any
+        correct travel solution *
     else return true;
   }
-
+  */
 
 }
 

@@ -6,9 +6,12 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <string>
-// TRAVEL_CCM 
+// Boost (Extended STL)
+#include <boost/date_time/gregorian/gregorian.hpp>
+// TRAVEL_CCM
+#include <travel-ccm/TRAVEL_CCM_Types.hpp>
 #include <travel-ccm/bom/BomAbstract.hpp>
-#include <travel-ccm/bom/Time.hpp>
+#include <travel-ccm/bom/Restriction.hpp>
 
 namespace TRAVEL_CCM {
 
@@ -40,9 +43,10 @@ namespace TRAVEL_CCM {
     /** all the get methods for the different fields */
     const std::string  getDepartureAirport() const;
     const std::string  getArrivalAirport() const;
-    const Time getDepartureTime() const;
-    const Time getArrivalTime() const;
-    const Time getDuration() const;
+    const Date_T  getDepartureDate() const;
+    const Duration_T getDepartureTime() const;
+    const Duration_T getArrivalTime() const;
+    const Duration_T getDuration() const;
     const bool getRefundable() const;
     const std::string getAirlineName() const;
     const std::string getCabin() const;
@@ -52,16 +56,22 @@ namespace TRAVEL_CCM {
     const bool getSaturdayNightStay() const;
     const bool getChangeable() const;
 
+    /* returns if the restriction put in arguent meets the current
+       travel solution */
+    bool restrictionMeetsTravelSolution (Restriction&) const;
+
   private:
     /** Constructors are private so as to force the usage of the Factory
         layer. */
     /** Default constructors. */
     TravelSolution ();
     TravelSolution (const TravelSolution&);
-    TravelSolution (std::string dAirport, std::string aAirport, Time depTime,
-                    Time arTime, Time dur, bool Ref, std::string airline,
-                    std::string cabin, int flightNum, double fare, int lagsNum,
-                    bool SNS, bool change);
+    TravelSolution (std::string& dAirport, std::string& aAirport,
+                    Date_T depDate,
+                    Duration_T& depTime, Duration_T& arTime, Duration_T& dur, 
+                    bool Ref, std::string& airline,
+                    std::string& cabin, int& flightNum, double& fare,
+                    int& lagsNum, bool SNS, bool change);
 
     /** Destructor. */
     virtual ~TravelSolution();
@@ -73,9 +83,10 @@ namespace TRAVEL_CCM {
         the change fee... */
     std::string _departureAirport;
     std::string _arrivalAirport;
-    Time _departureTime;
-    Time _arrivalTime;
-    Time _duration;
+    boost::gregorian::date _departureDate;
+    Duration_T _departureTime;
+    Duration_T _arrivalTime;
+    Duration_T _duration;
     bool _refundable;
     std::string _airlineName;
     std::string _cabinName;

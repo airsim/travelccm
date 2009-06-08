@@ -8,6 +8,11 @@
 #include <travel-ccm/bom/RestrictionHolder.hpp>
 
 namespace TRAVEL_CCM {
+
+  // ////////////////////////////////////////////////////////////////////
+  RestrictionHolder::RestrictionHolder () {
+  }
+  
   // ////////////////////////////////////////////////////////////////////
   RestrictionHolder::~RestrictionHolder () {
   }
@@ -23,7 +28,13 @@ namespace TRAVEL_CCM {
   // //////////////////////////////////////////////////////////////////////
   std::string RestrictionHolder::toString() const {
     std::string oString;
-
+    RestrictionList_T::const_iterator it = _restrictionList.begin();
+    while (it != _restrictionList.end() ){
+      Restriction* res_ptr = *it;
+      assert(res_ptr != NULL);
+      oString += res_ptr->toString();
+      it++;
+    }
     return oString;
   }
     
@@ -42,41 +53,21 @@ namespace TRAVEL_CCM {
   }
 
    // //////////////////////////////////////////////////////////////////////
-  Restriction& RestrictionHolder::getCurrentRestriction () const {
+   Restriction& RestrictionHolder::getCurrentRestriction () const {
     Restriction* resultRestriction_ptr = *_itCurrentRestriction;
     assert (resultRestriction_ptr != NULL);
     
     return (*resultRestriction_ptr);
   }
 
-  // //////////////////////////////////////////////////////////////////////
-  Restriction& RestrictionHolder::getNextRestriction () const {
-    Restriction* resultRestriction_ptr = *_itNextRestriction;
-    assert (resultRestriction_ptr != NULL);
-    
-    return (*resultRestriction_ptr);
-  }
-
-  // //////////////////////////////////////////////////////////////////////
-  Restriction& RestrictionHolder::getTaggedRestriction () const {
-    Restriction* resultRestriction_ptr = *_itTaggedRestriction;
-    assert (resultRestriction_ptr != NULL);
-    
-    return (*resultRestriction_ptr);
+  ///////////////////////////////////////////////////////////////////////
+  void RestrictionHolder::addRestriction (Restriction& iRestriction) {
+    _restrictionList.push_back (&iRestriction);
   }
 
   // //////////////////////////////////////////////////////////////////////
   void RestrictionHolder::begin () {
     _itCurrentRestriction = _restrictionList.begin();
-    _itNextRestriction = _restrictionList.begin();
-    if (_itNextRestriction != _restrictionList.end()) {
-      _itNextRestriction++;
-    }
-  }
-
-  // //////////////////////////////////////////////////////////////////////
-  void RestrictionHolder::tag () {
-      _itTaggedRestriction = _itCurrentRestriction;
   }
 
   // //////////////////////////////////////////////////////////////////////
@@ -90,34 +81,41 @@ namespace TRAVEL_CCM {
     if (_itCurrentRestriction != _restrictionList.end()) {
       _itCurrentRestriction++;
     }
-    if (_itNextRestriction != _restrictionList.end()) {
-      _itNextRestriction++;
-    }
   }
 
   // //////////////////////////////////////////////////////////////////////
-  bool RestrictionHolder::travelSolutionMeetRestrictionList(TravelSolution& TS){
-    /** call a function in the Restriction class which returns if a travel
-        solution meets a single restriction */
-    Restriction& currentRestriction = getCurrentRestriction();
-    Restriction& nextRestriction = getNextRestriction();
-    bool curResOK = currentRestriction.travelSolutionMeetRestriction(TS);
-    /* if we are at the end of the list, that is the current element is NULL
-        we return true because all the restrictions have been matched*/
-    if (!hasNotReachedEnd())
-      return true;
-    /* else, we are not at the end; if the travel solution does not
-       match the first restriction */
-    else if (!curResOK)
-        return false;
-    /* if it does, we need to know if the next ones do too */
-    else {
-      iterate();
-      return travelSolutionMeetRestrictionList(TS);
-    }
-    /* recursive function
-       Have to check if it works well !!!!
-    */
+  void RestrictionHolder::eraseCurrentRestriction () {
+    /* ok even if the list is at the end */
+    assert (_itCurrentRestriction != _restrictionList.end());
+    _itCurrentRestriction = _restrictionList.erase (_itCurrentRestriction);
   }
+
+  // //////////////////////////////////////////////////////////////////////
+  /* bool RestrictionHolder::travelSolutionMeetRestrictionList(TravelSolution& TS){
+     * if we are at the end of the list, that is the current element is NULL
+        we return true because all the restrictions have been matched
+     *
+    if (!hasNotReachedEnd()){
+      begin();
+      return true;
+    }
+    else {
+    ** call a function in the Restriction class which returns if a travel
+        solution meets a single restriction *
+      const Restriction& currentRestriction = getCurrentRestriction();
+      bool curResOK = currentRestriction.travelSolutionMeetRestriction(TS);
+      //assert(!curResOK);
+      * else, we are not at the end; if the travel solution does not
+         match the first restriction *
+      if (!curResOK){
+        //assert(1==0);
+        return false;}
+      * if it does, we need to know if the next ones do too *
+      else {
+        iterate();
+        return travelSolutionMeetRestrictionList(TS);
+      }
+    }
+    }*/
   
 }

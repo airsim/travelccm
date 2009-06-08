@@ -43,5 +43,25 @@ namespace TRAVEL_CCM {
     return *aPassenger_ptr;
   }
 
+  // ////////////////////////////////////////////////////////////////////
+  Passenger& FacPassenger::create (Request& req, std::string passType) {
+    Passenger* aPassenger_ptr = NULL;
+
+    aPassenger_ptr = new Passenger (req, passType);
+    assert (aPassenger_ptr != NULL);
+
+    // The new object is added to the Bom pool
+    _pool.push_back (aPassenger_ptr);
+
+    return *aPassenger_ptr;
+  }
+
+  // ////////////////////////////////////////////////////////////////////
+  void FacPassenger::
+  linkPassengerWithRestrictionHolder (Passenger& ioPassenger,
+                                      RestrictionHolder& ioRestrictionHolder) {
+    ioPassenger._passengerRestrictions = &ioRestrictionHolder;
+  }
+
 }
 

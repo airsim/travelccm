@@ -7,7 +7,7 @@
 // STL
 #include <string>
 // TRAVEL_CCM 
-#include <travel-ccm/bom/TravelSolution.hpp>
+//#include <travel-ccm/bom/TravelSolution.hpp>
 #include <travel-ccm/bom/BomAbstract.hpp>
 
 namespace TRAVEL_CCM {
@@ -46,10 +46,10 @@ namespace TRAVEL_CCM {
     /** Get the type of the restriction */
     const std::string getPreferredCabin() const;
     
-     /* return if the travel solution put in argument meets the current
+    /* return if the travel solution put in argument meets the current
        restriction */
-    bool travelSolutionMeetRestriction(TravelSolution& T);
-
+    // obsolete method
+    //bool travelSolutionMeetRestriction (TravelSolution&) const;
 
   private:
     /** Constructors are private so as to force the usage of the Factory
@@ -59,8 +59,10 @@ namespace TRAVEL_CCM {
     Restriction (const Restriction&);
 
     /** real constructors */
-    // used for the construction of refundability restriction
+    // used for the construction of dual restrictions
     Restriction(std::string restrictionType);
+    // used for the construction of "complex" restrictions
+    Restriction(std::string restrictionType, std::string namePreference);
 
     /** Destructor. */
     virtual ~Restriction();

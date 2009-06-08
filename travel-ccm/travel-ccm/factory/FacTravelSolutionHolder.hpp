@@ -6,9 +6,12 @@
 // //////////////////////////////////////////////////////////////////////
 // TRAVEL_CCM 
 #include <travel-ccm/factory/FacBomAbstract.hpp>
+
 namespace TRAVEL_CCM {
+
   // Forward declarations.
   class TravelSolutionHolder;
+  class TravelSolution;
   
   /** Factory for TravelSolutionHolder objects. */
   class FacTravelSolutionHolder : public FacBomAbstract {
@@ -17,12 +20,12 @@ namespace TRAVEL_CCM {
         <br>The singleton is instantiated when first used
         @return FacTravelSolutionHolder& */
     static FacTravelSolutionHolder& instance();
-
+    
     /** Destructor.
         <br>The Destruction put the _instance to NULL
         in order to be clean for the next FacTravelSolutionHolder::instance() */
     virtual ~FacTravelSolutionHolder();
-
+    
     /** Create a new TravelSolutionHolder object.
         <br>This new object is added to the list of instantiated objects.
         @return TravelSolutionHolder& The newly created object. */

@@ -4,8 +4,15 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
+// STL
+#include <string>
+// Boost (Extended STL)
+#include <boost/date_time/gregorian/gregorian.hpp>
 // TRAVEL_CCM 
 #include <travel-ccm/factory/FacBomAbstract.hpp>
+#include <travel-ccm/TRAVEL_CCM_Types.hpp>
+#include <travel-ccm/bom/TravelSolutionHolder.hpp>
+
 namespace TRAVEL_CCM {
   // Forward declarations.
   class TravelSolution;
@@ -28,10 +35,15 @@ namespace TRAVEL_CCM {
         @return TravelSolution& The newly created object. */
     TravelSolution& create ();
     TravelSolution& create (std::string dAirport, std::string aAirport,
-                            Time depTime, Time arTime, Time dur, bool Ref,
-                            std::string airline,  std::string cabin,
-                            int flightNum, double fare, int lagsNum,
-                            bool SNS, bool change);
+                            Date_T aDepDate,
+                            Duration_T depTime, Duration_T arTime,
+                            Duration_T dur, bool Ref, std::string airline,
+                            std::string cabin, int flightNum, double fare,
+                            int lagsNum, bool SNS, bool change);
+
+    /** Add a travel solution in the list of TravelSolutionHolder */
+    void addTravelSolution(TravelSolutionHolder& ioTravelSolutionHolder,
+                           TravelSolution& ioTravelSolution);
 
   protected:
     /** Default Constructor.

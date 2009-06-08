@@ -7,6 +7,10 @@
 // STL
 #include <vector>
 #include <list>
+// Boost (Extended STL)
+#include <boost/date_time/gregorian/gregorian.hpp>
+// Boost
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 namespace TRAVEL_CCM {
 
@@ -45,6 +49,11 @@ namespace TRAVEL_CCM {
   }
 
   // //////// Type definitions /////////
-  
+  /** Define the Duration (e.g., elapsed in-flight time). */
+  typedef boost::posix_time::time_duration Duration_T;
+
+  /** Define the Date (e.g., flight-date departure date). */
+  typedef boost::gregorian::date Date_T;
+    
 }
 #endif // __TRAVEL_CCM_TRAVEL_CCM_TYPES_HPP

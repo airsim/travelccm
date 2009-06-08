@@ -3,13 +3,22 @@
 // //////////////////////////////////////////////////////////////////////
 // C
 #include <assert.h>
+// STL
+#include <iostream>
+#include <iomanip>
 // TRAVEL_CCM
-#include <travel-ccm/bom/TravelSolution.hpp>
 #include <travel-ccm/bom/TravelSolutionHolder.hpp>
 
 namespace TRAVEL_CCM {
+
+  // ////////////////////////////////////////////////////////////////////
+  TravelSolutionHolder::TravelSolutionHolder () {
+    
+  }
+  
   // ////////////////////////////////////////////////////////////////////
   TravelSolutionHolder::~TravelSolutionHolder () {
+    _travelSolutionList.clear ();
   }
 
   // //////////////////////////////////////////////////////////////////////
@@ -23,8 +32,18 @@ namespace TRAVEL_CCM {
   // //////////////////////////////////////////////////////////////////////
   std::string TravelSolutionHolder::toString() const {
     std::string oString;
-
+    TravelSolutionList_T::const_iterator it = _travelSolutionList.begin();
+    while (it != _travelSolutionList.end() ){
+      TravelSolution* TS_ptr = *it;
+      assert(TS_ptr != NULL);
+      oString += TS_ptr->toString();
+      it++;
+    }
     return oString;
+  }
+
+  int TravelSolutionHolder::numberOfTravelSolutions() {
+    return _travelSolutionList.size();
   }
     
   // //////////////////////////////////////////////////////////////////////
@@ -68,17 +87,43 @@ namespace TRAVEL_CCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
+  void TravelSolutionHolder::addTravelSolution (TravelSolution& TS) {
+    _travelSolutionList.push_back(&TS);
+  }
+
+  // //////////////////////////////////////////////////////////////////////
   void TravelSolutionHolder::eraseCurrentTravelSolution () {
     /* ok even if the list is at the end */
     assert (_itCurrentTravelSolution != _travelSolutionList.end());
-    _travelSolutionList.erase (_itCurrentTravelSolution);
+    _itCurrentTravelSolution = _travelSolutionList.erase (_itCurrentTravelSolution);
   }
   
   // //////////////////////////////////////////////////////////////////////
- void TravelSolutionHolder::filtrateTravelSolutionList(Restriction R){
-   //modify _travelSolutionList
-    //need to implement the Restriction classs methods first
- }
+  bool TravelSolutionHolder::restrictionMeetsTSList(Restriction& restriction) {
+     /* if we are at the end of the list, we return true because all
+        the travel solutions have been matched
+     */
+    if (!hasNotReachedEnd()){
+      begin();
+      return true;
+    }
+    else {
+    /** call a function in the TravelSolution class which returns if a
+        restriction meets a single travel solution */
+      const TravelSolution& currentTravelSolution = getCurrentTravelSolution();
+      bool curTSOK =
+        currentTravelSolution.restrictionMeetsTravelSolution(restriction);
+      /* else, we are not at the end; if the restriction does not
+         match the first travel solution */
+      if (!curTSOK){
+        return false;}
+      /* if it does, we need to know if the next ones do too */
+      else {
+        iterate();
+        return restrictionMeetsTSList(restriction);
+      }
+    }
+  }
 
 }
 

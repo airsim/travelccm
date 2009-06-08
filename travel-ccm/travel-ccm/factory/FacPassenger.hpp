@@ -4,11 +4,17 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
+// STL
+#include <string>
 // TRAVEL_CCM 
 #include <travel-ccm/factory/FacBomAbstract.hpp>
+#include <travel-ccm/factory/FacRequest.hpp>
+
+
 namespace TRAVEL_CCM {
   // Forward declarations.
   class Passenger;
+  class RestrictionHolder;
   
   /** Factory for Passenger objects. */
   class FacPassenger : public FacBomAbstract {
@@ -27,6 +33,10 @@ namespace TRAVEL_CCM {
         <br>This new object is added to the list of instantiated objects.
         @return Passenger& The newly created object. */
     Passenger& create ();
+    Passenger& create (Request&, std::string);
+
+    /** Link the passenger with his restriction holder. */
+    void linkPassengerWithRestrictionHolder (Passenger&, RestrictionHolder&);
 
   protected:
     /** Default Constructor.

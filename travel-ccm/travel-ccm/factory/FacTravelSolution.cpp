@@ -45,21 +45,30 @@ namespace TRAVEL_CCM {
 
   // ////////////////////////////////////////////////////////////////////
   TravelSolution& FacTravelSolution::create (std::string dAirport,
-               std::string aAirport, Time depTime, Time arTime, Time dur,
-               bool Ref, std::string airline,  std::string cabin,
-               int flightNum, double fare, int lagsNum, bool SNS, bool change) {
+                std::string aAirport, Date_T depDate,
+                Duration_T depTime, Duration_T arTime, Duration_T dur,
+                bool Ref, std::string airline, std::string cabin,
+                int flightNum, double fare, int lagsNum, bool SNS,
+                                             bool change) {
     TravelSolution* aTravelSolution_ptr = NULL;
 
-    aTravelSolution_ptr = new TravelSolution (std::string dAirport,
-                  std::string aAirport, Time depTime, Time arTime, Time dur,
-                  bool Ref, std::string airline, std::string cabin,
-                  int flightNum, double fare, int lagsNum, bool SNS, bool change);
+    aTravelSolution_ptr = new TravelSolution ( dAirport, aAirport, depDate,
+                                               depTime, arTime, dur, Ref,
+                                               airline, cabin, flightNum,
+                                               fare, lagsNum, SNS, change);
     assert (aTravelSolution_ptr != NULL);
 
     // The new object is added to the Bom pool
     _pool.push_back (aTravelSolution_ptr);
 
     return *aTravelSolution_ptr;
+  }
+
+  // /////////////////////////////////////////////////////////////////////
+  void FacTravelSolution::
+  addTravelSolution (TravelSolutionHolder& ioTravelSolutionHolder,
+                     TravelSolution& ioTravelSolution) {
+    ioTravelSolutionHolder.addTravelSolution(ioTravelSolution);
   }
   
 

@@ -4,8 +4,12 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
+// STL
+#include <string>
 // TRAVEL_CCM 
 #include <travel-ccm/factory/FacBomAbstract.hpp>
+#include <travel-ccm/bom/RestrictionHolder.hpp>
+
 namespace TRAVEL_CCM {
   // Forward declarations.
   class Restriction;
@@ -27,6 +31,13 @@ namespace TRAVEL_CCM {
         <br>This new object is added to the list of instantiated objects.
         @return Restriction& The newly created object. */
     Restriction& create ();
+    Restriction& create (std::string restrictionType);
+    Restriction& create (std::string restrictionType,
+                         std::string namePreference);
+
+    /* add a restriction in the list of restrictionHolder */
+    void  addRestriction (RestrictionHolder& ioRestrictionHolder,
+                          Restriction& ioRestriction);
 
   protected:
     /** Default Constructor.

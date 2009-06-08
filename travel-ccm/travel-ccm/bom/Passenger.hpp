@@ -4,9 +4,11 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
+// STL
+#include <string>
 // TRAVEL_CCM 
 #include <travel-ccm/bom/BomAbstract.hpp>
-#include <travel-ccm/bom/RestrictionHolder.hpp>
+//#include <travel-ccm/bom/RestrictionHolder.hpp>
 
 namespace TRAVEL_CCM {
   //forward declaration
@@ -26,7 +28,8 @@ namespace TRAVEL_CCM {
         @param istream& the input stream. */
     void fromStream (std::istream& ioIn);
 
-   /** Get the serialised version of the Business Object. */
+    /////////////////////// Getters ////////////////
+    /** Get the serialised version of the Business Object. */
     std::string toString() const;
     
     /** Get a string describing the whole key (differentiating two objects
@@ -42,26 +45,31 @@ namespace TRAVEL_CCM {
 
     /** to get the oredered list of restrictions of the passenger,
         regarding his type */
-    /*const RestrictionHolder getPassengerRestriction() const;*/
- 
+    RestrictionHolder& getPassengerRestrictions () ;
+
+    //////////////////// Setters ///////////////////
+    /** Add a restriction to the restriction holder. */
+    void addRestriction (const Restriction&);
 
   private:
     /** A passenger is caracterized by both its type and booking request when
         simulated */
     Request* _request;
     std::string _passengerType;
+    RestrictionHolder* _passengerRestrictions;
     
     /** Constructors are private so as to force the usage of the Factory
         layer. */
     /** Default constructors. */
     Passenger ();
+    Passenger (Request&, std::string);
     Passenger (const Passenger&);
 
     /** Destructor. */
-    virtual ~Passenger();
+    ~Passenger();
 
   };
 
 }
-#endif // __TRAVEL_CCM_BOM_PASSENGER_HPP
+#endif  //__TRAVEL_CCM_BOM_PASSENGER_HPP
 

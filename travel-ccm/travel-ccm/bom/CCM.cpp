@@ -3,8 +3,11 @@
 // //////////////////////////////////////////////////////////////////////
 // C
 #include <assert.h>
+// STL
+#include <list>
 // TRAVEL_CCM 
 #include <travel-ccm/bom/CCM.hpp>
+#include <travel-ccm/service/Logger.hpp>
 
 namespace TRAVEL_CCM {
   // ////////////////////////////////////////////////////////////////////
@@ -18,7 +21,7 @@ namespace TRAVEL_CCM {
   // //////////////////////////////////////////////////////////////////////
   void CCM::fromStream (std::istream& ioIn) {
   }
-
+ 
   // //////////////////////////////////////////////////////////////////////
   std::string CCM::toString() const {
     std::string oString;
@@ -42,21 +45,22 @@ namespace TRAVEL_CCM {
 
   // //////////////////////////////////////////////////////////////////////
   void CCM::orderedPreferences (TravelSolutionHolder& ioTSHolder,
-                                RestrictionHolder& ioRestrictionList){
+                                RestrictionHolder& ioResHolder){
     /** for each travel solution, test if it meets the different restrictions;
         if it does, we keep it in the list, else we delete it
     */
-    ioTSHolder.begin();
-    while (ioTSHolder.hasNotReachedEnd()) { 
-      TravelSolution& lCurrentTravelSolution = 
-        ioTSHolder.getCurrentTravelSolution ();
-      bool travelSolOK = ioRestrictionList.
-        travelSolutionMeetRestrictionList (lCurrentTravelSolution);
-      if (!travelSolOK){
+    TravelSolutionList_T temporaryHolder;
+    // we check if each restriction meets the list of travel solutions
+    while (ioResHolder.hasNotReachedEnd()) {
+      Restriction& lCurrentRestriction =
+        ioResHolder.getCurrentRestriction ();
+      bool resOK = ioTSHolder.
+        restrictionMeetsTSList (lCurrentRestriction);
+      if (!resOK){
         /** erase this element */
         ioTSHolder.eraseCurrentTravelSolution();
       } else {
-        ioTSHolder.iterate();
+        ioResHolder.iterate();
       }
     }
   }

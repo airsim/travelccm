@@ -8,6 +8,7 @@
 #include <travel-ccm/bom/BomAbstract.hpp>
 #include <travel-ccm/bom/TravelSolutionList.hpp>
 #include <travel-ccm/bom/Restriction.hpp>
+#include <travel-ccm/bom/TravelSolution.hpp>
 
 namespace TRAVEL_CCM {
 
@@ -28,6 +29,9 @@ namespace TRAVEL_CCM {
 
    /** Get the serialised version of the Business Object. */
     std::string toString() const;
+
+    /** Get the number of travel solutions in the list */
+    int numberOfTravelSolutions();
     
     /** Get a string describing the whole key (differentiating two objects
         at any level). */
@@ -62,11 +66,12 @@ namespace TRAVEL_CCM {
     bool hasNotReachedEnd () const;
     void iterate ();
     void eraseCurrentTravelSolution ();
-    
-    /** filtrate the list of travel solutions given as a field of the
-        TravelSOlutionHolder class and modify it in the list of travel solutions
-        in which all the travel meet the restriction */
-    void filtrateTravelSolutionList(Restriction R);
+    void addTravelSolution (TravelSolution&) ;
+
+    /** given a list of travel solutionsm the function returns if the
+        restriction in argument meets the different travel solutions
+    */
+    bool restrictionMeetsTSList(Restriction&);
 
   };
 

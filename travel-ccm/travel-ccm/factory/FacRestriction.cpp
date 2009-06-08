@@ -43,5 +43,40 @@ namespace TRAVEL_CCM {
     return *aRestriction_ptr;
   }
 
+   // ////////////////////////////////////////////////////////////////////
+  Restriction& FacRestriction::create (std::string restrictionType) {
+    Restriction* aRestriction_ptr = NULL;
+
+    aRestriction_ptr = new Restriction (restrictionType);
+    assert (aRestriction_ptr != NULL);
+
+    // The new object is added to the Bom pool
+    _pool.push_back (aRestriction_ptr);
+
+    return *aRestriction_ptr;
+  }
+
+   // ////////////////////////////////////////////////////////////////////
+  Restriction& FacRestriction::create (std::string restrictionType,
+                                       std::string namePreference) {
+    Restriction* aRestriction_ptr = NULL;
+
+    aRestriction_ptr = new Restriction (restrictionType, namePreference);
+    assert (aRestriction_ptr != NULL);
+
+    // The new object is added to the Bom pool
+    _pool.push_back (aRestriction_ptr);
+
+    return *aRestriction_ptr;
+  }
+
+  // /////////////////////////////////////////////////////////////////////
+  void FacRestriction::
+  addRestriction (RestrictionHolder& ioRestrictionHolder,
+                     Restriction& ioRestriction) {
+    ioRestrictionHolder.addRestriction(ioRestriction);
+  }
+  
+
 }
 
