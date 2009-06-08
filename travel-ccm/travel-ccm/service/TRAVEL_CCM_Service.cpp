@@ -122,8 +122,8 @@ namespace TRAVEL_CCM {
     restrictionHolder.begin();
     travelSolutionHolder.begin();
 
-    TRAVEL_CCM_LOG_DEBUG ( travelSolutionHolder.toString() );
-    TRAVEL_CCM_LOG_DEBUG ( restrictionHolder.toString() );
+    TRAVEL_CCM_LOG_DEBUG ("TravelSolutionHolder: " << travelSolutionHolder);
+    TRAVEL_CCM_LOG_DEBUG ("RestrictionHolder: " << restrictionHolder);
 
     // Call the underlying Use Case (command)
     Simulator::simulate(restrictionHolder, travelSolutionHolder);
@@ -131,7 +131,7 @@ namespace TRAVEL_CCM {
     /* we will need the different restrictions and their order so the first
        argument of the function orderedPreference will probably change
     */
-    TRAVEL_CCM_LOG_DEBUG ( travelSolutionHolder.toString() );
+    TRAVEL_CCM_LOG_DEBUG ("TravelSolutionHolder: " << travelSolutionHolder);
   }
 
 }
