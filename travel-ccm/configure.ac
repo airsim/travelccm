@@ -2,9 +2,9 @@
 #-------------------------------------------------------------------
 AC_PREREQ(2.59)
 AC_COPYRIGHT([Copyright (C) 2007-2009  Denis Arnaud <denis_arnaud@users.sourceforge.net>])
-AC_INIT([TRAVEL-CCM],[0.1.0],[denis_arnaud@users.sourceforge.net],[travel-ccm])
-AC_CONFIG_HEADER([travel-ccm/config.h])
-AC_CONFIG_SRCDIR([travel-ccm/basic/BasConst.cpp])
+AC_INIT([TRAVELCCM],[0.1.0],[denis_arnaud@users.sourceforge.net],[travelccm])
+AC_CONFIG_HEADER([travelccm/config.h])
+AC_CONFIG_SRCDIR([travelccm/basic/BasConst.cpp])
 AC_CONFIG_AUX_DIR([config])
 AM_INIT_AUTOMAKE
 AM_PATH_CPPUNIT(1.10)
@@ -273,19 +273,19 @@ AH_BOTTOM([
 # Define configured files
 AC_CONFIG_FILES(
 	Makefile
-	travel-ccm-config
-	travel-ccm.pc
-	travel-ccm.spec
-	travel-ccm.m4
-	travel-ccm/Makefile
-	travel-ccm/basic/Makefile
-	travel-ccm/bom/Makefile
-	travel-ccm/factory/Makefile
-	travel-ccm/command/Makefile
-	travel-ccm/service/Makefile
-	travel-ccm/core/Makefile
-	travel-ccm/config/Makefile
-	travel-ccm/batches/Makefile
+	travelccm-config
+	travelccm.pc
+	travelccm.spec
+	travelccm.m4
+	travelccm/Makefile
+	travelccm/basic/Makefile
+	travelccm/bom/Makefile
+	travelccm/factory/Makefile
+	travelccm/command/Makefile
+	travelccm/service/Makefile
+	travelccm/core/Makefile
+	travelccm/config/Makefile
+	travelccm/batches/Makefile
 	test/Makefile
 	test/com/Makefile)
 AC_OUTPUT

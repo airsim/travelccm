@@ -2,7 +2,7 @@
 Building the library and test binary from Subversion repository:
 ----------------------------------------------------------------
 The Sourceforge Subversion repository is to be found here:
-svn co https://travel-ccm.svn.sourceforge.net/svnroot/travel-ccm/trunk/travel-ccm travel-ccmsvn
+svn co https://travelccm.svn.sourceforge.net/svnroot/travelccm/trunk/travelccm travelccmsvn
 
 Then, you need the following packages (Fedora Core 6 names here, 
 but names may vary according to distributions):
@@ -16,12 +16,12 @@ but names may vary according to distributions):
 
 Building the library and test binary from the tarball:
 ------------------------------------------------------
-The latest stable source tarball (travel-ccm*.tar.gz or .bz2) can be found here:
+The latest stable source tarball (travelccm*.tar.gz or .bz2) can be found here:
 http://sourceforge.net/project/showfiles.php?group_id=261639
 
 Then, as usual, you can just type the following sequence:
-"./configure --prefix=/home/travel-ccm/dev/deliveries/travel-ccm-0.1.0 && make && make check"
-Of course, if you want to install the library (libtravel-ccm*.so*), 
+"./configure --prefix=/home/travelccm/dev/deliveries/travelccm-0.1.0 && make && make check"
+Of course, if you want to install the library (libtravelccm*.so*), 
 just type: "make install".
 
 See the INSTALL file for more details.

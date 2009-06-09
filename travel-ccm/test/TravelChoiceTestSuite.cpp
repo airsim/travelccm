@@ -3,8 +3,8 @@
 #include <string>
 // CPPUNIT
 #include <test/com/CppUnitCore.hpp>
-// TRAVEL-CCM
-#include <travel-ccm/TRAVEL_CCM_Service.hpp>
+// TRAVELCCM
+#include <travelccm/TRAVELCCM_Service.hpp>
 // TRAVEL-CCM Test Suite
 #include <test/TravelChoiceTestSuite.hpp>
 
@@ -30,7 +30,7 @@ void testTravelChoiceHelper() {
     logOutputFile.clear();
     
     // Initialise the list of classes/buckets
-    // TRAVEL_CCM::TRAVEL_CCM_Service travel_ccmService (logOutputFile);
+    // TRAVELCCM::TRAVELCCM_Service travelccmService (logOutputFile);
     
   } catch (const std::exception& stde) {
     std::cerr << "Standard exception: " << stde.what() << std::endl;
