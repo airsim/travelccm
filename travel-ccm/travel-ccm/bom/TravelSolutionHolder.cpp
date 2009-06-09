@@ -8,6 +8,7 @@
 #include <iomanip>
 // TRAVEL_CCM
 #include <travel-ccm/bom/TravelSolutionHolder.hpp>
+#include <travel-ccm/service/Logger.hpp>
 
 namespace TRAVEL_CCM {
 
@@ -42,8 +43,14 @@ namespace TRAVEL_CCM {
     return oString;
   }
 
+  // ////////////////////////////////////////////////////////////////////////
   int TravelSolutionHolder::numberOfTravelSolutions() {
     return _travelSolutionList.size();
+  }
+
+  // ////////////////////////////////////////////////////////////////////////
+  bool TravelSolutionHolder::isVoid() {
+    return (numberOfTravelSolutions() == 0);
   }
     
   // //////////////////////////////////////////////////////////////////////
@@ -92,36 +99,47 @@ namespace TRAVEL_CCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
+  void TravelSolutionHolder::
+  addTravelSolutionList (TravelSolutionList_T addList) {
+    _travelSolutionList.merge(addList);
+  }
+
+  // //////////////////////////////////////////////////////////////////////
   void TravelSolutionHolder::eraseCurrentTravelSolution () {
     /* ok even if the list is at the end */
     assert (_itCurrentTravelSolution != _travelSolutionList.end());
-    _itCurrentTravelSolution = _travelSolutionList.erase (_itCurrentTravelSolution);
+    _itCurrentTravelSolution =
+      _travelSolutionList.erase (_itCurrentTravelSolution);
   }
   
   // //////////////////////////////////////////////////////////////////////
-  bool TravelSolutionHolder::restrictionMeetsTSList(Restriction& restriction) {
-     /* if we are at the end of the list, we return true because all
-        the travel solutions have been matched
-     */
+  void TravelSolutionHolder::
+  restrictionMeetsTSList(Restriction& restriction,
+                         TravelSolutionList_T& removedElements) {
+     /* if we are at the end of the list, we return the removedElements list
+        because all the travel solutions have been matched */
     if (!hasNotReachedEnd()){
-      begin();
-      return true;
+      return;
     }
     else {
     /** call a function in the TravelSolution class which returns if a
         restriction meets a single travel solution */
-      const TravelSolution& currentTravelSolution = getCurrentTravelSolution();
+      TravelSolution& currentTravelSolution = getCurrentTravelSolution();
       bool curTSOK =
         currentTravelSolution.restrictionMeetsTravelSolution(restriction);
-      /* else, we are not at the end; if the restriction does not
-         match the first travel solution */
-      if (!curTSOK){
-        return false;}
-      /* if it does, we need to know if the next ones do too */
+      if (!curTSOK) {
+        // we add this travel solution to the temp list
+        removedElements.push_back(&currentTravelSolution);
+        // TRAVEL_CCM_LOG_DEBUG (currentTravelSolution.toString());
+        // we erase this travel solution from the current holder
+        eraseCurrentTravelSolution();
+      }
+      /* if the travel solution matches the restriction, we do not alter the
+         temporary list, and test the next elements */
       else {
         iterate();
-        return restrictionMeetsTSList(restriction);
       }
+      restrictionMeetsTSList(restriction, removedElements);
     }
   }
 

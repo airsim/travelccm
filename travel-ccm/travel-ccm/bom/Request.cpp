@@ -51,7 +51,7 @@ namespace TRAVEL_CCM {
 
   // //////////////////////////////////////////////////////////////////////
   /*TravelSolutionHolder Request::getTravelSolutions() {
-    /** need other methods which are in the simulator */
+    ** need other methods which are in the simulator */
   /*return NULL;
     }*/
 

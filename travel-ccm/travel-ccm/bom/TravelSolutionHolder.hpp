@@ -32,6 +32,9 @@ namespace TRAVEL_CCM {
 
     /** Get the number of travel solutions in the list */
     int numberOfTravelSolutions();
+
+    /** return true if the list is void */
+    bool isVoid();
     
     /** Get a string describing the whole key (differentiating two objects
         at any level). */
@@ -67,11 +70,14 @@ namespace TRAVEL_CCM {
     void iterate ();
     void eraseCurrentTravelSolution ();
     void addTravelSolution (TravelSolution&) ;
+    void addTravelSolutionList (TravelSolutionList_T);
 
-    /** given a list of travel solutionsm the function returns if the
-        restriction in argument meets the different travel solutions
+    /** given a list of travel solutions, the function modifies the current
+        holder of travel solutions to keep only the ones that match the
+        restriction, and updates the list of travel solutions put in argument
+        so that it holds the travel solutions erased due to that restriction.
     */
-    bool restrictionMeetsTSList(Restriction&);
+    void restrictionMeetsTSList(Restriction&, TravelSolutionList_T&);
 
   };
 

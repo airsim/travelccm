@@ -100,7 +100,9 @@ namespace TRAVEL_CCM {
                       Duration_T(14,00,00), Duration_T(02,00,00), true, "BA",
                       "ECO", 404, 200, 0, true, false);
 
-    // add restrictions to the restriction holder
+    /* add restrictions to the restriction holder
+       the earlier we add the restriction, the more important
+    */
     addRestriction("refundability");
     addRestriction("preferredAirline", "AF");
     
