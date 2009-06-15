@@ -6,7 +6,7 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <string>
-// TRAVEL-CCM
+// TRAVELCCM
 #include <travelccm/bom/BomAbstract.hpp>
 
 namespace TRAVELCCM {

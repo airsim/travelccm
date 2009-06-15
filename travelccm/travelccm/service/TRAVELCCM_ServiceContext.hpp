@@ -6,16 +6,12 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <string>
-// Boost (Extended STL)
-#include <boost/date_time/gregorian/gregorian.hpp>
 // TRAVELCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/service/ServiceAbstract.hpp>
-#include <travelccm/TRAVELCCM_Types.hpp>
-#include <travelccm/bom/Request.hpp>
 
 namespace TRAVELCCM {
-  // Forward declarations.
+  // Forward declarations
   class Passenger;
   class RestrictionHolder;
   class TravelSolutionHolder;
@@ -27,7 +23,11 @@ namespace TRAVELCCM {
         with a context interface. */
     friend class TRAVELCCM_Service;
     friend class FacTRAVELCCMServiceContext;
-
+  public:
+    TravelSolutionHolder& getTravelSolutionHolder() const;
+    //Passenger& getPassenger () const ;
+    RestrictionHolder& getRestrictionHolder() const;
+    
   private:
     /** Constructors. */
     TRAVELCCM_ServiceContext ();
@@ -64,7 +64,6 @@ namespace TRAVELCCM {
     /** Read the input data from a file */
     void readFromInputFile (const std::string& iInputFileName);
 
-
   private:
     // /////// Attributes ///////
     /* use of the field passenger later
@@ -73,11 +72,6 @@ namespace TRAVELCCM {
     RestrictionHolder* _restrictionHolder;
     TravelSolutionHolder* _travelSolutionHolder;
 
-  public:
-    TravelSolutionHolder& getTravelSolutionHolder() const;
-    //Passenger& getPassenger () const ;
-    RestrictionHolder& getRestrictionHolder() const;
-    
   };
 
 }

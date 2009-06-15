@@ -6,12 +6,14 @@
 // //////////////////////////////////////////////////////////////////////
 // TRAVELCCM 
 #include <travelccm/bom/BomAbstract.hpp>
-#include <travelccm/bom/RestrictionHolder.hpp>
-#include <travelccm/bom/TravelSolutionHolder.hpp>
 #include <travelccm/bom/TravelSolutionList.hpp>
 
 namespace TRAVELCCM {
 
+  // Forward declarations
+  class TravelSolutionHolder;
+  class RestrictionHolder;
+  
   /** Object description here. */
   class CCM : public BomAbstract {
     friend class FacCCM;
@@ -37,6 +39,11 @@ namespace TRAVELCCM {
         at the same level). */
     const std::string describeShortKey() const;
 
+  public:
+    /** Where the algorithms of customer choice are implemented
+        we could imagine other algorithms later */
+    static void orderedPreferences (TravelSolutionHolder&, RestrictionHolder&);
+
   private:
     /** Constructors are private so as to force the usage of the Factory
         layer. */
@@ -46,12 +53,6 @@ namespace TRAVELCCM {
 
     /** Destructor. */
     virtual ~CCM();
-    
-
-  public:
-    /** where the algorithms of customer choice are implemented
-        we could imagine other algorithms later */
-    static void orderedPreferences (TravelSolutionHolder&, RestrictionHolder&);
 
   };
 

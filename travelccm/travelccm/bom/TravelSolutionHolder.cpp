@@ -7,6 +7,8 @@
 #include <iostream>
 #include <iomanip>
 // TRAVELCCM
+#include <travelccm/bom/Restriction.hpp>
+#include <travelccm/bom/TravelSolution.hpp>
 #include <travelccm/bom/TravelSolutionHolder.hpp>
 #include <travelccm/service/Logger.hpp>
 
@@ -14,7 +16,6 @@ namespace TRAVELCCM {
 
   // ////////////////////////////////////////////////////////////////////
   TravelSolutionHolder::TravelSolutionHolder () {
-    
   }
   
   // ////////////////////////////////////////////////////////////////////
@@ -56,14 +57,12 @@ namespace TRAVELCCM {
   // //////////////////////////////////////////////////////////////////////
   const std::string TravelSolutionHolder::describeKey() const {
     std::string oKey;
-
     return oKey;
   }
 
   // //////////////////////////////////////////////////////////////////////
   const std::string TravelSolutionHolder::describeShortKey() const {
     std::string oKey;
-
     return oKey;
   }
 
@@ -71,7 +70,6 @@ namespace TRAVELCCM {
   TravelSolution& TravelSolutionHolder::getCurrentTravelSolution () const {
     TravelSolution* resultTravelSolution_ptr = *_itCurrentTravelSolution;
     assert (resultTravelSolution_ptr != NULL);
-    
     return (*resultTravelSolution_ptr);
   }
 
@@ -95,18 +93,19 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   void TravelSolutionHolder::addTravelSolution (TravelSolution& TS) {
-    _travelSolutionList.push_back(&TS);
+    // TODO: that code should be moved into the Factory layer
+    _travelSolutionList.push_back (&TS);
   }
 
   // //////////////////////////////////////////////////////////////////////
   void TravelSolutionHolder::
-  addTravelSolutionList (TravelSolutionList_T addList) {
-    _travelSolutionList.merge(addList);
+  addTravelSolutionList (TravelSolutionList_T& addList) {
+    _travelSolutionList.merge (addList);
   }
 
   // //////////////////////////////////////////////////////////////////////
   void TravelSolutionHolder::eraseCurrentTravelSolution () {
-    /* ok even if the list is at the end */
+    /* Ok even if the list is at the end */
     assert (_itCurrentTravelSolution != _travelSolutionList.end());
     _itCurrentTravelSolution =
       _travelSolutionList.erase (_itCurrentTravelSolution);
@@ -114,31 +113,34 @@ namespace TRAVELCCM {
   
   // //////////////////////////////////////////////////////////////////////
   void TravelSolutionHolder::
-  restrictionMeetsTSList(Restriction& restriction,
-                         TravelSolutionList_T& removedElements) {
-     /* if we are at the end of the list, we return the removedElements list
-        because all the travel solutions have been matched */
-    if (!hasNotReachedEnd()){
+  restrictionMeetsTSList (Restriction& restriction,
+                          TravelSolutionList_T& removedElements) {
+    /* If we are at the end of the list, we return the removedElements list
+       because all the travel solutions have been matched */
+    if (hasNotReachedEnd() == false) {
       return;
-    }
-    else {
-    /** call a function in the TravelSolution class which returns if a
-        restriction meets a single travel solution */
+      
+    } else {
+      /** Call a function in the TravelSolution class which returns if a
+          restriction meets a single travel solution */
       TravelSolution& currentTravelSolution = getCurrentTravelSolution();
       bool curTSOK =
-        currentTravelSolution.restrictionMeetsTravelSolution(restriction);
+        currentTravelSolution.restrictionMeetsTravelSolution (restriction);
+      
       if (!curTSOK) {
-        // we add this travel solution to the temp list
+        // We add this travel solution to the temp list
         removedElements.push_back(&currentTravelSolution);
+        
         // TRAVELCCM_LOG_DEBUG (currentTravelSolution.toString());
-        // we erase this travel solution from the current holder
+        // We erase this travel solution from the current holder
         eraseCurrentTravelSolution();
-      }
-      /* if the travel solution matches the restriction, we do not alter the
-         temporary list, and test the next elements */
-      else {
+        
+      } else {
+        /* If the travel solution matches the restriction, we do not alter the
+           temporary list, and test the next elements */
         iterate();
       }
+      
       restrictionMeetsTSList(restriction, removedElements);
     }
   }

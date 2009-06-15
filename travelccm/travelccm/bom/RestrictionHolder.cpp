@@ -5,6 +5,7 @@
 #include <assert.h>
 // TRAVELCCM
 #include <travelccm/bom/TravelSolution.hpp>
+#include <travelccm/bom/Restriction.hpp>
 #include <travelccm/bom/RestrictionHolder.hpp>
 
 namespace TRAVELCCM {
@@ -28,27 +29,27 @@ namespace TRAVELCCM {
   // //////////////////////////////////////////////////////////////////////
   std::string RestrictionHolder::toString() const {
     std::string oString;
+    
     RestrictionList_T::const_iterator it = _restrictionList.begin();
-    while (it != _restrictionList.end() ){
-      Restriction* res_ptr = *it;
-      assert(res_ptr != NULL);
+    while (it != _restrictionList.end() ) {
+      const Restriction* res_ptr = *it;
+      assert (res_ptr != NULL);
       oString += res_ptr->toString();
-      it++;
+      ++it;
     }
+    
     return oString;
   }
     
   // //////////////////////////////////////////////////////////////////////
   const std::string RestrictionHolder::describeKey() const {
     std::string oKey;
-
     return oKey;
   }
 
   // //////////////////////////////////////////////////////////////////////
   const std::string RestrictionHolder::describeShortKey() const {
     std::string oKey;
-
     return oKey;
   }
 
@@ -56,7 +57,6 @@ namespace TRAVELCCM {
    Restriction& RestrictionHolder::getCurrentRestriction () const {
     Restriction* resultRestriction_ptr = *_itCurrentRestriction;
     assert (resultRestriction_ptr != NULL);
-    
     return (*resultRestriction_ptr);
   }
 
@@ -79,13 +79,13 @@ namespace TRAVELCCM {
   // //////////////////////////////////////////////////////////////////////
   void RestrictionHolder::iterate () {
     if (_itCurrentRestriction != _restrictionList.end()) {
-      _itCurrentRestriction++;
+      ++_itCurrentRestriction;
     }
   }
 
   // //////////////////////////////////////////////////////////////////////
   void RestrictionHolder::eraseCurrentRestriction () {
-    /* ok even if the list is at the end */
+    /* Ok even if the list is at the end */
     assert (_itCurrentRestriction != _restrictionList.end());
     _itCurrentRestriction = _restrictionList.erase (_itCurrentRestriction);
   }

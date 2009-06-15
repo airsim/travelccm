@@ -3,7 +3,7 @@
 // //////////////////////////////////////////////////////////////////////
 // C
 #include <assert.h>
-// TRAVEL-CCM
+// TRAVELCCM
 #include <travelccm/bom/TravelProduct.hpp>
 
 namespace TRAVELCCM {

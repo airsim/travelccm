@@ -7,15 +7,16 @@
 // TRAVELCCM 
 #include <travelccm/bom/BomAbstract.hpp>
 #include <travelccm/bom/TravelSolutionList.hpp>
-#include <travelccm/bom/Restriction.hpp>
-#include <travelccm/bom/TravelSolution.hpp>
 
 namespace TRAVELCCM {
+
+  // Forward declarations
+  class Restriction;
+  class TravelSolution;
 
   /** Object description here. */
   class TravelSolutionHolder : public BomAbstract {
     friend class FacTravelSolutionHolder;
-
   public:
     
     // /////////// Display support methods /////////
@@ -63,22 +64,28 @@ namespace TRAVELCCM {
     virtual ~TravelSolutionHolder();
 
   public:
+    /** */
     TravelSolution& getCurrentTravelSolution () const;
 
+    /** */
     void begin ();
+    /** */
     bool hasNotReachedEnd () const;
+    /** */
     void iterate ();
+    /** */
     void eraseCurrentTravelSolution ();
+    /** */
     void addTravelSolution (TravelSolution&) ;
-    void addTravelSolutionList (TravelSolutionList_T);
+    /** */
+    void addTravelSolutionList (TravelSolutionList_T&);
 
-    /** given a list of travel solutions, the function modifies the current
+    /** Given a list of travel solutions, the function modifies the current
         holder of travel solutions to keep only the ones that match the
         restriction, and updates the list of travel solutions put in argument
         so that it holds the travel solutions erased due to that restriction.
     */
-    void restrictionMeetsTSList(Restriction&, TravelSolutionList_T&);
-
+    void restrictionMeetsTSList (Restriction&, TravelSolutionList_T&);
   };
 
 }

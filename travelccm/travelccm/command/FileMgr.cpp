@@ -123,26 +123,28 @@ namespace TRAVELCCM {
           i = 0;
         }
         i++;
+
       } else {
         hasAllPArams = false;
       }
 
     }
+    
     if (hasAllPArams && i == 1) {
       TravelSolution& aTravelSolution =
         FacTravelSolution::instance().create (dAirport, aAirport, depDate,
                                               depTime, arTime, dur, Ref,
                                               airline, cabin, flightNum,
                                               fare, lagsNum, SNS, change);
-      ioTravelSolutionHolder.addTravelSolution(aTravelSolution);
+      ioTravelSolutionHolder.addTravelSolution (aTravelSolution);
       /*FacTravelSolutionHolder::
         instance().addTravelSolution (ioTravelSolutionHolder, aTravelSolution);*/
     }
-    if (!inputFile.eof()) {
-      std::cerr << "Problem when reading input file \"" << iInputFileName
-                << "\"" << std::endl;
+    
+    if (inputFile.eof() == false) {
+      TRAVELCCM_LOG_ERROR ("Problem when reading input file \""
+                           << iInputFileName << "\"");
     }
-
   }
   
 }

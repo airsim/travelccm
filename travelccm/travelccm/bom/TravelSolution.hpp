@@ -11,9 +11,11 @@
 // TRAVELCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/bom/BomAbstract.hpp>
-#include <travelccm/bom/Restriction.hpp>
 
 namespace TRAVELCCM {
+
+  // Forward declarations
+  class Restriction;
 
   /** Object description here. */
   class TravelSolution : public BomAbstract {

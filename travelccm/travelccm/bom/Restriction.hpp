@@ -66,17 +66,17 @@ namespace TRAVELCCM {
     Restriction ();
     Restriction (const Restriction&);
 
-    /** real constructors */
-    // used for the construction of dual restrictions
-    Restriction(std::string restrictionType);
-    // used for the construction of "complex" restrictions
-    Restriction(std::string restrictionType, std::string namePreference);
+    /** Real constructors */
+    /** Used for the construction of dual restrictions. */
+    Restriction (std::string restrictionType);
+    /** Used for the construction of "complex" restrictions. */
+    Restriction (std::string restrictionType, std::string namePreference);
 
     /** Destructor. */
     virtual ~Restriction();
 
   private:
-    /* the type of the restriction gives the aspect of the ticket which
+    /* The type of the restriction gives the aspect of the ticket which
        counts for the customer.
        Extensively they are: refundability, preferredAirline, preferredCabin
        (for the moment, we will add other later)

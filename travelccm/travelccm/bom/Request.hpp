@@ -6,7 +6,6 @@
 // //////////////////////////////////////////////////////////////////////
 // TRAVELCCM 
 #include <travelccm/bom/BomAbstract.hpp>
-#include <travelccm/bom/TravelSolutionHolder.hpp>
 
 namespace TRAVELCCM {
 

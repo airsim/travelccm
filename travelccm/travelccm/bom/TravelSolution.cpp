@@ -7,6 +7,7 @@
 #include <iostream>
 #include <iomanip>
 // TRAVELCCM 
+#include <travelccm/bom/Restriction.hpp>
 #include <travelccm/bom/TravelSolution.hpp>
 
 namespace TRAVELCCM {
@@ -18,24 +19,13 @@ namespace TRAVELCCM {
                                   Duration_T& dur, bool Ref,
                                   std::string& airline, std::string& cabin,
                                   int& flightNum, double& fare, int& lagsNum,
-                                  bool SNS, bool change){
-
-     _departureAirport = dAirport;
-     _arrivalAirport = aAirport;
-     _departureDate = depDate;
-     _departureTime = depTime;
-     _arrivalTime = arTime;
-     _duration = dur;
-     _refundable = Ref;
-     _airlineName = airline;
-     _cabinName = cabin;
-     _flightNumber = flightNum;
-     _fare = fare;
-     _numberOfLags = lagsNum;
-     _saturdayNightStay = SNS;
-     _changeable = change;
-    
-
+                                  bool SNS, bool change)
+    : _departureAirport (dAirport), _arrivalAirport (aAirport),
+      _departureDate (depDate), _departureTime (depTime), 
+      _arrivalTime (arTime), _duration (dur), _refundable (Ref),
+      _airlineName (airline), _cabinName (cabin), _flightNumber (flightNum),
+      _fare (fare), _numberOfLags (lagsNum), _saturdayNightStay (SNS),
+      _changeable (change) {
     }
 
   // /////////////////////////////////////////////////////////////////////
@@ -65,22 +55,27 @@ namespace TRAVELCCM {
             << "departure time: " << _departureTime << ", arrival time: "
             << _arrivalTime << ", duration: " << _duration << "; " << "cabin: "
             << _cabinName << "; ";
-    if (_refundable){
+
+    if (_refundable) {
      oString << "refundable fare; ";
     } else {
      oString << "nonrefundable fare; ";
     }
-    if (_changeable){
+    
+    if (_changeable) {
       oString << "changeable fare; ";
     } else {
       oString << "nonchangeable fare; ";
     }
-    if (_saturdayNightStay){
+    
+    if (_saturdayNightStay) {
       oString << "Saturday Night Stay mandatory; ";
     } else {
       oString << "Saturday Night Stay non mandatory; ";
     }
-    oString << "price: " << _fare <<  " \n";
+    
+    oString << "price: " << _fare <<  std::endl;
+    
     return oString.str();
   }
     
@@ -166,41 +161,40 @@ namespace TRAVELCCM {
     return _changeable;
   }
 
-   // /////////////////////////////////////////////////////////////////////
+  // /////////////////////////////////////////////////////////////////////
   bool TravelSolution::restrictionMeetsTravelSolution (Restriction& res) const {
-    /** need to consider all the different kind of restrictions in a
+    bool oRestrictionMatchesTravelSolution = true;
+    
+    /** Need to consider all the different kinds of restriction in a
         separate way
     */
-    if (res.getRestrictionType() == "refundability")
-      {
-      if (getRefundable())
-        return true;
-      else
-        return false;
-      }
-    else if (res.getRestrictionType() == "preferredAirline")
-      {
-        // be careful on how you write the airline (airline code or no?)
-        if (getAirlineName() == res.getPreferredAirline() )
-          return true;
-        else
-          return false;
-      }
-    else if (res.getRestrictionType() == "preferredCabin")
-      {
-        /* today we look for the perfect match. A better solution would be
-           to allow thee overclassing */
-        if (getCabin() == res.getPreferredCabin() )
-          return true;
-        else
-          return false;
-      }
-    
-    /** the function return true by default in order not to loose any
-        correct travel solution */
-    else return true;
-  }
+    if (res.getRestrictionType() == "refundability") {
+      return getRefundable();
+    }
 
+    if (res.getRestrictionType() == "preferredAirline") {
+      // Be careful on how you write the airline (airline code or no?)
+      if (getAirlineName() != res.getPreferredAirline() ) {
+        oRestrictionMatchesTravelSolution = false;
+      }
+
+      return oRestrictionMatchesTravelSolution;
+    }
+
+    if (res.getRestrictionType() == "preferredCabin") {
+      /* Today we look for the perfect match. A better solution would be
+         to allow thee overclassing */
+      if (getCabin() != res.getPreferredCabin() ) {
+        oRestrictionMatchesTravelSolution = false;
+      }
+
+      return oRestrictionMatchesTravelSolution;
+    }
+    
+    /** The function returns true by default in order not to loose any
+        correct travel solution */
+    return oRestrictionMatchesTravelSolution;
+  }
     
 }
 

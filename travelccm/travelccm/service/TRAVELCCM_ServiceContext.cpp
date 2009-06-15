@@ -20,22 +20,18 @@
 #include <travelccm/factory/FacPassenger.hpp>
 #include <travelccm/command/FileMgr.hpp>
 
-
 namespace TRAVELCCM {
   
   // //////////////////////////////////////////////////////////////////////
   TRAVELCCM_ServiceContext::TRAVELCCM_ServiceContext () {
-    _travelSolutionHolder = &FacTravelSolutionHolder::instance().create();
-    _restrictionHolder = &FacRestrictionHolder::instance().create();
     init ();
   }
   
   // //////////////////////////////////////////////////////////////////////
-  TRAVELCCM_ServiceContext::TRAVELCCM_ServiceContext (const TRAVELCCM_ServiceContext&) {
-    _travelSolutionHolder = &FacTravelSolutionHolder::instance().create();
-    _restrictionHolder = &FacRestrictionHolder::instance().create();
+  TRAVELCCM_ServiceContext::
+  TRAVELCCM_ServiceContext (const TRAVELCCM_ServiceContext&) {
     init ();
-    }
+  }
 
   // //////////////////////////////////////////////////////////////////////
   /* TRAVELCCM_ServiceContext::TRAVELCCM_ServiceContext (Request& req,
@@ -50,12 +46,15 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_ServiceContext::init () {
+    _travelSolutionHolder = &FacTravelSolutionHolder::instance().create();
+    _restrictionHolder = &FacRestrictionHolder::instance().create();
   }
 
   // //////////////////////////////////////////////////////////////////////
   /* void TRAVELCCM_ServiceContext::init (Request& req, std::string passType) {
     _passenger = &FacPassenger::instance().create(req, passType);
-    } */
+    }
+  */
 
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_ServiceContext::
@@ -78,10 +77,11 @@ namespace TRAVELCCM {
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_ServiceContext::addRestriction (std::string restrictionType) {
     Restriction& aRestriction =
-      FacRestriction::instance().create(restrictionType);
+      FacRestriction::instance().create (restrictionType);
     assert (_restrictionHolder != NULL);
+    
     FacRestriction::instance().addRestriction (*_restrictionHolder,
-                                                     aRestriction);
+                                               aRestriction);
   }
 
    // //////////////////////////////////////////////////////////////////////
@@ -90,26 +90,30 @@ namespace TRAVELCCM {
     Restriction& aRestriction =
       FacRestriction::instance().create(restrictionType, namePreference);
     assert (_restrictionHolder != NULL);
+    
     FacRestriction::instance().addRestriction (*_restrictionHolder,
-                                                     aRestriction);
+                                               aRestriction);
   }
 
   // //////////////////////////////////////////////////////////////////////
   RestrictionHolder& TRAVELCCM_ServiceContext::
-                               getRestrictionHolder() const {
+  getRestrictionHolder() const {
+    assert (_restrictionHolder != NULL);
     return *_restrictionHolder;
   }
   
   // //////////////////////////////////////////////////////////////////////
   TravelSolutionHolder& TRAVELCCM_ServiceContext::
-                               getTravelSolutionHolder() const {
+  getTravelSolutionHolder() const {
+    assert (_travelSolutionHolder != NULL);
     return *_travelSolutionHolder;
   }
 
   // //////////////////////////////////////////////////////////////////////
   /*Passenger& TRAVELCCM_ServiceContext::getPassenger() const {
     return *_passenger;
-    } */
+    }
+  */
 
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_ServiceContext::
@@ -118,4 +122,5 @@ namespace TRAVELCCM {
     FileMgr::readAndProcessTravelSolutionInputFile (iInputFileName,
                                                     *_travelSolutionHolder);
   }
+  
 }
