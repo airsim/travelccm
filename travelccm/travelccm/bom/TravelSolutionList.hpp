@@ -13,7 +13,7 @@ namespace TRAVELCCM {
   class TravelSolution;
 
   /** Define a vector (ordered map) of N TravelSlutions/classes. */
-  typedef std::list<TravelSolution*> TravelSolutionList_T;
+  typedef std::list<const TravelSolution*> TravelSolutionList_T;
   
 }
 #endif // __TRAVELCCM_TRAVELSOLUTIONLIST_HPP

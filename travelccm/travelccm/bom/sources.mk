@@ -8,7 +8,8 @@ bom_h_sources = $(top_srcdir)/travelccm/bom/BomAbstract.hpp \
 				$(top_srcdir)/travelccm/bom/RestrictionList.hpp \
 				$(top_srcdir)/travelccm/bom/CCM.hpp \
 				$(top_srcdir)/travelccm/bom/TravelSolution.hpp \
-				$(top_srcdir)/travelccm/bom/Request.hpp
+				$(top_srcdir)/travelccm/bom/Request.hpp \
+				$(top_srcdir)/travelccm/bom/DepartureTimePreferencePattern.hpp
 bom_cc_sources = $(top_srcdir)/travelccm/bom/BomAbstract.cpp \
 				$(top_srcdir)/travelccm/bom/TravelProduct.cpp \
 				$(top_srcdir)/travelccm/bom/FlightDate.cpp \
@@ -18,4 +19,5 @@ bom_cc_sources = $(top_srcdir)/travelccm/bom/BomAbstract.cpp \
 				$(top_srcdir)/travelccm/bom/RestrictionHolder.cpp \
 				$(top_srcdir)/travelccm/bom/CCM.cpp \
 				$(top_srcdir)/travelccm/bom/TravelSolution.cpp \
-				$(top_srcdir)/travelccm/bom/Request.cpp
+				$(top_srcdir)/travelccm/bom/Request.cpp \
+				$(top_srcdir)/travelccm/bom/DepartureTimePreferencePattern.cpp

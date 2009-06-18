@@ -16,10 +16,7 @@ namespace TRAVELCCM {
   // //////////////////////////////////////////////////////////////////////
   void Simulator::simulate(RestrictionHolder& ioRestrictionHolder,
                            TravelSolutionHolder& ioTravelSolutionHolder) {
-    /* no passenger field anymore 
-    RestrictionHolder& restrictions = ioPassenger.getPassengerRestrictions();
-    */
-
+    
     int numTravelSolIn = ioTravelSolutionHolder.numberOfTravelSolutions();
     // print the number of travel solutions before the customer choice
     TRAVELCCM_LOG_DEBUG ("Initially there are " << numTravelSolIn

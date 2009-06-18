@@ -13,7 +13,7 @@ namespace TRAVELCCM {
   class Restriction;
 
   /** Define a vector (ordered list) of N Restrictions/classes. */
-  typedef std::list<Restriction*> RestrictionList_T;
+  typedef std::list<const Restriction*> RestrictionList_T;
   
 }
 #endif // __TRAVELCCM_RESTRICTIONLIST_HPP

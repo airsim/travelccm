@@ -69,7 +69,8 @@ namespace TRAVELCCM {
                       const std::string& iAirlineCode,
                       const std::string& iCabinCode,
                       const int iFlightNumber, double iFare,
-                      int iStopsNumber,  bool iSNS, bool iChangeability) {
+                      int iStopsNumber,  bool iSNS, bool iChangeability,
+                      const std::string& id) {
     assert (_travelccmServiceContext != NULL);
 
     _travelccmServiceContext->addTravelSolution (iDepartureAirport,
@@ -79,7 +80,7 @@ namespace TRAVELCCM {
                                                  iAirlineCode, iCabinCode,
                                                  iFlightNumber,
                                                  iFare, iStopsNumber, iSNS,
-                                                 iChangeability);
+                                                 iChangeability, id);
   }
   
   // //////////////////////////////////////////////////////////////////////
@@ -103,22 +104,22 @@ namespace TRAVELCCM {
     // AF404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
     addTravelSolution ("NCE","LHR", Date_T(2009,06,1), Duration_T(12,00,00),
                        Duration_T(14,00,00), Duration_T(02,00,00), false,
-                       "AF", "ECO", 404, 200, 0, false, false);
+                       "AF", "ECO", 404, 200, 0, false, false, "T1");
     
     // AF404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
     addTravelSolution ("NCE","LHR", Date_T(2009,06,1), Duration_T(12,00,00),
                        Duration_T(14,00,00), Duration_T(02,00,00), true, "AF",
-                       "ECO", 404, 200, 0, false, false);
+                       "ECO", 404, 200, 0, false, false, "T2");
     
     // BA404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
     addTravelSolution ("NCE","LHR", Date_T(2009,06,1), Duration_T(12,00,00),
                        Duration_T(14,00,00), Duration_T(02,00,00), false, "BA",
-                       "ECO", 404, 200, 0, true, false);
+                       "ECO", 404, 200, 0, true, false, "T3");
     
     // BA404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
     addTravelSolution ("NCE","LHR", Date_T(2009,06,1), Duration_T(12,00,00),
                        Duration_T(14,00,00), Duration_T(02,00,00), true, "BA",
-                       "ECO", 404, 200, 0, true, false);
+                       "ECO", 404, 200, 0, true, false, "T4");
 
     /* Add restrictions to the restriction holder
        the earlier we add the restriction, the more important

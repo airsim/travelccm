@@ -6,12 +6,16 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <string>
+// Boost (Extended STL)
+#include <boost/date_time/gregorian/gregorian.hpp>
 // TRAVELCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/service/ServiceAbstract.hpp>
+#include <travelccm/TRAVELCCM_Types.hpp>
+#include <travelccm/bom/Request.hpp>
 
 namespace TRAVELCCM {
-  // Forward declarations
+  // Forward declarations.
   class Passenger;
   class RestrictionHolder;
   class TravelSolutionHolder;
@@ -23,11 +27,7 @@ namespace TRAVELCCM {
         with a context interface. */
     friend class TRAVELCCM_Service;
     friend class FacTRAVELCCMServiceContext;
-  public:
-    TravelSolutionHolder& getTravelSolutionHolder() const;
-    //Passenger& getPassenger () const ;
-    RestrictionHolder& getRestrictionHolder() const;
-    
+
   private:
     /** Constructors. */
     TRAVELCCM_ServiceContext ();
@@ -49,20 +49,27 @@ namespace TRAVELCCM {
     }
 
     /** Add a travel solution to the TravelSolutionHolder */
-    void addTravelSolution (std::string dAirport, std::string aAirport,
-                            Date_T depDate,
-                            Duration_T depTime, Duration_T arTime,
-                            Duration_T dur, bool Ref, std::string airline,
-                            std::string cabin, int flightNum, double fare,
-                            int lagsNum,  bool SNS, bool change);
+    void addTravelSolution (const std::string& iDepartureAirport,
+                            const std::string& iArrivalAirport,
+                            const Date_T& iDepartureDate,
+                            const Duration_T& iDepartureTime,
+                            const Duration_T& iArrivalTime,
+                            const Duration_T& iDuration,
+                            const bool iRefubdability,
+                            const std::string& iAirlineCode,
+                            const std::string& iCabinCode,
+                            const int FlightNumber, double iFare,
+                            int iStopsNumber,  bool iSNS, bool iChangeability,
+                            const std::string& id);
     
     /** Add a restriction to the restriction holder */
-    void addRestriction (std::string restrictionType);
-    void addRestriction (std::string restrictionType,
-                         std::string namePreference);
+    void addRestriction (const std::string& iRestrictionType);
+    void addRestriction (const std::string& iRestrictionType,
+                         const std::string& iNamePreference);
 
     /** Read the input data from a file */
     void readFromInputFile (const std::string& iInputFileName);
+
 
   private:
     // /////// Attributes ///////
@@ -72,6 +79,11 @@ namespace TRAVELCCM {
     RestrictionHolder* _restrictionHolder;
     TravelSolutionHolder* _travelSolutionHolder;
 
+  public:
+    TravelSolutionHolder& getTravelSolutionHolder() const;
+    //Passenger& getPassenger () const ;
+    RestrictionHolder& getRestrictionHolder() const;
+    
   };
 
 }

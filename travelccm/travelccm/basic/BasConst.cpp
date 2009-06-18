@@ -1,10 +1,14 @@
 #include <travelccm/basic/BasConst_General.hpp>
 #include <travelccm/basic/BasConst_TRAVELCCM_Service.hpp>
-
+#include <travelccm/basic/BasConst_TimePattern.hpp>
 namespace TRAVELCCM {
-
-  /** Default value for the number of draws within the Monte-Carlo
-      Integration algorithm. */
-  const int DEFAULT_NUMBER_OF_DRAWS_FOR_MC_SIMULATION = 100000;
+  
+  /** Default value for the ID of the DepartureTimePreferencePattern
+      for the business type. */
+  const PatternId_T DEFAULT_BUSINESS_PATTERN_ID = "B";
+  
+  /** Default value for the ID of the DepartureTimePreferencePattern
+      for the leisure type. */
+  const PatternId_T DEFAULT_LEISURE_PATTERN_ID = "L";
 
 }

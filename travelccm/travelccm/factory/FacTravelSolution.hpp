@@ -39,7 +39,7 @@ namespace TRAVELCCM {
                             Duration_T depTime, Duration_T arTime,
                             Duration_T dur, bool Ref, std::string airline,
                             std::string cabin, int flightNum, double fare,
-                            int lagsNum, bool SNS, bool change);
+                            int lagsNum, bool SNS, bool change, std::string id);
 
     /** Add a travel solution in the list of TravelSolutionHolder */
     void addTravelSolution(TravelSolutionHolder& ioTravelSolutionHolder,

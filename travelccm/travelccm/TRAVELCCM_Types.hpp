@@ -54,6 +54,18 @@ namespace TRAVELCCM {
 
   /** Define the Date (e.g., flight-date departure date). */
   typedef boost::gregorian::date Date_T;
+  
+  /** Define an accurate time (date +time). */
+  typedef boost::posix_time::ptime DateTime_T;
+
+  /** Define an identity of a pattern. */
+  typedef std::string PatternId_T;
+
+  /** Define a pair of Duration_T. */
+  typedef std::pair<Duration_T, Duration_T> DurationPair_T;
+
+  /** Define a map between a time of the day and a DurationPair_T. */
+  typedef std::map<Duration_T, DurationPair_T> DepartureTimePreferencePattern_T;
     
 }
 #endif // __TRAVELCCM_TRAVELCCM_TYPES_HPP

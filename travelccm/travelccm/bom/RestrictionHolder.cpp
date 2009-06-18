@@ -5,7 +5,6 @@
 #include <assert.h>
 // TRAVELCCM
 #include <travelccm/bom/TravelSolution.hpp>
-#include <travelccm/bom/Restriction.hpp>
 #include <travelccm/bom/RestrictionHolder.hpp>
 
 namespace TRAVELCCM {
@@ -29,39 +28,40 @@ namespace TRAVELCCM {
   // //////////////////////////////////////////////////////////////////////
   std::string RestrictionHolder::toString() const {
     std::string oString;
-    
     RestrictionList_T::const_iterator it = _restrictionList.begin();
-    while (it != _restrictionList.end() ) {
+    while (it != _restrictionList.end() ){
       const Restriction* res_ptr = *it;
-      assert (res_ptr != NULL);
+      assert(res_ptr != NULL);
       oString += res_ptr->toString();
-      ++it;
+      it++;
     }
-    
     return oString;
   }
     
   // //////////////////////////////////////////////////////////////////////
   const std::string RestrictionHolder::describeKey() const {
     std::string oKey;
+
     return oKey;
   }
 
   // //////////////////////////////////////////////////////////////////////
   const std::string RestrictionHolder::describeShortKey() const {
     std::string oKey;
+
     return oKey;
   }
 
    // //////////////////////////////////////////////////////////////////////
-   Restriction& RestrictionHolder::getCurrentRestriction () const {
-    Restriction* resultRestriction_ptr = *_itCurrentRestriction;
+   const Restriction& RestrictionHolder::getCurrentRestriction () const {
+    const Restriction* resultRestriction_ptr = *_itCurrentRestriction;
     assert (resultRestriction_ptr != NULL);
+    
     return (*resultRestriction_ptr);
   }
 
   ///////////////////////////////////////////////////////////////////////
-  void RestrictionHolder::addRestriction (Restriction& iRestriction) {
+  void RestrictionHolder::addRestriction (const Restriction& iRestriction) {
     _restrictionList.push_back (&iRestriction);
   }
 
@@ -79,13 +79,13 @@ namespace TRAVELCCM {
   // //////////////////////////////////////////////////////////////////////
   void RestrictionHolder::iterate () {
     if (_itCurrentRestriction != _restrictionList.end()) {
-      ++_itCurrentRestriction;
+      _itCurrentRestriction++;
     }
   }
 
   // //////////////////////////////////////////////////////////////////////
   void RestrictionHolder::eraseCurrentRestriction () {
-    /* Ok even if the list is at the end */
+    /* ok even if the list is at the end */
     assert (_itCurrentRestriction != _restrictionList.end());
     _itCurrentRestriction = _restrictionList.erase (_itCurrentRestriction);
   }

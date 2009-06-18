@@ -51,6 +51,7 @@ namespace TRAVELCCM {
     int lagsNum;
     bool SNS;
     bool change;
+    std::string id;
     
     while (inputFile.getline (buffer, sizeof (buffer), ';')) {
       std::istringstream iStringStr (buffer);
@@ -121,30 +122,30 @@ namespace TRAVELCCM {
             change = true;
           else change = false;
           i = 0;
+        } else if (i == 15) {
+          id = dvalStr;
         }
         i++;
-
       } else {
         hasAllPArams = false;
       }
 
     }
-    
     if (hasAllPArams && i == 1) {
       TravelSolution& aTravelSolution =
         FacTravelSolution::instance().create (dAirport, aAirport, depDate,
                                               depTime, arTime, dur, Ref,
                                               airline, cabin, flightNum,
-                                              fare, lagsNum, SNS, change);
-      ioTravelSolutionHolder.addTravelSolution (aTravelSolution);
+                                              fare, lagsNum, SNS, change, id);
+      ioTravelSolutionHolder.addTravelSolution(aTravelSolution);
       /*FacTravelSolutionHolder::
         instance().addTravelSolution (ioTravelSolutionHolder, aTravelSolution);*/
     }
-    
-    if (inputFile.eof() == false) {
-      TRAVELCCM_LOG_ERROR ("Problem when reading input file \""
-                           << iInputFileName << "\"");
+    if (!inputFile.eof()) {
+      std::cerr << "Problem when reading input file \"" << iInputFileName
+                << "\"" << std::endl;
     }
+
   }
   
 }

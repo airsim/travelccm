@@ -17,18 +17,26 @@ namespace TRAVELCCM {
   }
 
   // /////////////////////////////////////////////////////////////////////
-  Restriction:: Restriction(std::string restrictionType){
-    _restrictionType = restrictionType;
+  Restriction:: Restriction(const std::string& iRestrictionType){
+    _restrictionType = iRestrictionType;
   }
 
   // /////////////////////////////////////////////////////////////////////
-  Restriction:: Restriction(std::string restrictionType,
-                            std::string namePreference){
-    _restrictionType = restrictionType;
-    if (restrictionType == "preferredAirline")
-      _preferredAirline = namePreference;
-    if (restrictionType == "preferredCabin")
-      _preferredCabin == namePreference;
+  Restriction:: Restriction(const std::string& iRestrictionType,
+                            const std::string& iNamePreference){
+    _restrictionType = iRestrictionType;
+    if (iRestrictionType == "preferredAirline")
+      _preferredAirline = iNamePreference;
+    if (iRestrictionType == "preferredCabin")
+      _preferredCabin == iNamePreference;
+  }
+
+  // /////////////////////////////////////////////////////////////////////
+  Restriction:: Restriction(const std::string& iRestrictionType,
+                            const DateTime_T& iDateTime){
+    _restrictionType = iRestrictionType;
+    if (iRestrictionType == "timePreference")
+      _preferredDepartureTime = iDateTime;
   }
   
   // ////////////////////////////////////////////////////////////////////
@@ -52,6 +60,9 @@ namespace TRAVELCCM {
       oString << " (" << _preferredAirline << ") ";
     if (_restrictionType == "preferredCabin")
       oString << " (" << _preferredCabin << ") ";
+    if (_restrictionType == "timePreference" )
+      oString << " ( " <<
+        boost::posix_time::to_simple_string(_preferredDepartureTime) << " )";
     oString << std::endl;
     return oString.str();
   }
@@ -69,18 +80,23 @@ namespace TRAVELCCM {
   }
 
   // /////////////////////////////////////////////////////////////////////
-  const std::string Restriction::getRestrictionType() const{
+  const std::string Restriction::getRestrictionType() const {
     return _restrictionType;
   }
 
   // /////////////////////////////////////////////////////////////////////
-  const std::string Restriction::getPreferredAirline() const{
+  const std::string Restriction::getPreferredAirline() const {
     return _preferredAirline;
   }
 
   // /////////////////////////////////////////////////////////////////////
-  const std::string Restriction::getPreferredCabin() const{
+  const std::string Restriction::getPreferredCabin() const {
     return _preferredCabin;
+  }
+
+   // /////////////////////////////////////////////////////////////////////
+  const DateTime_T Restriction::getPreferredDateTime() const {
+    return  _preferredDepartureTime;
   }
   
   // /////////////////////////////////////////////////////////////////////

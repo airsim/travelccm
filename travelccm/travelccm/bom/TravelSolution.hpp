@@ -11,13 +11,16 @@
 // TRAVELCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/bom/BomAbstract.hpp>
+#include <travelccm/bom/Restriction.hpp>
 
 namespace TRAVELCCM {
 
-  // Forward declarations
-  class Restriction;
-
-  /** Object description here. */
+  /** This class represents a travel solution, more precisely the fields
+    of a travel solution mandatory so that to implement a customer choice
+    model.
+    An example is NCE-LHR; 01-JUN-2009; 12:00 - 14:00 (02:00); refundable;
+    AF404; ECO; 200.0E; 0 stop; saturday night stay (mandatory); changeable;
+  */
   class TravelSolution : public BomAbstract {
     friend class FacTravelSolution;
   public:
@@ -57,10 +60,12 @@ namespace TRAVELCCM {
     const int  getNumberOfLags() const;
     const bool getSaturdayNightStay() const;
     const bool getChangeable() const;
+    const std::string getId() const;
+
 
     /* returns if the restriction put in arguent meets the current
        travel solution */
-    bool restrictionMeetsTravelSolution (Restriction&) const;
+    bool restrictionMeetsTravelSolution (const Restriction&) const;
 
   private:
     /** Constructors are private so as to force the usage of the Factory
@@ -68,12 +73,18 @@ namespace TRAVELCCM {
     /** Default constructors. */
     TravelSolution ();
     TravelSolution (const TravelSolution&);
-    TravelSolution (std::string& dAirport, std::string& aAirport,
-                    Date_T depDate,
-                    Duration_T& depTime, Duration_T& arTime, Duration_T& dur, 
-                    bool Ref, std::string& airline,
-                    std::string& cabin, int& flightNum, double& fare,
-                    int& lagsNum, bool SNS, bool change);
+    TravelSolution (const std::string& iDepartureAirport,
+                    const std::string& iArrivalAirport,
+                    const Date_T& iDepartureDate,
+                    const Duration_T& iDepartureTime,
+                    const Duration_T& iArrivalTime,
+                    const Duration_T& iDuration,
+                    const bool iRefundability,
+                    const std::string& iAirlineCode,
+                    const std::string& iCabinCode,
+                    const int& iFlightNumber,
+                    const double& iFare, int& iStopsNumber,
+                    bool iSNS, bool iChangeability, const std::string& id);
 
     /** Destructor. */
     virtual ~TravelSolution();
@@ -97,6 +108,7 @@ namespace TRAVELCCM {
     int _numberOfLags;
     bool _saturdayNightStay;
     bool _changeable;
+    std::string id;
     
   };
 

@@ -4,8 +4,8 @@
 // C
 #include <assert.h>
 // TRAVELCCM 
-#include <travelccm/factory/FacAirline.hpp>
 #include <travelccm/bom/Airline.hpp>
+#include <travelccm/factory/FacAirline.hpp>
 #include <travelccm/factory/FacSupervisor.hpp>
 #include <travelccm/service/Logger.hpp>
 

@@ -8,10 +8,13 @@
 #include <string>
 // TRAVELCCM 
 #include <travelccm/bom/BomAbstract.hpp>
+#include <travelccm/TRAVELCCM_Types.hpp>
 
 namespace TRAVELCCM {
 
   /** Class representing a fare restriction.
+      It represents all the different kinds of restriction who could reduce
+      the choice of any given customer, whatever its "type"
       <br>Typically, examples of fare restrictions are:
       <ul>
       <li>Refundability</li>
@@ -48,11 +51,15 @@ namespace TRAVELCCM {
     /** Get the type of the restriction */
     const std::string getRestrictionType() const;
 
-    /** Get the type of the restriction */
+    /** Get the preferred airline of the restriction */
     const std::string getPreferredAirline() const;
 
-    /** Get the type of the restriction */
+    /** Get the preferred cabin of the restriction */
     const std::string getPreferredCabin() const;
+
+    /** Get the preferred date time of the restriction -for the departure
+     or the arrival; not decided yet*/
+    const DateTime_T getPreferredDateTime() const;
     
     /* return if the travel solution put in argument meets the current
        restriction */
@@ -66,17 +73,21 @@ namespace TRAVELCCM {
     Restriction ();
     Restriction (const Restriction&);
 
-    /** Real constructors */
-    /** Used for the construction of dual restrictions. */
-    Restriction (std::string restrictionType);
-    /** Used for the construction of "complex" restrictions. */
-    Restriction (std::string restrictionType, std::string namePreference);
+    /** real constructors */
+    // used for the construction of dual restrictions
+    Restriction(const std::string& iRestrictionType);
+    // used for the construction of "complex" restrictions
+    Restriction(const std::string& iRestrictionType,
+                const std::string& iNamePreference);
+    // used for the construction of "time" restrictions
+    Restriction(const std::string& iRestrictionType,
+                const DateTime_T& iDateTime);
 
     /** Destructor. */
     virtual ~Restriction();
 
   private:
-    /* The type of the restriction gives the aspect of the ticket which
+    /* the type of the restriction gives the aspect of the ticket which
        counts for the customer.
        Extensively they are: refundability, preferredAirline, preferredCabin
        (for the moment, we will add other later)
@@ -86,6 +97,9 @@ namespace TRAVELCCM {
     std::string _preferredAirline;
     // field used only if the restriction is of type preferredCabin
     std::string _preferredCabin;
+    // filed used only if the restriction is of type timePreference
+    /** Define an accurate time (date +time). */
+    DateTime_T _preferredDepartureTime; //could be arrival too...
     
 
   };

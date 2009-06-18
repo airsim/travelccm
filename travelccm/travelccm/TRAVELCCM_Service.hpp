@@ -35,7 +35,8 @@ namespace TRAVELCCM {
                             const std::string& iAirlineCode,
                             const std::string& iCabinCode,
                             const int iFlightNumber, double iFare,
-                            int iStopsNumber,  bool iSNS, bool iChangeability);
+                            int iStopsNumber,  bool iSNS, bool iChangeability,
+                            const std::string& id);
 
     /** Add a restriction to the context. */
     void addRestriction (const std::string& iRestrictionType);

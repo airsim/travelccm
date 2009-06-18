@@ -20,18 +20,22 @@
 #include <travelccm/factory/FacPassenger.hpp>
 #include <travelccm/command/FileMgr.hpp>
 
+
 namespace TRAVELCCM {
   
   // //////////////////////////////////////////////////////////////////////
   TRAVELCCM_ServiceContext::TRAVELCCM_ServiceContext () {
+    _travelSolutionHolder = &FacTravelSolutionHolder::instance().create();
+    _restrictionHolder = &FacRestrictionHolder::instance().create();
     init ();
   }
   
   // //////////////////////////////////////////////////////////////////////
-  TRAVELCCM_ServiceContext::
-  TRAVELCCM_ServiceContext (const TRAVELCCM_ServiceContext&) {
+  TRAVELCCM_ServiceContext::TRAVELCCM_ServiceContext (const TRAVELCCM_ServiceContext&) {
+    _travelSolutionHolder = &FacTravelSolutionHolder::instance().create();
+    _restrictionHolder = &FacRestrictionHolder::instance().create();
     init ();
-  }
+    }
 
   // //////////////////////////////////////////////////////////////////////
   /* TRAVELCCM_ServiceContext::TRAVELCCM_ServiceContext (Request& req,
@@ -46,74 +50,77 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_ServiceContext::init () {
-    _travelSolutionHolder = &FacTravelSolutionHolder::instance().create();
-    _restrictionHolder = &FacRestrictionHolder::instance().create();
   }
 
   // //////////////////////////////////////////////////////////////////////
   /* void TRAVELCCM_ServiceContext::init (Request& req, std::string passType) {
     _passenger = &FacPassenger::instance().create(req, passType);
-    }
-  */
+    } */
 
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_ServiceContext::
-  addTravelSolution (std::string dAirport, std::string aAirport,
-                     Date_T depDate,
-                     Duration_T depTime, Duration_T arTime, Duration_T dur,
-                     bool Ref, std::string airline, std::string cabin,
-                     int flightNum, double fare, int lagsNum, bool SNS,
-                     bool change) {
+  addTravelSolution (const std::string& iDepartureAirport,
+                     const std::string& iArrivalAirport,
+                     const Date_T& iDepartureDate,
+                     const Duration_T& iDepartureTime,
+                     const Duration_T& iArrivalTime,
+                     const Duration_T& iDuration,
+                     const bool iRefundability,
+                     const std::string& iAirlineCode,
+                     const std::string& iCabinCode,
+                     const int iFlightNumber, const double iFare,
+                     int iStopsNumber, bool iSNS, bool iChangeability,
+                     const std::string& id) {
     TravelSolution& aTravelSolution =
-      FacTravelSolution::instance().create(dAirport, aAirport, depDate,
-                                           depTime, arTime, dur, Ref, airline,
-                                           cabin, flightNum, fare, lagsNum,
-                                           SNS, change);
+      FacTravelSolution::instance().create(iDepartureAirport, iArrivalAirport,
+                                           iDepartureDate, iDepartureTime,
+                                           iArrivalTime, iDuration,
+                                           iRefundability, iAirlineCode,
+                                           iCabinCode, iFlightNumber, iFare,
+                                           iStopsNumber, iSNS, iChangeability,
+                                           id);
     assert (_travelSolutionHolder != NULL);
     FacTravelSolution::instance().addTravelSolution (*_travelSolutionHolder,
                                                      aTravelSolution);
   }
 
   // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_ServiceContext::addRestriction (std::string restrictionType) {
+  void TRAVELCCM_ServiceContext::
+  addRestriction (const std::string& iRestrictionType) {
     Restriction& aRestriction =
-      FacRestriction::instance().create (restrictionType);
+      FacRestriction::instance().create(iRestrictionType);
     assert (_restrictionHolder != NULL);
-    
     FacRestriction::instance().addRestriction (*_restrictionHolder,
                                                aRestriction);
   }
 
    // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_ServiceContext::addRestriction (std::string restrictionType,
-                                                  std::string namePreference) {
+  void TRAVELCCM_ServiceContext::
+  addRestriction (const std::string& iRestrictionType,
+                  const std::string& iNamePreference) {
     Restriction& aRestriction =
-      FacRestriction::instance().create(restrictionType, namePreference);
+      FacRestriction::instance().create(iRestrictionType, iNamePreference);
     assert (_restrictionHolder != NULL);
-    
     FacRestriction::instance().addRestriction (*_restrictionHolder,
-                                               aRestriction);
+                                                     aRestriction);
   }
 
   // //////////////////////////////////////////////////////////////////////
   RestrictionHolder& TRAVELCCM_ServiceContext::
-  getRestrictionHolder() const {
-    assert (_restrictionHolder != NULL);
+                               getRestrictionHolder() const {
     return *_restrictionHolder;
   }
   
   // //////////////////////////////////////////////////////////////////////
   TravelSolutionHolder& TRAVELCCM_ServiceContext::
-  getTravelSolutionHolder() const {
-    assert (_travelSolutionHolder != NULL);
+                               getTravelSolutionHolder() const {
     return *_travelSolutionHolder;
   }
 
   // //////////////////////////////////////////////////////////////////////
   /*Passenger& TRAVELCCM_ServiceContext::getPassenger() const {
     return *_passenger;
-    }
-  */
+    } */
 
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_ServiceContext::
@@ -122,5 +129,4 @@ namespace TRAVELCCM {
     FileMgr::readAndProcessTravelSolutionInputFile (iInputFileName,
                                                     *_travelSolutionHolder);
   }
-  
 }

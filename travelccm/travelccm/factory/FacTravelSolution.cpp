@@ -44,18 +44,18 @@ namespace TRAVELCCM {
   }
 
   // ////////////////////////////////////////////////////////////////////
-  TravelSolution& FacTravelSolution::create (std::string dAirport,
-                std::string aAirport, Date_T depDate,
-                Duration_T depTime, Duration_T arTime, Duration_T dur,
-                bool Ref, std::string airline, std::string cabin,
-                int flightNum, double fare, int lagsNum, bool SNS,
-                                             bool change) {
+  TravelSolution& FacTravelSolution::
+  create (std::string dAirport, std::string aAirport, Date_T depDate,
+          Duration_T depTime, Duration_T arTime, Duration_T dur,
+          bool Ref, std::string airline, std::string cabin,
+          int flightNum, double fare, int lagsNum, bool SNS,
+          bool change, std::string id) {
     TravelSolution* aTravelSolution_ptr = NULL;
 
     aTravelSolution_ptr = new TravelSolution ( dAirport, aAirport, depDate,
                                                depTime, arTime, dur, Ref,
                                                airline, cabin, flightNum,
-                                               fare, lagsNum, SNS, change);
+                                               fare, lagsNum, SNS, change, id);
     assert (aTravelSolution_ptr != NULL);
 
     // The new object is added to the Bom pool
