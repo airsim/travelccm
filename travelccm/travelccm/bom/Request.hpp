@@ -9,7 +9,7 @@
 
 namespace TRAVELCCM {
 
-  /** Object description here. */
+  /** Class representing a travel request (from a given passenger). */
   class Request : public BomAbstract {
     friend class FacRequest;
   public:

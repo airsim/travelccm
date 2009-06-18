@@ -7,9 +7,11 @@
 // TRAVELCCM 
 #include <travelccm/bom/BomAbstract.hpp>
 #include <travelccm/bom/RestrictionList.hpp>
-#include <travelccm/bom/Restriction.hpp>
 
 namespace TRAVELCCM {
+
+  // Forward declarations
+  class Restriction;
 
   /** Respresents a holder of restriction, using a list for the moment
       This holder's aim is to represent, for a given passenger, the ordered
@@ -17,8 +19,6 @@ namespace TRAVELCCM {
    */
   class RestrictionHolder : public BomAbstract {
     friend class FacRestrictionHolder;
-    friend class TravelSolution;
-
   public:
     
     // /////////// Display support methods /////////
@@ -63,20 +63,25 @@ namespace TRAVELCCM {
     virtual ~RestrictionHolder();
 
   public:
+    /** Get the current restriction. */
     const Restriction& getCurrentRestriction () const;
 
+    /** */
     void begin ();
+    /** */
     bool hasNotReachedEnd () const;
+    /** */
     void iterate ();
+    /** */
     void addRestriction (const Restriction&);
+    /** */
     void eraseCurrentRestriction ();
 
-    
-     /** given a list of restriction, the function returns if the
-         travel solution in argument meets the different restrictions
-      */
-    // obsolete method
-    //bool travelSolutionMeetRestrictionList(TravelSolution& TS);
+    /** given a list of restriction, the function returns if the
+        travel solution in argument meets the different restrictions
+    */
+    // Obsolete (deprecated) method
+    // bool travelSolutionMeetRestrictionList (TravelSolution& TS);
 
   };
 

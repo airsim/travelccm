@@ -73,35 +73,37 @@ namespace TRAVELCCM {
     Restriction ();
     Restriction (const Restriction&);
 
-    /** real constructors */
-    // used for the construction of dual restrictions
-    Restriction(const std::string& iRestrictionType);
-    // used for the construction of "complex" restrictions
-    Restriction(const std::string& iRestrictionType,
-                const std::string& iNamePreference);
-    // used for the construction of "time" restrictions
-    Restriction(const std::string& iRestrictionType,
-                const DateTime_T& iDateTime);
+    // ///////////  Constructors //////////
+    /** Constructor used for the construction of dual restrictions. */
+    Restriction (const std::string& iRestrictionType);
+    
+    /** Constructor used for the construction of "complex" restrictions. */
+    Restriction (const std::string& iRestrictionType,
+                 const std::string& iNamePreference);
+    
+    /** Constructor used for the construction of "time" restrictions. */
+    Restriction (const std::string& iRestrictionType,
+                 const DateTime_T& iDateTime);
 
     /** Destructor. */
     virtual ~Restriction();
 
   private:
-    /* the type of the restriction gives the aspect of the ticket which
+    /* The type of the restriction gives the aspect of the ticket which
        counts for the customer.
        Extensively they are: refundability, preferredAirline, preferredCabin
-       (for the moment, we will add other later)
-    */
+       (for the moment, we will add other later). */
     std::string _restrictionType;
-    // field used only if the restriction is of type preferredAirline
-    std::string _preferredAirline;
-    // field used only if the restriction is of type preferredCabin
-    std::string _preferredCabin;
-    // filed used only if the restriction is of type timePreference
-    /** Define an accurate time (date +time). */
-    DateTime_T _preferredDepartureTime; //could be arrival too...
     
-
+    /** Field used only if the restriction is of type preferredAirline. */
+    std::string _preferredAirline;
+    
+    /** Field used only if the restriction is of type preferredCabin. */
+    std::string _preferredCabin;
+    
+    /** Field used only if the restriction is of type timePreference.
+        Define an accurate time (date +time). */
+    DateTime_T _preferredDepartureTime; //could be arrival too...
   };
 
 }

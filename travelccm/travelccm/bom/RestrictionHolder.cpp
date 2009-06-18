@@ -5,6 +5,7 @@
 #include <assert.h>
 // TRAVELCCM
 #include <travelccm/bom/TravelSolution.hpp>
+#include <travelccm/bom/Restriction.hpp>
 #include <travelccm/bom/RestrictionHolder.hpp>
 
 namespace TRAVELCCM {
@@ -27,15 +28,19 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   std::string RestrictionHolder::toString() const {
-    std::string oString;
-    RestrictionList_T::const_iterator it = _restrictionList.begin();
-    while (it != _restrictionList.end() ){
-      const Restriction* res_ptr = *it;
-      assert(res_ptr != NULL);
-      oString += res_ptr->toString();
-      it++;
+    std::ostringstream oStr;
+    
+    RestrictionList_T::const_iterator itRestriction = _restrictionList.begin();
+    while (itRestriction != _restrictionList.end()) {
+      const Restriction* lRestriction_ptr = *itRestriction;
+      assert (lRestriction_ptr != NULL);
+      
+      oStr << lRestriction_ptr->toString();
+      
+      ++itRestriction;
     }
-    return oString;
+    
+    return oStr.str();
   }
     
   // //////////////////////////////////////////////////////////////////////
@@ -85,37 +90,9 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   void RestrictionHolder::eraseCurrentRestriction () {
-    /* ok even if the list is at the end */
+    // ok even if the list is at the end
     assert (_itCurrentRestriction != _restrictionList.end());
     _itCurrentRestriction = _restrictionList.erase (_itCurrentRestriction);
   }
 
-  // //////////////////////////////////////////////////////////////////////
-  /* bool RestrictionHolder::travelSolutionMeetRestrictionList(TravelSolution& TS){
-     * if we are at the end of the list, that is the current element is NULL
-        we return true because all the restrictions have been matched
-     *
-    if (!hasNotReachedEnd()){
-      begin();
-      return true;
-    }
-    else {
-    ** call a function in the Restriction class which returns if a travel
-        solution meets a single restriction *
-      const Restriction& currentRestriction = getCurrentRestriction();
-      bool curResOK = currentRestriction.travelSolutionMeetRestriction(TS);
-      //assert(!curResOK);
-      * else, we are not at the end; if the travel solution does not
-         match the first restriction *
-      if (!curResOK){
-        //assert(1==0);
-        return false;}
-      * if it does, we need to know if the next ones do too *
-      else {
-        iterate();
-        return travelSolutionMeetRestrictionList(TS);
-      }
-    }
-    }*/
-  
 }

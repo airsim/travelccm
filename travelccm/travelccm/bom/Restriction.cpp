@@ -4,7 +4,8 @@
 // C
 #include <assert.h>
 // STL
-#include <iostream>
+#include <ostream>
+#include <istream>
 #include <iomanip>
 // TRAVELCCM 
 #include <travelccm/service/Logger.hpp>
@@ -17,26 +18,32 @@ namespace TRAVELCCM {
   }
 
   // /////////////////////////////////////////////////////////////////////
-  Restriction:: Restriction(const std::string& iRestrictionType){
-    _restrictionType = iRestrictionType;
+  Restriction:: Restriction (const std::string& iRestrictionType)
+    : _restrictionType (iRestrictionType) {
   }
 
   // /////////////////////////////////////////////////////////////////////
-  Restriction:: Restriction(const std::string& iRestrictionType,
-                            const std::string& iNamePreference){
-    _restrictionType = iRestrictionType;
-    if (iRestrictionType == "preferredAirline")
+  Restriction:: Restriction (const std::string& iRestrictionType,
+                             const std::string& iNamePreference)
+    : _restrictionType (iRestrictionType) {
+    
+    if (iRestrictionType == "preferredAirline") {
       _preferredAirline = iNamePreference;
-    if (iRestrictionType == "preferredCabin")
+    }
+    
+    if (iRestrictionType == "preferredCabin") {
       _preferredCabin == iNamePreference;
+    }
   }
 
   // /////////////////////////////////////////////////////////////////////
-  Restriction:: Restriction(const std::string& iRestrictionType,
-                            const DateTime_T& iDateTime){
-    _restrictionType = iRestrictionType;
-    if (iRestrictionType == "timePreference")
+  Restriction:: Restriction (const std::string& iRestrictionType,
+                             const DateTime_T& iDateTime)
+    : _restrictionType (iRestrictionType) {
+
+    if (iRestrictionType == "timePreference") {
       _preferredDepartureTime = iDateTime;
+    }
   }
   
   // ////////////////////////////////////////////////////////////////////
@@ -54,15 +61,24 @@ namespace TRAVELCCM {
   // //////////////////////////////////////////////////////////////////////
   std::string Restriction::toString() const {
     std::ostringstream oString;
-    /* only the type of restriction is printed for the moment */
+    
+    // Only the type of restriction is printed for the moment
     oString << "restriction type: " << _restrictionType;
-    if (_restrictionType == "preferredAirline")
+    
+    if (_restrictionType == "preferredAirline") {
       oString << " (" << _preferredAirline << ") ";
-    if (_restrictionType == "preferredCabin")
+    }
+    
+    if (_restrictionType == "preferredCabin") {
       oString << " (" << _preferredCabin << ") ";
-    if (_restrictionType == "timePreference" )
-      oString << " ( " <<
-        boost::posix_time::to_simple_string(_preferredDepartureTime) << " )";
+    }
+    
+    if (_restrictionType == "timePreference" ) {
+      oString << " ( "
+              << boost::posix_time::to_simple_string (_preferredDepartureTime)
+              << " )";
+    }
+    
     oString << std::endl;
     return oString.str();
   }

@@ -6,13 +6,16 @@
 // //////////////////////////////////////////////////////////////////////
 // TRAVELCCM 
 #include <travelccm/bom/BomAbstract.hpp>
-#include <travelccm/bom/RestrictionHolder.hpp>
-#include <travelccm/bom/TravelSolutionHolder.hpp>
 #include <travelccm/bom/TravelSolutionList.hpp>
 
 namespace TRAVELCCM {
 
-  /** Object description here. */
+  // Forward declarations
+  class RestrictionHolder;
+  class TravelSolutionHolder;
+
+  
+  /** Class modelling the Customer-Choice. */
   class CCM : public BomAbstract {
     friend class FacCCM;
   public:
