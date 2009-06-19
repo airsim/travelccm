@@ -62,6 +62,9 @@ namespace TRAVELCCM {
     const bool getChangeable() const;
     const std::string getId() const;
 
+    /* returns if the travel solution put in argument is cheaper than the
+       current travel solution */
+    const bool isCheaper (const TravelSolution&) const;
 
     /* returns if the restriction put in arguent meets the current
        travel solution */

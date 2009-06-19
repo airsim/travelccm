@@ -90,7 +90,6 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   void RestrictionHolder::eraseCurrentRestriction () {
-    // ok even if the list is at the end
     assert (_itCurrentRestriction != _restrictionList.end());
     _itCurrentRestriction = _restrictionList.erase (_itCurrentRestriction);
   }

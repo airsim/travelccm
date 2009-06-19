@@ -178,7 +178,15 @@ namespace TRAVELCCM {
     return id;
   }
 
-   // /////////////////////////////////////////////////////////////////////
+  // //////////////////////////////////////////////////////////////////////
+  const bool TravelSolution::
+  isCheaper (const TravelSolution& iComparedTravelSolution) const {
+    double currentFare = getFare();
+    double comparedFare = iComparedTravelSolution.getFare();
+    return (comparedFare < currentFare);
+  }                                                     
+  
+  // /////////////////////////////////////////////////////////////////////
   bool TravelSolution::
   restrictionMeetsTravelSolution (const Restriction& iRestriction) const {
     /** need to consider all the different kind of restrictions in a

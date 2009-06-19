@@ -15,6 +15,8 @@ namespace TRAVELCCM {
 
   /** Forward declaration. */
   class TRAVELCCM_ServiceContext;
+  class TravelSolutionHolder;
+  class TravelSolution;
 
   /** Interface for the TRAVELCCM Services. */
   class TRAVELCCM_Service {
@@ -44,6 +46,14 @@ namespace TRAVELCCM {
     /** Add a restriction to the context. */
     void addRestriction (const std::string& iRestrictionType,
                          const std::string& iNamePreference);
+
+    /** returns the holder of travel solutions after the algorithm of
+        preferred choices */
+    TravelSolutionHolder& getChoosenTravelSolutions();
+    
+    /** returns the cheapest travel solution amongs those retained by the
+        customer, that is the one he will buy */
+    const TravelSolution&  getBestTravelSolution(TravelSolutionHolder&);
 
     /** Perform a small simulation, which uses the Customer Choice Model.*/
     void simulate();

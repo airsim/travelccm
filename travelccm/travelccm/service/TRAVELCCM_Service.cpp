@@ -97,6 +97,46 @@ namespace TRAVELCCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
+  TravelSolutionHolder& TRAVELCCM_Service::getChoosenTravelSolutions() {
+
+    // Retrieve the travel solution holder in the service context.
+    TravelSolutionHolder& travelSolutionHolder =
+      _travelccmServiceContext->getTravelSolutionHolder();
+    // Retrieve the restriction holder in the service context.
+    RestrictionHolder& restrictionHolder =
+      _travelccmServiceContext->getRestrictionHolder();
+    
+    // Initialise the different pointers at the beginning of the different lists
+    restrictionHolder.begin();
+    travelSolutionHolder.begin();
+
+    // launch the algorithm of preferred choices
+    Simulator::simulate (restrictionHolder, travelSolutionHolder);
+    
+    return travelSolutionHolder;
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  const TravelSolution& TRAVELCCM_Service::
+  getBestTravelSolution (TravelSolutionHolder& ioTravelSolutionHolder) {
+    ioTravelSolutionHolder.begin();
+    const TravelSolution* oBestTravelSolution_ptr =
+      &ioTravelSolutionHolder.getCurrentTravelSolution();
+    while (ioTravelSolutionHolder.hasNotReachedEnd()) {
+      const TravelSolution& lCurrentTravelSolution =
+        ioTravelSolutionHolder.getCurrentTravelSolution();
+      bool hasToChangeOfTS =
+        lCurrentTravelSolution.isCheaper (*oBestTravelSolution_ptr);
+      if (hasToChangeOfTS) {
+        oBestTravelSolution_ptr = &lCurrentTravelSolution ;
+      }
+      ioTravelSolutionHolder.iterate();
+    }
+    return *oBestTravelSolution_ptr;
+  }
+    
+
+  // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_Service::simulate()  {
     // add travel solutions to the travelsolution holder
     assert(_travelccmServiceContext != NULL);
