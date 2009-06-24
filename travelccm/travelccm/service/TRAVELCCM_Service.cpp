@@ -134,8 +134,16 @@ namespace TRAVELCCM {
     }
     return *oBestTravelSolution_ptr;
   }
-    
 
+  // //////////////////////////////////////////////////////////////////////
+  std::string TRAVELCCM_Service::getBestTravelSolutionId() {
+    TravelSolutionHolder& lTravelSolutionHolder = getChoosenTravelSolutions();
+    const TravelSolution& lBestTravelSolution =
+      getBestTravelSolution(lTravelSolutionHolder);
+    std::string id = lBestTravelSolution.getId();
+    return id;
+  }
+    
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_Service::simulate()  {
     // add travel solutions to the travelsolution holder

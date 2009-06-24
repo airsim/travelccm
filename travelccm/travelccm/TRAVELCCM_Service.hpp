@@ -55,6 +55,9 @@ namespace TRAVELCCM {
         customer, that is the one he will buy */
     const TravelSolution&  getBestTravelSolution(TravelSolutionHolder&);
 
+    /** returns the key of the cheapest travel solution */
+    std::string getBestTravelSolutionId();
+
     /** Perform a small simulation, which uses the Customer Choice Model.*/
     void simulate();
 
