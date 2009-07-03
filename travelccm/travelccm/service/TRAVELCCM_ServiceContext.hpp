@@ -39,6 +39,13 @@ namespace TRAVELCCM {
     /** Destructor. */
     ~TRAVELCCM_ServiceContext();
 
+    /** To create the passenger */
+    void createPassenger(std::string);
+
+    /** To intialize the different field of the passenger. To be called after
+        the creation of the passenger inevitably.  */
+    void intializePassenger();
+
     /** Set the TravelSolutionHolder */
     void setTravelSolutionHolder (
                      TravelSolutionHolder* ioTravelSolutionHolderPtr){

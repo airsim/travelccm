@@ -26,6 +26,11 @@ namespace TRAVELCCM {
     /** Destructor. */
     ~TRAVELCCM_Service();
 
+    /** create a passenger in the context thanks to his type. */
+    void createPassenger(std::string);
+    /** Initialize the different fields of a passenger after creating it. */
+    void initializePassenger();
+
     /** add a travel solution to the context */
     void addTravelSolution (const std::string& iDepartureAirport,
                             const std::string& iArrivalAirport,

@@ -29,10 +29,31 @@ namespace TRAVELCCM {
   
   // //////////////////////////////////////////////////////////////////////
   TRAVELCCM_ServiceContext::TRAVELCCM_ServiceContext () {
-    _travelSolutionHolder = &FacTravelSolutionHolder::instance().create();
-    // bu default, the passenger is a leisure passenger but it was fixed arbitraty
-    _passenger = &FacPassenger::instance().create("L");
+    init();
+  }
+  
+  // //////////////////////////////////////////////////////////////////////
+  TRAVELCCM_ServiceContext::TRAVELCCM_ServiceContext (const TRAVELCCM_ServiceContext&) {
+    init ();
+  }
 
+  // //////////////////////////////////////////////////////////////////////
+  TRAVELCCM_ServiceContext::~TRAVELCCM_ServiceContext() {
+  }
+  
+  // //////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_ServiceContext::init () {
+    // set the travel solution holder
+    _travelSolutionHolder = &FacTravelSolutionHolder::instance().create();
+  }
+  
+  // //////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_ServiceContext::createPassenger(std::string passengerType) {
+    _passenger = &FacPassenger::instance().create(passengerType);
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_ServiceContext::intializePassenger() {
     // set the restriction holder of the passenger
     RestrictionHolder& lRestrictionHolder =
       FacRestrictionHolder::instance().create();
@@ -43,35 +64,6 @@ namespace TRAVELCCM {
     DepartureTimePreferencePattern& lDepartureTimePreferencePattern =
       FacDepartureTimePreferencePattern::instance().create(passengerType);
     FacPassenger::instance().linkPassengerWithDepartureTimePreferencePattern(*_passenger, lDepartureTimePreferencePattern);
-    
-    init ();
-  }
-  
-  // //////////////////////////////////////////////////////////////////////
-  TRAVELCCM_ServiceContext::TRAVELCCM_ServiceContext (const TRAVELCCM_ServiceContext&) {
-    _travelSolutionHolder = &FacTravelSolutionHolder::instance().create();
-    _passenger = &FacPassenger::instance().create();
-    
-    // set the restriction holder of the passenger
-    RestrictionHolder& lRestrictionHolder =
-      FacRestrictionHolder::instance().create();
-    FacPassenger::instance().linkPassengerWithRestrictionHolder(*_passenger, lRestrictionHolder);
-    
-    // set the departure time preference pattern of the passenger
-    std::string passengerType = _passenger->getPassengerType();
-    DepartureTimePreferencePattern& lDepartureTimePreferencePattern =
-      FacDepartureTimePreferencePattern::instance().create(passengerType);
-    FacPassenger::instance().linkPassengerWithDepartureTimePreferencePattern(*_passenger, lDepartureTimePreferencePattern);
-    
-    init ();
-  }
-
-  // //////////////////////////////////////////////////////////////////////
-  TRAVELCCM_ServiceContext::~TRAVELCCM_ServiceContext() {
-  }
-  
-  // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_ServiceContext::init () {
   }
 
   // //////////////////////////////////////////////////////////////////////

@@ -60,6 +60,16 @@ namespace TRAVELCCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_Service::createPassenger(std::string passengerType) {
+    _travelccmServiceContext->createPassenger(passengerType);
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_Service::initializePassenger() {
+    _travelccmServiceContext->intializePassenger();
+  }
+
+  // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_Service::
   addTravelSolution  (const std::string& iDepartureAirport,
                       const std::string& iArrivalAirport,
