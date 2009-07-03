@@ -43,5 +43,23 @@ namespace TRAVELCCM {
     return *aRequest_ptr;
   }
 
+  // ///////////////////////////////////////////////////////////////////
+  Request& FacRequest::create (bool refundability, bool changeability,
+                               bool saturdayNightStay,
+                               std::string preferredAirline,
+                               std::string preferredCabin,
+                               DateTime_T departureTime) {
+    Request* aRequest_ptr = NULL;
+    
+    aRequest_ptr = new Request (refundability, changeability, saturdayNightStay,
+                                preferredAirline, preferredCabin, departureTime);
+    assert (aRequest_ptr != NULL);
+
+    // The new object is added to the Bom pool
+    _pool.push_back (aRequest_ptr);
+
+    return *aRequest_ptr;
+  }
+
 }
 

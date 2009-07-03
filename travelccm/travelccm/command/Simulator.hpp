@@ -6,7 +6,7 @@
 // //////////////////////////////////////////////////////////////////////
 // TRAVELCCM Common
 #include <travelccm/bom/TravelSolutionHolder.hpp>
-#include <travelccm/bom/RestrictionHolder.hpp>
+#include <travelccm/bom/Passenger.hpp>
 #include <travelccm/command/CmdAbstract.hpp>
 #include <travelccm/bom/CCM.hpp>
 
@@ -21,7 +21,7 @@ namespace TRAVELCCM {
 
     // ////////// Business Methods /////////
     /** Perform a small simulation, which uses the Customer Choice Model.*/
-    static void simulate (RestrictionHolder&, TravelSolutionHolder&);
+    static void simulate (Passenger&, TravelSolutionHolder&);
 
     
   private:

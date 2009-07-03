@@ -14,6 +14,8 @@
 #include <travelccm/service/TRAVELCCM_ServiceContext.hpp>
 #include <travelccm/service/Logger.hpp>
 #include <travelccm/TRAVELCCM_Service.hpp>
+#include <travelccm/bom/TravelSolutionHolder.hpp>
+#include <travelccm/bom/RestrictionHolder.hpp>
 
 namespace TRAVELCCM {
 
@@ -47,13 +49,13 @@ namespace TRAVELCCM {
 
     // Initialise the context
     TRAVELCCM_ServiceContext& lTRAVELCCM_ServiceContext = 
-      FacTRAVELCCMServiceContext::instance().create ();
+      FacTRAVELCCMServiceContext::instance().create();
     _travelccmServiceContext = &lTRAVELCCM_ServiceContext;
   }
   
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_Service::logInit (const LOG::EN_LogLevel iLogLevel,
-                                    std::ostream& ioLogOutputFile) {
+                                   std::ostream& ioLogOutputFile) {
     Logger::instance().setLogParameters (iLogLevel, ioLogOutputFile);
   }
 
@@ -97,21 +99,31 @@ namespace TRAVELCCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_Service::
+  addRequest (bool refundability, bool changeability, bool saturdayNightStay,
+              std::string preferredAirline, std::string preferredCabin,
+              DateTime_T departureTime) {
+    assert (_travelccmServiceContext != NULL);
+    _travelccmServiceContext->addAndLinkRequest (refundability, changeability,
+                                                 saturdayNightStay, preferredAirline,
+                                                 preferredCabin, departureTime);
+  }
+
+  // //////////////////////////////////////////////////////////////////////
   TravelSolutionHolder& TRAVELCCM_Service::getChoosenTravelSolutions() {
 
     // Retrieve the travel solution holder in the service context.
     TravelSolutionHolder& travelSolutionHolder =
       _travelccmServiceContext->getTravelSolutionHolder();
-    // Retrieve the restriction holder in the service context.
-    RestrictionHolder& restrictionHolder =
-      _travelccmServiceContext->getRestrictionHolder();
+    // Retrieve the passenger
+    Passenger& passenger = _travelccmServiceContext->getPassenger();
     
     // Initialise the different pointers at the beginning of the different lists
-    restrictionHolder.begin();
+    passenger.begin();
     travelSolutionHolder.begin();
 
     // launch the algorithm of preferred choices
-    Simulator::simulate (restrictionHolder, travelSolutionHolder);
+    Simulator::simulate (passenger, travelSolutionHolder);
     
     return travelSolutionHolder;
   }
@@ -169,40 +181,43 @@ namespace TRAVELCCM {
                        Duration_T(14,00,00), Duration_T(02,00,00), true, "BA",
                        "ECO", 404, 200, 0, true, false, "T4");
 
+    /** Add a request for the passenger */
+    Date_T date(2002, 1, 10);
+    Duration_T duration(1, 2, 3);
+    DateTime_T dateTime(date, duration);
+    addRequest (true, false, false, "AF", "NONE", dateTime);
+
+    /** Add the restrictions stem from the previous request */
+    _travelccmServiceContext->addAndOrderRestrictionsFromRequest();
+
     /* Add restrictions to the restriction holder
        the earlier we add the restriction, the more important
     */
-    addRestriction ("refundability");
-    addRestriction ("preferredAirline", "AF");
+    //addRestriction ("refundability");
+    //addRestriction ("preferredAirline", "AF");
     
     // Retrieve the travel solution holder in the service context.
     TravelSolutionHolder& travelSolutionHolder =
       _travelccmServiceContext->getTravelSolutionHolder();
 
     // Retrieve the restriction holder in the service context.
-    RestrictionHolder& restrictionHolder =
-      _travelccmServiceContext->getRestrictionHolder();
-
-    // Retrieve the restriction holder in the passenger object in the
-    // service context.
-    /* We stop using the passenger class for the moment
-       Passenger& passenger = _travelccmServiceContext->getPassenger();
-    */
+    Passenger& passenger = _travelccmServiceContext->getPassenger();
 
     // Initialise the different pointers at the beginning of the different lists
-    restrictionHolder.begin();
+    passenger.begin();
     travelSolutionHolder.begin();
 
-    TRAVELCCM_LOG_DEBUG ("TravelSolutionHolder: " << travelSolutionHolder);
-    TRAVELCCM_LOG_DEBUG ("RestrictionHolder: " << restrictionHolder);
+    TRAVELCCM_LOG_DEBUG ("TravelSolutionHolder: " << travelSolutionHolder.toString());
+    RestrictionHolder& passengerRestrictions = passenger.getPassengerRestrictions();
+    TRAVELCCM_LOG_DEBUG ("RestrictionHolder: " << passengerRestrictions.toString());
 
     // Call the underlying Use Case (command)
-    Simulator::simulate (restrictionHolder, travelSolutionHolder);
+    Simulator::simulate (passenger, travelSolutionHolder);
 
     /* We will need the different restrictions and their order so the first
        argument of the function orderedPreference will probably change
     */
-    TRAVELCCM_LOG_DEBUG ("TravelSolutionHolder: " << travelSolutionHolder);
+    TRAVELCCM_LOG_DEBUG ("TravelSolutionHolder: " << travelSolutionHolder.toString());
   }
 
 }

@@ -3,12 +3,26 @@
 // //////////////////////////////////////////////////////////////////////
 // C
 #include <assert.h>
+// STL
+#include <iostream>
+#include <iomanip>
 // TRAVELCCM 
-//#include <travelccm/bom/TravelSolutionHolder.hpp>
 #include <travelccm/bom/Request.hpp>
 
 namespace TRAVELCCM {
 
+  // //////////////////////////////////////////////////////////////////////
+  Request::Request (bool refundability, bool changeability,
+                    bool saturdayNightStay, std::string preferredAirline,
+                    std::string preferredCabin, DateTime_T departureTime) {
+    _refundability = refundability;
+    _changeability = changeability;
+    _saturdayNightStay = saturdayNightStay;
+    _preferredAirline = preferredAirline;
+    _preferredCabin = preferredCabin;
+    _departureTime = departureTime;
+  }
+  
   // /////////////////////////////////////////////////////////////////////
   Request::Request () {
   }
@@ -31,9 +45,29 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   std::string Request::toString() const {
-    std::string oString;
+    std::ostringstream oString;
+    oString << "request's characteristics: ";
+    oString << "time of departure = "
+            << boost::posix_time::to_simple_string(_departureTime);
+    if (_refundability) {
+      oString << "refundable ; ";
+    } else {
+      oString << "non refundable ; ";
+    }
+    if (_changeability) {
+      oString << "changeable ; ";
+    } else {
+      oString << "non changeable ; ";
+    }
+    if (_saturdayNightStay) {
+      oString << "saturday night stay mandatory; ";
+    } else {
+      oString << "saturday night stay non mandatory ; ";
+    }
+    oString << "preferred airline (" << _preferredAirline << ") ";
+    oString << "preferred cabin (" << _preferredCabin << ") ";
 
-    return oString;
+    return oString.str();
   }
     
   // //////////////////////////////////////////////////////////////////////
@@ -50,11 +84,35 @@ namespace TRAVELCCM {
     return oKey;
   }
 
+  // ///////////////////////////////////////////////////////////////////////
+  const DateTime_T Request::getDepartureTime() const {
+    return _departureTime;
+  }
+
   // //////////////////////////////////////////////////////////////////////
-  /*TravelSolutionHolder Request::getTravelSolutions() {
-    ** need other methods which are in the simulator */
-  /*return NULL;
-    }*/
+  const bool Request::getRefundability() const {
+    return _refundability;
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  const bool Request::getChangeability() const {
+    return _changeability;
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  const bool Request::getSaturdayNightStay() const {
+    return _saturdayNightStay;
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  const std::string Request::getPreferredAirline() const {
+    return _preferredAirline;
+  }
+
+   // /////////////////////////////////////////////////////////////////////
+  const std::string Request::getPreferredCabin() const {
+    return _preferredCabin;
+  }
 
 }
 

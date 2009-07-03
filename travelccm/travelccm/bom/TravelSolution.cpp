@@ -205,7 +205,7 @@ namespace TRAVELCCM {
     else if (iRestriction.getRestrictionType() == "preferredAirline")
       {
         // be careful on how you write the airline (airline code or no?)
-        if (getAirlineName() == iRestriction.getPreferredAirline() )
+        if (getAirlineName() == iRestriction.getPreferredAirline())
           return true;
         else
           return false;

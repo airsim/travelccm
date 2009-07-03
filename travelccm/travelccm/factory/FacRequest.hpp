@@ -4,6 +4,8 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
+// TYPES
+#include <travelccm/TRAVELCCM_Types.hpp>
 // TRAVELCCM 
 #include <travelccm/factory/FacBomAbstract.hpp>
 
@@ -28,6 +30,9 @@ namespace TRAVELCCM {
         <br>This new object is added to the list of instantiated objects.
         @return Request& The newly created object. */
     Request& create ();
+    Request& create (bool refundability, bool changeability,
+                     bool saturdayNightStay, std::string preferredAirline,
+                     std::string preferredCabin, DateTime_T departureTime);
 
   protected:
     /** Default Constructor.

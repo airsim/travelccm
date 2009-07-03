@@ -13,7 +13,9 @@
 namespace TRAVELCCM {
   // Forward declarations.
   class Passenger;
+  class Request;
   class RestrictionHolder;
+  class DepartureTimePreferencePattern;
   
   /** Factory for Passenger objects. */
   class FacPassenger : public FacBomAbstract {
@@ -32,10 +34,17 @@ namespace TRAVELCCM {
         <br>This new object is added to the list of instantiated objects.
         @return Passenger& The newly created object. */
     Passenger& create ();
-    Passenger& create (Request&, std::string);
+    Passenger& create (std::string);
 
     /** Link the passenger with his restriction holder. */
     void linkPassengerWithRestrictionHolder (Passenger&, RestrictionHolder&);
+
+    /** Link the passenger with his request. */
+    void linkPassengerWithRequest (Passenger&, Request&);
+
+    /** Link the passenger with his departure time restriction pattern. */
+    void linkPassengerWithDepartureTimePreferencePattern (Passenger&,
+                                                          DepartureTimePreferencePattern&);
 
   protected:
     /** Default Constructor.

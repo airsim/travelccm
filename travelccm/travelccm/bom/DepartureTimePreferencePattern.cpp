@@ -6,10 +6,12 @@
 // STL
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 #include <stdexcept>
 // BOOST
 #include <boost/date_time/posix_time/posix_time.hpp>
 // TRAVELCCM
+#include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/basic/BasConst_TimePattern.hpp>
 #include <travelccm/bom/DepartureTimePreferencePattern.hpp>
 
@@ -20,19 +22,36 @@ namespace TRAVELCCM {
   (const PatternId_T& iDepartureTimePreferencePatternId)
     :_departureTimePreferencePatternId (iDepartureTimePreferencePatternId) {
     if (_departureTimePreferencePatternId == "B" ) {
-      /*_departureTimePreferencePattern.
-        insert(std::pair(time_duration td(0,0,0),
-                         std::pair(time_duration td(1,0,0),
-                         time_duration td(1,0,0))));*/
-      Duration_T lowerBound(1,0,0);
-      Duration_T upperBound(1,0,0);
-      DurationPair_T p(lowerBound, upperBound);
-      boost::posix_time::time_duration timeOfDay(0,0,0);
-      std::pair<Duration_T,DurationPair_T> patternElement(timeOfDay,p);
-      _departureTimePreferencePattern.insert(patternElement);
+      /*for the moment, we consider that a business passenger is ready to leave
+        up to 10h sooner or later his preferred departure time, and 1h for a
+        business passenger. */
+      Duration_T lowerBound(10,0,0);
+      Duration_T upperBound(10,0,0);
+      DurationPair_T timeInterval(lowerBound, upperBound);
+      int i = 0;
+      // we add the pair (lower bound, upper bound) for each hour of the day
+      // that is 0h, 1h, 2h... (5h,(2h,3h)) means that the passenger is ready to
+      // leave between 3h and 8h!
+      // (i goes from 0 to 24 to facilitate the calculus of the decision window
+      // in the passenger class)
+      for (i = 0; i < 25 ; i++) {
+        Duration_T timeOfDay(i,0,0);
+        std::pair<Duration_T,DurationPair_T> patternElement(timeOfDay,
+                                                            timeInterval);
+        _departureTimePreferencePattern.insert(patternElement);
+      }
     }
     else if (_departureTimePreferencePatternId == "L") {
-      // _departureTimePreferencePattern = ;
+      Duration_T lowerBound(1,0,0);
+      Duration_T upperBound(1,0,0);
+      DurationPair_T timeInterval(lowerBound, upperBound);
+      int i = 0;
+      for (i = 0; i < 25 ; i++) {
+        Duration_T timeOfDay(i,0,0);
+        std::pair<Duration_T,DurationPair_T> patternElement(timeOfDay,
+                                                            timeInterval);
+        _departureTimePreferencePattern.insert(patternElement);
+      }
     }
   }
 
@@ -50,9 +69,10 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   std::string DepartureTimePreferencePattern::toString() const {
-    std::string oString;
-    
-    return oString;
+    std::ostringstream oString;
+    oString << "departure time preference pattern for passenger of type "
+            << _departureTimePreferencePatternId;
+      return oString.str();
   }
 
   // //////////////////////////////////////////////////////////////////////
@@ -108,6 +128,16 @@ namespace TRAVELCCM {
     std::cout.flags (oldFlags);
 
     return ostr.str();
+  }
+
+  // ///////////////////////////////////////////////////////////////////////
+  const DurationPair_T DepartureTimePreferencePattern::
+  getDurationPair(const Duration_T& ioDuration) const {
+    DepartureTimePreferencePattern_T::const_iterator itDepartureTime =
+      _departureTimePreferencePattern.find(ioDuration);
+    assert (itDepartureTime != _departureTimePreferencePattern.end());
+    const DurationPair_T oDurationPair = itDepartureTime->second;
+    return oDurationPair;
   }
 
 }

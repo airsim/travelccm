@@ -47,6 +47,9 @@ namespace TRAVELCCM {
     void addRestriction (const std::string& iRestrictionType,
                          const std::string& iNamePreference);
 
+    /** Add a request to the context. */
+    void addRequest (bool, bool, bool, std::string, std::string, DateTime_T);
+    
     /** returns the holder of travel solutions after the algorithm of
         preferred choices */
     TravelSolutionHolder& getChoosenTravelSolutions();

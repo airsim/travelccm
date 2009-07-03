@@ -6,8 +6,8 @@
 #include <string>
 #include <map>
 // TRAVEL CCM
-#include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/bom/BomAbstract.hpp>
+#include <travelccm/TRAVELCCM_Types.hpp>
 
 namespace TRAVELCCM {
     
@@ -39,6 +39,10 @@ namespace TRAVELCCM {
     /** Display the full DepartureTimePreferencePattern context. */
     const std::string display() const;
 
+    /** get the duration pair corresponding to a given duration put in
+        argument */
+    const DurationPair_T getDurationPair(const Duration_T&) const;
+
     // ////////// Business methods /////////
   private:
     /** Constructors are private so as to force the usage of the Factory
@@ -54,12 +58,12 @@ namespace TRAVELCCM {
     }
 
   private:
-    /** Identifier of the cancellation rate curve. */
+    /** Identifier of the preferred departure time curve. */
     PatternId_T _departureTimePreferencePatternId;
 
-    /** List of the discretized points of the cancellation rate curve 
-        Date to Departure are on the X-axis and percentage pair of expected
-        cancellation and no-show are on the Y-axis. */
+    /** List of the discretized points of the preferred departure time rate
+        curve. Time to Departure are on the X-axis and the allowed early
+        and late departure times are on the Y-axis. */
     DepartureTimePreferencePattern_T _departureTimePreferencePattern;
   };
     

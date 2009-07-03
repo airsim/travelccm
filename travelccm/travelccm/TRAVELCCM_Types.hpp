@@ -64,8 +64,11 @@ namespace TRAVELCCM {
   /** Define a pair of Duration_T. */
   typedef std::pair<Duration_T, Duration_T> DurationPair_T;
 
+  /** Define a pair of DateTime_T. */
+  typedef std::pair<DateTime_T, DateTime_T> DateTimePair_T;
+
   /** Define a map between a time of the day and a DurationPair_T. */
-  typedef std::map<Duration_T, DurationPair_T> DepartureTimePreferencePattern_T;
+  typedef std::map<const Duration_T, const DurationPair_T> DepartureTimePreferencePattern_T;
     
 }
 #endif // __TRAVELCCM_TRAVELCCM_TYPES_HPP

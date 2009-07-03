@@ -31,12 +31,9 @@ namespace TRAVELCCM {
   private:
     /** Constructors. */
     TRAVELCCM_ServiceContext ();
-    // passenger filed unuse makes this function useless
-    // TRAVELCCM_ServiceContext (Request&, std::string);
     TRAVELCCM_ServiceContext (const TRAVELCCM_ServiceContext&);
     void init ();
-    // passenger filed unuse makes this function useless
-    // void init (Request&, std::string);
+    
     /** Initialise the StudyStatManager. */
     void initStudyStatManager ();
     /** Destructor. */
@@ -62,26 +59,32 @@ namespace TRAVELCCM {
                             int iStopsNumber,  bool iSNS, bool iChangeability,
                             const std::string& id);
     
-    /** Add a restriction to the restriction holder */
+    /** Add a restriction to the restriction holder in the passenger field */
     void addRestriction (const std::string& iRestrictionType);
     void addRestriction (const std::string& iRestrictionType,
                          const std::string& iNamePreference);
 
+    /** Add a request and link it to the passenger. */
+    void addAndLinkRequest (bool refundability, bool changeability,
+                            bool saturdayNightStay, std::string preferredAirline,
+                            std::string preferredCabin, DateTime_T departureTime);
+    
     /** Read the input data from a file */
     void readFromInputFile (const std::string& iInputFileName);
 
+    /** Add in the right order the restrictions regarding the characteristics
+        of the fares desired by the passenger, found in the request field */
+    void addAndOrderRestrictionsFromRequest();
 
   private:
     // /////// Attributes ///////
-    /* use of the field passenger later
-       Passenger* _passenger;
-    */
-    RestrictionHolder* _restrictionHolder;
+    Passenger* _passenger;
     TravelSolutionHolder* _travelSolutionHolder;
 
   public:
     TravelSolutionHolder& getTravelSolutionHolder() const;
-    //Passenger& getPassenger () const ;
+    Passenger& getPassenger () const ;
+    // return the restriction holder in the passenger class
     RestrictionHolder& getRestrictionHolder() const;
     
   };

@@ -5,7 +5,10 @@
 // Import section
 // //////////////////////////////////////////////////////////////////////
 // TRAVELCCM 
+#include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/factory/FacBomAbstract.hpp>
+
+
 namespace TRAVELCCM {
   // Forward declarations.
   class DepartureTimePreferencePattern;

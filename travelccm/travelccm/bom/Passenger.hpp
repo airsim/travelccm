@@ -7,13 +7,19 @@
 // STL
 #include <string>
 // TRAVELCCM 
+#include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/bom/BomAbstract.hpp>
 
 namespace TRAVELCCM {
   //forward declaration
-  class Request; 
+  class Restriction;
+  class RestrictionHolder;
+  class Request;
+  class DepartureTimePreferencePattern;
 
-  /** Object description here. */
+  /** this class gathers the information on the passenger who do the booking
+      request. It stores the required information to know the customer's choice
+      of a travel solution. */
   class Passenger : public BomAbstract {
     friend class FacPassenger;
   public:
@@ -39,30 +45,63 @@ namespace TRAVELCCM {
         at the same level). */
     const std::string describeShortKey() const;
 
+    /** Intialize the pointer at the beginning of the retriction holder */
+    void begin();
+
     /** Get the type of the passenger  */
     const std::string getPassengerType() const;
 
-    /** to get the oredered list of restrictions of the passenger,
+    /** to get the ordered list of restrictions of the passenger,
         regarding his type */
     RestrictionHolder& getPassengerRestrictions () ;
+    
+    /** to get the request done by a passenger */
+    Request& getPassengerRequest () ;
 
-    //////////////////// Setters ///////////////////
+    /** Get the two points in the map of DepartureTimePreferencePattern which
+        are just under the desired departure time of the passenger (in order to
+        use a linear regression) */
+    const DurationPair_T& getLowerPair() const;
+
+    /** Get the two points in the map of DepartureTimePreferencePattern which
+        are just above the desired departure time of the passenger (in order to
+        use a linear regression) */
+    const DurationPair_T& getUpperPair() const;
+
+    /** Get the lower time duration associated to the passenger */
+    const Duration_T& getLowerBound() const;
+
+    /** Get the upper time duration associated to the passenger */
+    const Duration_T& getUpperBound() const;
+
+    /** To get the departure window of the passenger, that is the time interval
+        in which he is ready to leave */
+    const DateTimePair_T getDepartureWindow () const;
+
+    // functions unsed to lighten the operations on the duration times
+    /** retrieve the middle duration time regarding the formula:
+        (1 - ratio) * 1stDT + ratio * 2ndDT */
+    static const Duration_T& computeMiddleDuration (long, long, double);
+
     /** Add a restriction to the restriction holder. */
     void addRestriction (const Restriction&);
 
+
   private:
-    /** A passenger is caracterized by both its type and booking request when
-        simulated */
-    Request* _request;
+    /** A passenger is caracterized by both its type and its request
+        when simulated; from those characteristics we will build his
+        departureTimePreferencePattern and his restriction list */
     std::string _passengerType;
+    Request* _request;
+    DepartureTimePreferencePattern* _departureTimePreferencePattern;
     RestrictionHolder* _passengerRestrictions;
     
     /** Constructors are private so as to force the usage of the Factory
         layer. */
     /** Default constructors. */
     Passenger ();
-    Passenger (Request&, std::string);
     Passenger (const Passenger&);
+    Passenger (std::string);
 
     /** Destructor. */
     ~Passenger();

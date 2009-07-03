@@ -14,22 +14,27 @@
 namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
-  void Simulator::simulate(RestrictionHolder& ioRestrictionHolder,
+  void Simulator::simulate(Passenger& ioPassenger,
                            TravelSolutionHolder& ioTravelSolutionHolder) {
+
+    RestrictionHolder& lRestrictionHolder =
+      ioPassenger.getPassengerRestrictions();
     
     int numTravelSolIn = ioTravelSolutionHolder.numberOfTravelSolutions();
+
     // print the number of travel solutions before the customer choice
     TRAVELCCM_LOG_DEBUG ("Initially there are " << numTravelSolIn
-                          << " travel solutions");
+                         << " travel solutions");
 
     // run the algorithm of passenger choice
-    CCM::orderedPreferences (ioTravelSolutionHolder, ioRestrictionHolder);
+    CCM::orderedPreferences (ioTravelSolutionHolder, lRestrictionHolder);
     
     // print the travel solutions among which the customer will choose
-    int numTravelSolOut= ioTravelSolutionHolder.numberOfTravelSolutions();
-    TRAVELCCM_LOG_DEBUG ( "Finally there are " << numTravelSolOut
-                           << " travel solutions");
-    //TRAVELCCM_LOG_DEBUG ( ioTravelSolutionHolder.toString() );
+    int numTravelSolOut = ioTravelSolutionHolder.numberOfTravelSolutions();
+
+    TRAVELCCM_LOG_DEBUG ("Finally there are " << numTravelSolOut
+                         << " travel solutions");
+    
     TRAVELCCM_LOG_DEBUG ("Simulation ended properly!");
   }
   

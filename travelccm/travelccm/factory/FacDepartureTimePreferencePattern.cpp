@@ -5,7 +5,7 @@
 #include <assert.h>
 // TRAVELCCM 
 #include <travelccm/bom/DepartureTimePreferencePattern.hpp>
-#include <travelccm/factory/FacDepartureTimePreference.hpp>
+#include <travelccm/factory/FacDepartureTimePreferencePattern.hpp>
 #include <travelccm/factory/FacSupervisor.hpp>
 #include <travelccm/service/Logger.hpp>
 

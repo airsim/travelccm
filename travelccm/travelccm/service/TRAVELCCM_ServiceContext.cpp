@@ -4,20 +4,24 @@
 // C
 #include <assert.h>
 // TRAVELCCM
+#include <travelccm/service/Logger.hpp>
 #include <travelccm/basic/BasConst_TRAVELCCM_Service.hpp>
 #include <travelccm/factory/FacSupervisor.hpp>
 #include <travelccm/service/TRAVELCCM_ServiceContext.hpp>
-#include <travelccm/bom/Request.hpp>
 #include <travelccm/bom/TravelSolution.hpp>
 #include <travelccm/bom/TravelSolutionHolder.hpp>
 #include <travelccm/bom/Restriction.hpp>
 #include <travelccm/bom/RestrictionHolder.hpp>
+#include <travelccm/bom/Passenger.hpp>
+// FACTORY
 #include <travelccm/factory/FacTravelSolution.hpp>
 #include <travelccm/factory/FacTravelSolutionHolder.hpp>
 #include <travelccm/factory/FacRestriction.hpp>
 #include <travelccm/factory/FacRestrictionHolder.hpp>
-#include <travelccm/factory/FacRequest.hpp>
 #include <travelccm/factory/FacPassenger.hpp>
+#include <travelccm/factory/FacRequest.hpp>
+#include <travelccm/factory/FacDepartureTimePreferencePattern.hpp>
+// COMMAND
 #include <travelccm/command/FileMgr.hpp>
 
 
@@ -26,36 +30,49 @@ namespace TRAVELCCM {
   // //////////////////////////////////////////////////////////////////////
   TRAVELCCM_ServiceContext::TRAVELCCM_ServiceContext () {
     _travelSolutionHolder = &FacTravelSolutionHolder::instance().create();
-    _restrictionHolder = &FacRestrictionHolder::instance().create();
+    // bu default, the passenger is a leisure passenger but it was fixed arbitraty
+    _passenger = &FacPassenger::instance().create("L");
+
+    // set the restriction holder of the passenger
+    RestrictionHolder& lRestrictionHolder =
+      FacRestrictionHolder::instance().create();
+    FacPassenger::instance().linkPassengerWithRestrictionHolder(*_passenger, lRestrictionHolder);
+    
+    // set the departure time preference pattern of the passenger
+    const std::string& passengerType = _passenger->getPassengerType();
+    DepartureTimePreferencePattern& lDepartureTimePreferencePattern =
+      FacDepartureTimePreferencePattern::instance().create(passengerType);
+    FacPassenger::instance().linkPassengerWithDepartureTimePreferencePattern(*_passenger, lDepartureTimePreferencePattern);
+    
     init ();
   }
   
   // //////////////////////////////////////////////////////////////////////
   TRAVELCCM_ServiceContext::TRAVELCCM_ServiceContext (const TRAVELCCM_ServiceContext&) {
     _travelSolutionHolder = &FacTravelSolutionHolder::instance().create();
-    _restrictionHolder = &FacRestrictionHolder::instance().create();
+    _passenger = &FacPassenger::instance().create();
+    
+    // set the restriction holder of the passenger
+    RestrictionHolder& lRestrictionHolder =
+      FacRestrictionHolder::instance().create();
+    FacPassenger::instance().linkPassengerWithRestrictionHolder(*_passenger, lRestrictionHolder);
+    
+    // set the departure time preference pattern of the passenger
+    std::string passengerType = _passenger->getPassengerType();
+    DepartureTimePreferencePattern& lDepartureTimePreferencePattern =
+      FacDepartureTimePreferencePattern::instance().create(passengerType);
+    FacPassenger::instance().linkPassengerWithDepartureTimePreferencePattern(*_passenger, lDepartureTimePreferencePattern);
+    
     init ();
-    }
-
-  // //////////////////////////////////////////////////////////////////////
-  /* TRAVELCCM_ServiceContext::TRAVELCCM_ServiceContext (Request& req,
-                                                        std::string passType) {
-    _travelSolutionHolder = &FacTravelSolutionHolder::instance().create();
-    init(req,passType);
-    } */
+  }
 
   // //////////////////////////////////////////////////////////////////////
   TRAVELCCM_ServiceContext::~TRAVELCCM_ServiceContext() {
   }
-
+  
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_ServiceContext::init () {
   }
-
-  // //////////////////////////////////////////////////////////////////////
-  /* void TRAVELCCM_ServiceContext::init (Request& req, std::string passType) {
-    _passenger = &FacPassenger::instance().create(req, passType);
-    } */
 
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_ServiceContext::
@@ -89,26 +106,33 @@ namespace TRAVELCCM {
   addRestriction (const std::string& iRestrictionType) {
     Restriction& aRestriction =
       FacRestriction::instance().create(iRestrictionType);
-    assert (_restrictionHolder != NULL);
-    FacRestriction::instance().addRestriction (*_restrictionHolder,
-                                               aRestriction);
+    _passenger->addRestriction(aRestriction);
   }
 
-   // //////////////////////////////////////////////////////////////////////
+  // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_ServiceContext::
   addRestriction (const std::string& iRestrictionType,
                   const std::string& iNamePreference) {
     Restriction& aRestriction =
       FacRestriction::instance().create(iRestrictionType, iNamePreference);
-    assert (_restrictionHolder != NULL);
-    FacRestriction::instance().addRestriction (*_restrictionHolder,
-                                                     aRestriction);
+    _passenger->addRestriction(aRestriction);
   }
 
   // //////////////////////////////////////////////////////////////////////
-  RestrictionHolder& TRAVELCCM_ServiceContext::
-                               getRestrictionHolder() const {
-    return *_restrictionHolder;
+  void TRAVELCCM_ServiceContext::
+  addAndLinkRequest (bool refundability, bool changeability,
+                     bool saturdayNightStay, std::string preferredAirline,
+                     std::string preferredCabin, DateTime_T departureTime) {
+    Request& aRequest =
+      FacRequest::instance().create(refundability, changeability,
+                                    saturdayNightStay, preferredAirline,
+                                    preferredCabin, departureTime);
+    FacPassenger::instance().linkPassengerWithRequest(*_passenger, aRequest);
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  RestrictionHolder& TRAVELCCM_ServiceContext::getRestrictionHolder() const {
+    return _passenger->getPassengerRestrictions();
   }
   
   // //////////////////////////////////////////////////////////////////////
@@ -118,9 +142,9 @@ namespace TRAVELCCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
-  /*Passenger& TRAVELCCM_ServiceContext::getPassenger() const {
+  Passenger& TRAVELCCM_ServiceContext::getPassenger() const {
     return *_passenger;
-    } */
+  }
 
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_ServiceContext::
@@ -128,5 +152,67 @@ namespace TRAVELCCM {
     assert (_travelSolutionHolder != NULL);
     FileMgr::readAndProcessTravelSolutionInputFile (iInputFileName,
                                                     *_travelSolutionHolder);
+  }
+  
+  // /////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_ServiceContext::addAndOrderRestrictionsFromRequest() {
+    /* the order when adding the restrictions is crucial since it reflects
+       the importance of the characteristics, compared to the others; more
+       precisely the first characteristic added is the most important for the
+       passenger and the last one the less important.
+       For a business passenger, we have: departureTime >> saturday night stay >>
+       refundability >> preferred airline >> preferred cabin >> changeability
+       For a leisure passenger, we have: changeability >> departure time >>
+       preferred airline >> saturday night stay >> refundability >>
+       preferred cabin  */
+
+    assert (_passenger != NULL);
+    Request& _request = _passenger->getPassengerRequest();
+    
+    // retrieve the characteristics of the fare in the Request class
+    const bool refundability = _request.getRefundability();
+    const bool changeability = _request.getChangeability();
+    const bool saturdayNightStay = _request.getSaturdayNightStay();
+    const std::string preferredAirline = _request.getPreferredAirline();
+    const std::string preferredCabin = _request.getPreferredCabin();
+
+    std::string passengerType = _passenger->getPassengerType();
+    if (passengerType == "B") {
+        if (saturdayNightStay) {
+          addRestriction("saturdayStay");
+        }
+        if (refundability) {
+          addRestriction("refundability");
+        }
+        if (preferredAirline != "NONE") {
+          addRestriction("preferredAirline", preferredAirline);
+        }
+        if (preferredCabin != "NONE") {
+          addRestriction("preferredCabin", preferredCabin);
+        }
+        if (changeability) {
+          addRestriction("changeability");
+        }
+      }
+      else if (passengerType == "L") {
+        if (changeability) {
+          addRestriction("changeability");
+        }
+        if (preferredAirline != "NONE") {
+          addRestriction("preferredAirline", preferredAirline);
+        }
+        if (saturdayNightStay) {
+          addRestriction("saturdayStay");
+        }
+        if (refundability) {
+          addRestriction("refundability");
+        }
+        if (preferredCabin != "NONE") {
+          addRestriction("preferredCabin", preferredCabin);
+        }
+      }
+
+    RestrictionHolder& restrictionHolder = getRestrictionHolder();
+    TRAVELCCM_LOG_DEBUG ("RH: " << restrictionHolder.toString());
   }
 }
