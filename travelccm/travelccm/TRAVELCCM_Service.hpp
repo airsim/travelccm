@@ -54,6 +54,10 @@ namespace TRAVELCCM {
 
     /** Add a request to the context. */
     void addRequest (bool, bool, bool, std::string, std::string, DateTime_T);
+
+    /* Add the restrictions to the passenger, in the right order, from his
+       request */
+    void addRestrictionsFromRequest ();
     
     /** returns the holder of travel solutions after the algorithm of
         preferred choices */
@@ -61,7 +65,7 @@ namespace TRAVELCCM {
     
     /** returns the cheapest travel solution amongs those retained by the
         customer, that is the one he will buy */
-    const TravelSolution&  getBestTravelSolution(TravelSolutionHolder&);
+    const TravelSolution*  getBestTravelSolution(TravelSolutionHolder&);
 
     /** returns the key of the cheapest travel solution */
     std::string getBestTravelSolutionId();

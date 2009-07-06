@@ -42,8 +42,9 @@ namespace TRAVELCCM {
     /** To create the passenger */
     void createPassenger(std::string);
 
-    /** To intialize the different field of the passenger. To be called after
-        the creation of the passenger inevitably.  */
+    /** To intialize the different field of the passenger, that is the
+        departure time preference pattern and the restriction holder.
+        To be called after the creation of the passenger inevitably.  */
     void intializePassenger();
 
     /** Set the TravelSolutionHolder */

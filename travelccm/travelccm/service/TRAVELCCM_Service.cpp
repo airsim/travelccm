@@ -114,9 +114,9 @@ namespace TRAVELCCM {
               std::string preferredAirline, std::string preferredCabin,
               DateTime_T departureTime) {
     assert (_travelccmServiceContext != NULL);
-    _travelccmServiceContext->addAndLinkRequest (refundability, changeability,
-                                                 saturdayNightStay, preferredAirline,
-                                                 preferredCabin, departureTime);
+    _travelccmServiceContext->addAndLinkRequest(refundability, changeability,
+                                                saturdayNightStay, preferredAirline,
+                                                preferredCabin, departureTime);
   }
 
   // //////////////////////////////////////////////////////////////////////
@@ -139,37 +139,50 @@ namespace TRAVELCCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
-  const TravelSolution& TRAVELCCM_Service::
+  const TravelSolution* TRAVELCCM_Service::
   getBestTravelSolution (TravelSolutionHolder& ioTravelSolutionHolder) {
-    ioTravelSolutionHolder.begin();
-    const TravelSolution* oBestTravelSolution_ptr =
-      &ioTravelSolutionHolder.getCurrentTravelSolution();
-    while (ioTravelSolutionHolder.hasNotReachedEnd()) {
-      const TravelSolution& lCurrentTravelSolution =
-        ioTravelSolutionHolder.getCurrentTravelSolution();
-      bool hasToChangeOfTS =
-        lCurrentTravelSolution.isCheaper (*oBestTravelSolution_ptr);
-      if (hasToChangeOfTS) {
-        oBestTravelSolution_ptr = &lCurrentTravelSolution ;
+    if (ioTravelSolutionHolder.isVoid())
+      return NULL;
+    else {
+      ioTravelSolutionHolder.begin();
+      const TravelSolution* oBestTravelSolution_ptr =
+        &ioTravelSolutionHolder.getCurrentTravelSolution();
+      while (ioTravelSolutionHolder.hasNotReachedEnd()) {
+        const TravelSolution& lCurrentTravelSolution =
+          ioTravelSolutionHolder.getCurrentTravelSolution();
+        bool hasToChangeOfTS =
+          lCurrentTravelSolution.isCheaper (*oBestTravelSolution_ptr);
+        if (hasToChangeOfTS) {
+          oBestTravelSolution_ptr = &lCurrentTravelSolution ;
+        }
+        ioTravelSolutionHolder.iterate();
       }
-      ioTravelSolutionHolder.iterate();
+      return oBestTravelSolution_ptr;
     }
-    return *oBestTravelSolution_ptr;
+  }
+
+  // ///////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_Service::addRestrictionsFromRequest () {
+    _travelccmServiceContext->addAndOrderRestrictionsFromRequest ();
   }
 
   // //////////////////////////////////////////////////////////////////////
   std::string TRAVELCCM_Service::getBestTravelSolutionId() {
     TravelSolutionHolder& lTravelSolutionHolder = getChoosenTravelSolutions();
-    const TravelSolution& lBestTravelSolution =
+    const TravelSolution* lBestTravelSolution_ptr =
       getBestTravelSolution(lTravelSolutionHolder);
-    std::string id = lBestTravelSolution.getId();
-    return id;
+    if (lBestTravelSolution_ptr == NULL)
+      return "";
+    else {
+      std::string id = lBestTravelSolution_ptr->getId();
+      return id;
+    }
   }
     
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_Service::simulate()  {
     // add travel solutions to the travelsolution holder
-    assert(_travelccmServiceContext != NULL);
+    /*assert(_travelccmServiceContext != NULL);
 
     // AF404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
     addTravelSolution ("NCE","LHR", Date_T(2009,06,1), Duration_T(12,00,00),
@@ -192,7 +205,7 @@ namespace TRAVELCCM {
                        "ECO", 404, 200, 0, true, false, "T4");
 
     /** Add a request for the passenger */
-    Date_T date(2002, 1, 10);
+    /*Date_T date(2002, 1, 10);
     Duration_T duration(1, 2, 3);
     DateTime_T dateTime(date, duration);
     addRequest (true, false, false, "AF", "NONE", dateTime);

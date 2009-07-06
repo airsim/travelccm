@@ -160,6 +160,7 @@ namespace TRAVELCCM {
 
     assert (_passenger != NULL);
     Request& _request = _passenger->getPassengerRequest();
+    assert(_request != NULL);
     
     // retrieve the characteristics of the fare in the Request class
     const bool refundability = _request.getRefundability();
@@ -204,7 +205,5 @@ namespace TRAVELCCM {
         }
       }
 
-    RestrictionHolder& restrictionHolder = getRestrictionHolder();
-    TRAVELCCM_LOG_DEBUG ("RH: " << restrictionHolder.toString());
   }
 }
