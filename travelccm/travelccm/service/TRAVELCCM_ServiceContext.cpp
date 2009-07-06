@@ -159,17 +159,16 @@ namespace TRAVELCCM {
        preferred cabin  */
 
     assert (_passenger != NULL);
-    Request& _request = _passenger->getPassengerRequest();
-    assert(_request != NULL);
+    Request& lRequest = _passenger->getPassengerRequest();
     
     // retrieve the characteristics of the fare in the Request class
-    const bool refundability = _request.getRefundability();
-    const bool changeability = _request.getChangeability();
-    const bool saturdayNightStay = _request.getSaturdayNightStay();
-    const std::string preferredAirline = _request.getPreferredAirline();
-    const std::string preferredCabin = _request.getPreferredCabin();
+    const bool refundability = lRequest.getRefundability();
+    const bool changeability = lRequest.getChangeability();
+    const bool saturdayNightStay = lRequest.getSaturdayNightStay();
+    const std::string& preferredAirline = lRequest.getPreferredAirline();
+    const std::string& preferredCabin = lRequest.getPreferredCabin();
 
-    std::string passengerType = _passenger->getPassengerType();
+    const std::string& passengerType = _passenger->getPassengerType();
     if (passengerType == "B") {
         if (saturdayNightStay) {
           addRestriction("saturdayStay");
@@ -186,8 +185,8 @@ namespace TRAVELCCM {
         if (changeability) {
           addRestriction("changeability");
         }
-      }
-      else if (passengerType == "L") {
+
+      } else if (passengerType == "L") {
         if (changeability) {
           addRestriction("changeability");
         }
