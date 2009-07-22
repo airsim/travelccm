@@ -201,7 +201,8 @@ namespace TRAVELCCM {
     assert(_travelccmServiceContext != NULL);
 
     // AF404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
-    /*addTravelSolution ("NCE","LHR", Date_T(2009,05,1), Duration_T(12,00,00),
+    /*
+    addTravelSolution ("NCE","LHR", Date_T(2009,05,1), Duration_T(12,00,00),
                        Duration_T(14,00,00), Duration_T(02,00,00), false,
                        "AF", "ECO", 404, 200, 0, false, false, "T1");
     
@@ -222,13 +223,15 @@ namespace TRAVELCCM {
 
     _travelccmServiceContext->createPassenger("L");
     _travelccmServiceContext->intializePassenger();
+    */
 
     /** Add a request for the passenger */
-    /*Date_T date(2009, 6, 1);
+    /*
+    Date_T date(2009, 6, 1);
     Duration_T duration(8, 30, 0);
     DateTime_T dateTime(date, duration);
     addRequest (false, true, false, "NONE", "NONE", dateTime);
-
+    */
     /** Add the restrictions stem from the previous request */
     _travelccmServiceContext->addAndOrderRestrictionsFromRequest();
 
