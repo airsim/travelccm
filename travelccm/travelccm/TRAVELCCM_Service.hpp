@@ -62,11 +62,17 @@ namespace TRAVELCCM {
     /** returns the holder of travel solutions after the algorithm of
         preferred choices */
     TravelSolutionHolder& getChoosenTravelSolutions();
-    
+
+    // TO DO: revise the choice process since the travel solution returned is
+    // not necessarily the cheapestone. Idem for the follwing function.
     /** returns the cheapest travel solution amongs those retained by the
         customer, that is the one he will buy */
     const TravelSolution*  getBestTravelSolution(TravelSolutionHolder&);
 
+    /** returns one of the cheapest travel solutions which has the best matching
+        indicator */
+    const TravelSolution* getBestTravelSolutionByMatchingIndicator ();
+    
     /** returns the key of the cheapest travel solution */
     std::string getBestTravelSolutionId();
 

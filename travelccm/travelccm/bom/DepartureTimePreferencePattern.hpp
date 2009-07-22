@@ -39,6 +39,11 @@ namespace TRAVELCCM {
     /** Display the full DepartureTimePreferencePattern context. */
     const std::string display() const;
 
+    /** Another method to return if the date time given in argument is in the \
+        departure window - given in argument too - of the customer */
+    static bool isBetweenDateTheDepartureWindow (DateTime_T iDateTime,
+                                          DateTimePair_T iDateTimePair);
+
     /** get the duration pair corresponding to a given duration put in
         argument */
     const DurationPair_T getDurationPair(const Duration_T&) const;

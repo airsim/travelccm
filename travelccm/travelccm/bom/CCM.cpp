@@ -5,6 +5,8 @@
 #include <assert.h>
 // TRAVELCCM 
 #include <travelccm/bom/RestrictionHolder.hpp>
+#include <travelccm/bom/Passenger.hpp>
+#include <travelccm/bom/Request.hpp>
 #include <travelccm/bom/TravelSolutionHolder.hpp>
 #include <travelccm/bom/CCM.hpp>
 #include <travelccm/service/Logger.hpp>
@@ -44,8 +46,49 @@ namespace TRAVELCCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
+  void CCM::
+  getBestTravelSolutionByMatchingIndicator(const std::string iPassengerType,
+                                            const Request& iRequest,
+                                            TravelSolutionHolder* travelSolutionHolder_ptr) {
+    assert (travelSolutionHolder_ptr != NULL);
+    
+    // we define the base number in which the matching indicator will be computed
+    int baseNumber = 2;
+
+    travelSolutionHolder_ptr->begin();
+    const TravelSolution* oBestTravelSolution_ptr =
+      &travelSolutionHolder_ptr->getCurrentTravelSolution();
+    int matchingIndicator =
+      oBestTravelSolution_ptr->CalculateMatchingNumber(iPassengerType,iRequest,
+                                                       baseNumber);
+
+    while (travelSolutionHolder_ptr->hasNotReachedEnd()) {
+      const TravelSolution& lCurrentTravelSolution =
+        travelSolutionHolder_ptr->getCurrentTravelSolution();
+      int lCurrentMatchingIndicator =
+        lCurrentTravelSolution.CalculateMatchingNumber(iPassengerType,iRequest,
+                                                       baseNumber);
+      // if the current travel solution has a better matching indicator then
+      // than the stored one, then we change and erase the previous ones which
+      // have a matching indicator strictly inferior.
+      if (lCurrentMatchingIndicator > matchingIndicator) {
+        oBestTravelSolution_ptr = &lCurrentTravelSolution;
+        travelSolutionHolder_ptr->begin();
+      }
+      if (lCurrentMatchingIndicator < matchingIndicator) {
+        // then we erase the current travel solution
+        travelSolutionHolder_ptr->eraseCurrentTravelSolution();
+      }
+      else {
+        // the 2 indicators are equal, in that case we iterate
+        travelSolutionHolder_ptr->iterate();
+      } 
+    }
+  }
+   
+  // //////////////////////////////////////////////////////////////////////
   void CCM::orderedPreferences (TravelSolutionHolder& ioTSHolder,
-                                RestrictionHolder& ioResHolder){
+                                Passenger& iPassenger) {
     /** For each travel solution, test if it meets the different restrictions;
         if it does, we keep it in the list, else we delete it
     */
@@ -53,18 +96,23 @@ namespace TRAVELCCM {
         travel solutions we erase from the ioTSHolder, in order to readd them
         in case of the list become void
     */
-    ioResHolder.begin();
+
+    RestrictionHolder& passengerRestrictions =
+      iPassenger.getPassengerRestrictions();
+    
+    passengerRestrictions.begin();
     // We check if each restriction meets the list of travel solutions
-    while (ioResHolder.hasNotReachedEnd()) {
+    while (passengerRestrictions.hasNotReachedEnd()) {
       const Restriction& lCurrentRestriction =
-        ioResHolder.getCurrentRestriction ();
+        passengerRestrictions.getCurrentRestriction ();
       
       // We put the pointer at the beginning of the travel solutions list
       ioTSHolder.begin();
 
       // We retrive the erased travel solutions due to the restriction
       TravelSolutionList_T erasedElements;
-      ioTSHolder.restrictionMeetsTSList (lCurrentRestriction, erasedElements);
+      ioTSHolder.restrictionMeetsTSList (lCurrentRestriction, erasedElements,
+                                         iPassenger);
       
       // If no travel solution remains
       if (ioTSHolder.isVoid() == true) {
@@ -82,7 +130,7 @@ namespace TRAVELCCM {
       
       /* The pointer of the list is put at the beginning for the
          next restriction(s) */
-      ioResHolder.iterate();
+      passengerRestrictions.iterate();
     }
   }
   

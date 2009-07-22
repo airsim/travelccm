@@ -25,8 +25,8 @@ namespace TRAVELCCM {
       /*for the moment, we consider that a business passenger is ready to leave
         up to 10h sooner or later his preferred departure time, and 1h for a
         business passenger. */
-      Duration_T lowerBound(10,0,0);
-      Duration_T upperBound(10,0,0);
+      Duration_T lowerBound(1,0,0);
+      Duration_T upperBound(1,0,0);
       DurationPair_T timeInterval(lowerBound, upperBound);
       int i = 0;
       // we add the pair (lower bound, upper bound) for each hour of the day
@@ -42,8 +42,8 @@ namespace TRAVELCCM {
       }
     }
     else if (_departureTimePreferencePatternId == "L") {
-      Duration_T lowerBound(1,0,0);
-      Duration_T upperBound(1,0,0);
+      Duration_T lowerBound(10,0,0);
+      Duration_T upperBound(10,0,0);
       DurationPair_T timeInterval(lowerBound, upperBound);
       int i = 0;
       for (i = 0; i < 25 ; i++) {
@@ -128,6 +128,15 @@ namespace TRAVELCCM {
     std::cout.flags (oldFlags);
 
     return ostr.str();
+  }
+
+  // ///////////////////////////////////////////////////////////////////////
+  bool DepartureTimePreferencePattern::
+  isBetweenDateTheDepartureWindow (DateTime_T iDateTime,
+                                   DateTimePair_T iDateTimePair) {
+    DateTime_T lowerBound = iDateTimePair.first;
+    DateTime_T upperBound = iDateTimePair.second;
+    return iDateTime >= lowerBound && iDateTime <= upperBound;
   }
 
   // ///////////////////////////////////////////////////////////////////////

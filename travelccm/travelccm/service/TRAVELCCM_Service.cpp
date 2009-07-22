@@ -150,15 +150,31 @@ namespace TRAVELCCM {
       while (ioTravelSolutionHolder.hasNotReachedEnd()) {
         const TravelSolution& lCurrentTravelSolution =
           ioTravelSolutionHolder.getCurrentTravelSolution();
-        bool hasToChangeOfTS =
-          lCurrentTravelSolution.isCheaper (*oBestTravelSolution_ptr);
-        if (hasToChangeOfTS) {
+        bool isCheaper =
+          lCurrentTravelSolution.isCheaper(*oBestTravelSolution_ptr);
+        if (isCheaper == true) {
           oBestTravelSolution_ptr = &lCurrentTravelSolution ;
+        }
+        bool hasTheSamePrice =
+          lCurrentTravelSolution.hasTheSamePrice (*oBestTravelSolution_ptr);
+        if (hasTheSamePrice == true) {
+          int randomIndicator = rand () % 2;
+          // we change only when we cast a 0, if more than two travel solutions
+          // have the same price, they do not have the same probability!!
+          if (randomIndicator == 0)
+            oBestTravelSolution_ptr = &lCurrentTravelSolution ;
         }
         ioTravelSolutionHolder.iterate();
       }
       return oBestTravelSolution_ptr;
     }
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  const TravelSolution* TRAVELCCM_Service::
+  getBestTravelSolutionByMatchingIndicator () {
+    assert (_travelccmServiceContext != NULL);
+    return _travelccmServiceContext->getBestAndCheapestTravelSolutionByMatchingIndicator();
   }
 
   // ///////////////////////////////////////////////////////////////////////
@@ -182,15 +198,15 @@ namespace TRAVELCCM {
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_Service::simulate()  {
     // add travel solutions to the travelsolution holder
-    /*assert(_travelccmServiceContext != NULL);
+    assert(_travelccmServiceContext != NULL);
 
     // AF404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
-    addTravelSolution ("NCE","LHR", Date_T(2009,06,1), Duration_T(12,00,00),
+    /*addTravelSolution ("NCE","LHR", Date_T(2009,05,1), Duration_T(12,00,00),
                        Duration_T(14,00,00), Duration_T(02,00,00), false,
                        "AF", "ECO", 404, 200, 0, false, false, "T1");
     
     // AF404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
-    addTravelSolution ("NCE","LHR", Date_T(2009,06,1), Duration_T(12,00,00),
+    addTravelSolution ("NCE","LHR", Date_T(2009,05,1), Duration_T(12,00,00),
                        Duration_T(14,00,00), Duration_T(02,00,00), true, "AF",
                        "ECO", 404, 200, 0, false, false, "T2");
     
@@ -204,21 +220,18 @@ namespace TRAVELCCM {
                        Duration_T(14,00,00), Duration_T(02,00,00), true, "BA",
                        "ECO", 404, 200, 0, true, false, "T4");
 
+    _travelccmServiceContext->createPassenger("L");
+    _travelccmServiceContext->intializePassenger();
+
     /** Add a request for the passenger */
-    /*Date_T date(2002, 1, 10);
-    Duration_T duration(1, 2, 3);
+    /*Date_T date(2009, 6, 1);
+    Duration_T duration(8, 30, 0);
     DateTime_T dateTime(date, duration);
-    addRequest (true, false, false, "AF", "NONE", dateTime);
+    addRequest (false, true, false, "NONE", "NONE", dateTime);
 
     /** Add the restrictions stem from the previous request */
     _travelccmServiceContext->addAndOrderRestrictionsFromRequest();
 
-    /* Add restrictions to the restriction holder
-       the earlier we add the restriction, the more important
-    */
-    //addRestriction ("refundability");
-    //addRestriction ("preferredAirline", "AF");
-    
     // Retrieve the travel solution holder in the service context.
     TravelSolutionHolder& travelSolutionHolder =
       _travelccmServiceContext->getTravelSolutionHolder();
@@ -230,9 +243,13 @@ namespace TRAVELCCM {
     passenger.begin();
     travelSolutionHolder.begin();
 
-    TRAVELCCM_LOG_DEBUG ("TravelSolutionHolder: " << travelSolutionHolder.toString());
-    RestrictionHolder& passengerRestrictions = passenger.getPassengerRestrictions();
-    TRAVELCCM_LOG_DEBUG ("RestrictionHolder: " << passengerRestrictions.toString());
+    TRAVELCCM_LOG_DEBUG (travelSolutionHolder.numberOfTravelSolutions());
+    TRAVELCCM_LOG_DEBUG ("TravelSolutionHolder: "
+                         << travelSolutionHolder.toString());
+    RestrictionHolder& passengerRestrictions =
+      passenger.getPassengerRestrictions();
+    TRAVELCCM_LOG_DEBUG ("RestrictionHolder: "
+                         << passengerRestrictions.toString());
 
     // Call the underlying Use Case (command)
     Simulator::simulate (passenger, travelSolutionHolder);
@@ -240,7 +257,8 @@ namespace TRAVELCCM {
     /* We will need the different restrictions and their order so the first
        argument of the function orderedPreference will probably change
     */
-    TRAVELCCM_LOG_DEBUG ("TravelSolutionHolder: " << travelSolutionHolder.toString());
+    TRAVELCCM_LOG_DEBUG ("TravelSolutionHolder: "
+                         << travelSolutionHolder.toString());
   }
 
 }

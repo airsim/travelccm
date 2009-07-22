@@ -77,8 +77,12 @@ namespace TRAVELCCM {
         restriction, and updates the list of travel solutions put in argument
         so that it holds the travel solutions erased due to that restriction.
     */
-    void restrictionMeetsTSList (const Restriction&, TravelSolutionList_T&);
+    void restrictionMeetsTSList (const Restriction&, TravelSolutionList_T&,
+                                 const Passenger&);
 
+    /** return the cheapest travel solution of the holder. If there are more than
+        one, one among the cheapest travel solution is returned randomly */
+    const TravelSolution* getCheapestTravelSolution();
   };
 
 }

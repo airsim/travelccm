@@ -10,13 +10,14 @@
 #include <boost/date_time/gregorian/gregorian.hpp>
 // TRAVELCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
-#include <travelccm/service/ServiceAbstract.hpp>
 #include <travelccm/TRAVELCCM_Types.hpp>
+#include <travelccm/service/ServiceAbstract.hpp>
 #include <travelccm/bom/Request.hpp>
 
 namespace TRAVELCCM {
   // Forward declarations.
   class Passenger;
+  class TravelSolution;
   class RestrictionHolder;
   class TravelSolutionHolder;
 
@@ -53,6 +54,10 @@ namespace TRAVELCCM {
       _travelSolutionHolder = ioTravelSolutionHolderPtr;
     }
 
+    /** returns the cheapest travel solution which best match the passenger's
+        request among the travel solution holder field of this class */
+    const TravelSolution* getBestAndCheapestTravelSolutionByMatchingIndicator();
+
     /** Add a travel solution to the TravelSolutionHolder */
     void addTravelSolution (const std::string& iDepartureAirport,
                             const std::string& iArrivalAirport,
@@ -71,6 +76,8 @@ namespace TRAVELCCM {
     void addRestriction (const std::string& iRestrictionType);
     void addRestriction (const std::string& iRestrictionType,
                          const std::string& iNamePreference);
+    void addRestriction (const std::string& iRestrictionType,
+                         const DateTime_T iDepartureTime);
 
     /** Add a request and link it to the passenger. */
     void addAndLinkRequest (bool refundability, bool changeability,

@@ -8,6 +8,12 @@
 #include <iomanip>
 // TRAVELCCM 
 #include <travelccm/bom/TravelSolution.hpp>
+#include <travelccm/bom/Restriction.hpp>
+#include <travelccm/bom/Passenger.hpp>
+#include <travelccm/bom/Request.hpp>
+#include <travelccm/bom/DepartureTimePreferencePattern.hpp>
+// SERVICE
+#include <travelccm/service/Logger.hpp>
 
 namespace TRAVELCCM {
 
@@ -113,6 +119,14 @@ namespace TRAVELCCM {
     return _arrivalAirport;
   }
 
+  // /////////////////////////////////////////////////////////////////////
+  const DateTime_T TravelSolution::getDepartureDateTime() const {
+    Date_T date = getDepartureDate();
+    Duration_T time = getDepartureTime();
+    DateTime_T dateTime (date, time);
+    return dateTime;
+  }
+
   // //////////////////////////////////////////////////////////////////////
   const Date_T TravelSolution::getDepartureDate() const {
     return _departureDate;
@@ -184,11 +198,20 @@ namespace TRAVELCCM {
     double currentFare = getFare();
     double comparedFare = iComparedTravelSolution.getFare();
     return (comparedFare < currentFare);
-  }                                                     
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  const bool TravelSolution::
+  hasTheSamePrice (const TravelSolution& iComparedTravelSolution) const {
+    double currentFare = getFare();
+    double comparedFare = iComparedTravelSolution.getFare();
+    return (comparedFare == currentFare);
+  }
   
   // /////////////////////////////////////////////////////////////////////
   bool TravelSolution::
-  restrictionMeetsTravelSolution (const Restriction& iRestriction) const {
+  restrictionMeetsTravelSolution (const Restriction& iRestriction,
+                                  const Passenger& iPassenger) const {
     /** need to consider all the different kind of restrictions in a
         separate way
     */
@@ -214,33 +237,133 @@ namespace TRAVELCCM {
       {
         /* today we look for the perfect match. A better solution would be
            to allow the overclassing */
-        if (getCabin() == iRestriction.getPreferredCabin() )
+        if (getCabin() == iRestriction.getPreferredCabin())
           return true;
         else
           return false;
       }
-    else if (iRestriction.getRestrictionType() == "saturdayStay" )
+    else if (iRestriction.getRestrictionType() == "saturdayStay")
       {
-        if (getSaturdayNightStay() )
+        if (getSaturdayNightStay())
           return true;
         else
           return false;
       }
-    else if (iRestriction.getRestrictionType() == "timePreference" )
+    else if (iRestriction.getRestrictionType() == "timePreference")
       {
         /** the most difficult restriction to implement. Here is only one
             solution, not perfect, to deal with it. */
-        DateTime_T dateTime = iRestriction.getPreferredDateTime();
-        /* need the type of the passenger here since the interval accepted
-           will depend on both the date-time and the passenger type */
-        return true;
+        DateTime_T dateTime = getDepartureDateTime();
+        DateTimePair_T passengerWindow = iPassenger.getDepartureWindow();
+
+        DateTime_T lowerBound = passengerWindow.first;
+        DateTime_T upperBound = passengerWindow.second;
         
+        bool travelSolutionIsInTheDepartureWindow =
+          DepartureTimePreferencePattern::isBetweenDateTheDepartureWindow(dateTime, passengerWindow);
+        
+        if (travelSolutionIsInTheDepartureWindow) {
+          return true;
+        }
+        else {
+          return false;
+        }
       }
     /** the function return true by default in order not to loose any
         correct travel solution */
     else return true;
   }
 
+  // ///////////////////////////////////////////////////////////////////////
+  int TravelSolution::
+  CalculateMatchingNumber (std::string iPassengerType, const Request& iRequest,
+                           int baseNumber) const {
+    int matchingIndicator = 0;
+    int numberOfRestrictions = iRequest.getNumberOfRestrictions();
+    // the preferred departure time is still to be added
     
+    if (iPassengerType == "B") {
+      // if the passenger wants that condition to be respected...
+      bool saturdayNightStay = iRequest.getSaturdayNightStay();
+      if (saturdayNightStay) {
+        // then we look if the travel solution meets this restriction
+        bool travelSolutionSaturdayNightStay = getSaturdayNightStay();
+        if (travelSolutionSaturdayNightStay) {
+          matchingIndicator += baseNumber^(numberOfRestrictions - 1);
+        }
+      }
+      bool refundability = iRequest.getRefundability();
+      if (refundability) {
+        bool travelSolutionRefundability = getRefundable();
+        if (travelSolutionRefundability) {
+          matchingIndicator += baseNumber^(numberOfRestrictions - 2);
+        }
+      }
+      // to be changed if there are serveral preferred airlines
+      std::string preferredAirline = iRequest.getPreferredAirline();
+      if (preferredAirline != "NONE") {
+        std::string travelSolutionPreferredAirline = getAirlineName();
+        if (preferredAirline == travelSolutionPreferredAirline) {
+          matchingIndicator += baseNumber^(numberOfRestrictions - 3);
+        }
+      }
+      std::string preferredCabin = iRequest.getPreferredCabin();
+      if (preferredCabin != "NONE") {
+        std::string travelSolutionPreferredCabin = getCabin();
+        if (preferredCabin == travelSolutionPreferredCabin) {
+          matchingIndicator += baseNumber^(numberOfRestrictions - 4);
+        }
+      }
+      bool changeability = iRequest.getChangeability();
+      if (changeability) {
+        bool travelSolutionChangeability = getChangeable();
+        if (travelSolutionChangeability) {
+          matchingIndicator += baseNumber^(numberOfRestrictions - 5);
+        }
+      } 
+    }
+    
+    else if (iPassengerType == "L") {
+      bool changeability = iRequest.getChangeability();
+      if (changeability) {
+        bool travelSolutionChangeability = getChangeable();
+        if (travelSolutionChangeability) {
+          matchingIndicator += baseNumber^(numberOfRestrictions - 1);
+        }
+      }
+      // to be changed if there are serveral preferred airlines
+      std::string preferredAirline = iRequest.getPreferredAirline();
+      if (preferredAirline != "NONE") {
+        std::string travelSolutionPreferredAirline = getAirlineName();
+        if (preferredAirline == travelSolutionPreferredAirline) {
+          matchingIndicator += baseNumber^(numberOfRestrictions - 2);
+        }
+      }
+      bool saturdayNightStay = iRequest.getSaturdayNightStay();
+      if (saturdayNightStay) {
+        bool travelSolutionSaturdayNightStay = getSaturdayNightStay();
+        if (travelSolutionSaturdayNightStay) {
+          matchingIndicator += baseNumber^(numberOfRestrictions - 3);
+        }
+      }
+      bool refundability = iRequest.getRefundability();
+      if (refundability) {
+        bool travelSolutionRefundability = getRefundable();
+        if (travelSolutionRefundability) {
+          matchingIndicator += baseNumber^(numberOfRestrictions - 4);
+        }
+      }
+      std::string preferredCabin = iRequest.getPreferredCabin();
+      if (preferredCabin != "NONE") {
+        std::string travelSolutionPreferredCabin = getCabin();
+        if (preferredCabin == travelSolutionPreferredCabin) {
+          matchingIndicator += baseNumber^(numberOfRestrictions - 5);
+        }
+      }
+    }
+    
+    return matchingIndicator;
+  }
+  
 }
 

@@ -16,9 +16,6 @@ namespace TRAVELCCM {
   // //////////////////////////////////////////////////////////////////////
   void Simulator::simulate(Passenger& ioPassenger,
                            TravelSolutionHolder& ioTravelSolutionHolder) {
-
-    RestrictionHolder& lRestrictionHolder =
-      ioPassenger.getPassengerRestrictions();
     
     int numTravelSolIn = ioTravelSolutionHolder.numberOfTravelSolutions();
 
@@ -27,7 +24,7 @@ namespace TRAVELCCM {
                          << " travel solutions");
 
     // run the algorithm of passenger choice
-    CCM::orderedPreferences (ioTravelSolutionHolder, lRestrictionHolder);
+    CCM::orderedPreferences (ioTravelSolutionHolder, ioPassenger);
     
     // print the travel solutions among which the customer will choose
     int numTravelSolOut = ioTravelSolutionHolder.numberOfTravelSolutions();

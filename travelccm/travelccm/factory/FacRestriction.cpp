@@ -70,6 +70,20 @@ namespace TRAVELCCM {
     return *aRestriction_ptr;
   }
 
+   // ////////////////////////////////////////////////////////////////////
+  Restriction& FacRestriction::create (std::string restrictionType,
+                                       DateTime_T departureTime) {
+    Restriction* aRestriction_ptr = NULL;
+
+    aRestriction_ptr = new Restriction (restrictionType, departureTime);
+    assert (aRestriction_ptr != NULL);
+
+    // The new object is added to the Bom pool
+    _pool.push_back (aRestriction_ptr);
+
+    return *aRestriction_ptr;
+  }
+
   // /////////////////////////////////////////////////////////////////////
   void FacRestriction::
   addRestriction (RestrictionHolder& ioRestrictionHolder,

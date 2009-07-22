@@ -51,8 +51,14 @@ namespace TRAVELCCM {
     /** Get the preferred airline */
     const std::string getPreferredAirline() const;
 
-    /* Get the preferred cabin */
+    /** Get the preferred cabin */
     const std::string getPreferredCabin() const;
+
+    /** Get the number of restrictions taken into account, that is the number
+        of private fields of this class */
+    const int getNumberOfRestrictions() const {
+      return 6;
+    };
 
   private:
     /** Constructors are private so as to force the usage of the Factory

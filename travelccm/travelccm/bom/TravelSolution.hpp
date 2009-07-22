@@ -11,9 +11,13 @@
 // TRAVELCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/bom/BomAbstract.hpp>
-#include <travelccm/bom/Restriction.hpp>
 
 namespace TRAVELCCM {
+
+  // forward declarations
+  class Passenger;
+  class Request;
+  class Restriction;
 
   /** This class represents a travel solution, more precisely the fields
     of a travel solution mandatory so that to implement a customer choice
@@ -48,6 +52,7 @@ namespace TRAVELCCM {
     /** all the get methods for the different fields */
     const std::string  getDepartureAirport() const;
     const std::string  getArrivalAirport() const;
+    const DateTime_T  getDepartureDateTime() const;
     const Date_T  getDepartureDate() const;
     const Duration_T getDepartureTime() const;
     const Duration_T getArrivalTime() const;
@@ -66,9 +71,22 @@ namespace TRAVELCCM {
        current travel solution */
     const bool isCheaper (const TravelSolution&) const;
 
+    /* returns if the travel solution put in argument has the same price as
+       the current travel solution */
+    const bool hasTheSamePrice (const TravelSolution&) const;
+
     /* returns if the restriction put in arguent meets the current
        travel solution */
-    bool restrictionMeetsTravelSolution (const Restriction&) const;
+    bool restrictionMeetsTravelSolution (const Restriction&,
+                                         const Passenger&) const;
+
+    /* returns a number which allow the comparison of two travel solutions,
+       regarding a passenger's request. The higher the number, the preferred
+       the solution.
+       The base number represents the number of choice possible for a given
+       constraint. Generally it is 2 since each restriction can be met or not */
+    int CalculateMatchingNumber (std::string passengerType,
+                                 const Request& iRequest, int baseNumber) const;
 
   private:
     /** Constructors are private so as to force the usage of the Factory

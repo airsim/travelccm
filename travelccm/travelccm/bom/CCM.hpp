@@ -13,6 +13,8 @@ namespace TRAVELCCM {
   // Forward declarations
   class RestrictionHolder;
   class TravelSolutionHolder;
+  class Passenger;
+  class Request;
 
   
   /** Class modelling the Customer-Choice. */
@@ -52,9 +54,18 @@ namespace TRAVELCCM {
     
 
   public:
+
+    /** function using the matching indicators to keep only the better travel
+        solutions in the travel solution holder - better from the customer's
+        point of view. */
+    static void
+    getBestTravelSolutionByMatchingIndicator(const std::string iPassengerType,
+                                              const Request& iRequest,
+                                              TravelSolutionHolder* travelSolutionHolder_ptr);
+    
     /** where the algorithms of customer choice are implemented
         we could imagine other algorithms later */
-    static void orderedPreferences (TravelSolutionHolder&, RestrictionHolder&);
+    static void orderedPreferences (TravelSolutionHolder&, Passenger&);
 
   };
 

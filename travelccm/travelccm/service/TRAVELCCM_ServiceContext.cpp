@@ -1,18 +1,18 @@
-// //////////////////////////////////////////////////////////////////////
+ // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
 // C
 #include <assert.h>
 // TRAVELCCM
-#include <travelccm/service/Logger.hpp>
 #include <travelccm/basic/BasConst_TRAVELCCM_Service.hpp>
-#include <travelccm/factory/FacSupervisor.hpp>
-#include <travelccm/service/TRAVELCCM_ServiceContext.hpp>
 #include <travelccm/bom/TravelSolution.hpp>
 #include <travelccm/bom/TravelSolutionHolder.hpp>
 #include <travelccm/bom/Restriction.hpp>
 #include <travelccm/bom/RestrictionHolder.hpp>
 #include <travelccm/bom/Passenger.hpp>
+#include <travelccm/bom/CCM.hpp>
+#include <travelccm/service/TRAVELCCM_ServiceContext.hpp>
+#include <travelccm/service/Logger.hpp>
 // FACTORY
 #include <travelccm/factory/FacTravelSolution.hpp>
 #include <travelccm/factory/FacTravelSolutionHolder.hpp>
@@ -21,6 +21,7 @@
 #include <travelccm/factory/FacPassenger.hpp>
 #include <travelccm/factory/FacRequest.hpp>
 #include <travelccm/factory/FacDepartureTimePreferencePattern.hpp>
+#include <travelccm/factory/FacSupervisor.hpp>
 // COMMAND
 #include <travelccm/command/FileMgr.hpp>
 
@@ -112,6 +113,15 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_ServiceContext::
+  addRestriction (const std::string& iRestrictionType,
+                  const DateTime_T iDepartureTime) {
+    Restriction& aRestriction =
+      FacRestriction::instance().create(iRestrictionType, iDepartureTime);
+    _passenger->addRestriction(aRestriction);
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_ServiceContext::
   addAndLinkRequest (bool refundability, bool changeability,
                      bool saturdayNightStay, std::string preferredAirline,
                      std::string preferredCabin, DateTime_T departureTime) {
@@ -135,6 +145,7 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   Passenger& TRAVELCCM_ServiceContext::getPassenger() const {
+    assert(_passenger != NULL);
     return *_passenger;
   }
 
@@ -144,6 +155,30 @@ namespace TRAVELCCM {
     assert (_travelSolutionHolder != NULL);
     FileMgr::readAndProcessTravelSolutionInputFile (iInputFileName,
                                                     *_travelSolutionHolder);
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  const TravelSolution* TRAVELCCM_ServiceContext::
+  getBestAndCheapestTravelSolutionByMatchingIndicator () {
+    // passenger type, request and int
+    assert (_passenger != NULL);
+    assert (_travelSolutionHolder != NULL);
+
+    const Request& iRequest = _passenger->getPassengerRequest();
+    const std::string iPassengerType = _passenger->getPassengerType();
+
+    // filtrate to keep only the travel solution with the highest matching
+    // indicator.
+    CCM::getBestTravelSolutionByMatchingIndicator(iPassengerType, iRequest,
+                                                  _travelSolutionHolder);
+
+    if (_travelSolutionHolder->isVoid())
+      return NULL;
+    else {
+      const TravelSolution* cheapestTravelSolution =
+        _travelSolutionHolder->getCheapestTravelSolution();
+      return cheapestTravelSolution;
+    }
   }
   
   // /////////////////////////////////////////////////////////////////////
@@ -159,50 +194,55 @@ namespace TRAVELCCM {
        preferred cabin  */
 
     assert (_passenger != NULL);
-    Request& lRequest = _passenger->getPassengerRequest();
+    Request& request = _passenger->getPassengerRequest();
+
+    std::string passengerType = _passenger->getPassengerType();
     
     // retrieve the characteristics of the fare in the Request class
-    const bool refundability = lRequest.getRefundability();
-    const bool changeability = lRequest.getChangeability();
-    const bool saturdayNightStay = lRequest.getSaturdayNightStay();
-    const std::string& preferredAirline = lRequest.getPreferredAirline();
-    const std::string& preferredCabin = lRequest.getPreferredCabin();
-
-    const std::string& passengerType = _passenger->getPassengerType();
+    const bool refundability = request.getRefundability();
+    const bool changeability = request.getChangeability();
+    const bool saturdayNightStay = request.getSaturdayNightStay();
+    const std::string preferredAirline = request.getPreferredAirline();
+    const std::string preferredCabin = request.getPreferredCabin();
+    const DateTime_T departureTime = request.getDepartureTime();
     if (passengerType == "B") {
-        if (saturdayNightStay) {
-          addRestriction("saturdayStay");
-        }
-        if (refundability) {
-          addRestriction("refundability");
-        }
-        if (preferredAirline != "NONE") {
-          addRestriction("preferredAirline", preferredAirline);
-        }
-        if (preferredCabin != "NONE") {
-          addRestriction("preferredCabin", preferredCabin);
-        }
-        if (changeability) {
-          addRestriction("changeability");
-        }
-
-      } else if (passengerType == "L") {
-        if (changeability) {
-          addRestriction("changeability");
-        }
-        if (preferredAirline != "NONE") {
-          addRestriction("preferredAirline", preferredAirline);
-        }
-        if (saturdayNightStay) {
-          addRestriction("saturdayStay");
-        }
-        if (refundability) {
-          addRestriction("refundability");
-        }
-        if (preferredCabin != "NONE") {
-          addRestriction("preferredCabin", preferredCabin);
-        }
+      // there is always a departure time request so we always add a time
+      // restriction
+      addRestriction("timePreference", departureTime);
+      if (saturdayNightStay) {
+        addRestriction("saturdayStay");
       }
-
+      if (refundability) {
+        addRestriction("refundability");
+      }
+      if (preferredAirline != "NONE") {
+        addRestriction("preferredAirline", preferredAirline);
+      }
+      if (preferredCabin != "NONE") {
+        addRestriction("preferredCabin", preferredCabin);
+      }
+      if (changeability) {
+        addRestriction("changeability");
+      }
+      
+    } else if (passengerType == "L") {
+      if (changeability) {
+        addRestriction("changeability");
+      }
+      addRestriction("timePreference", departureTime);
+      if (preferredAirline != "NONE") {
+        addRestriction("preferredAirline", preferredAirline);
+      }
+      if (saturdayNightStay) {
+        addRestriction("saturdayStay");
+      }
+      if (refundability) {
+        addRestriction("refundability");
+      }
+      if (preferredCabin != "NONE") {
+        addRestriction("preferredCabin", preferredCabin);
+      }
+    }
   }
+  
 }

@@ -115,7 +115,8 @@ namespace TRAVELCCM {
   // //////////////////////////////////////////////////////////////////////
   void TravelSolutionHolder::
   restrictionMeetsTSList(const Restriction& iRestriction,
-                         TravelSolutionList_T& ioRemovedElements) {
+                         TravelSolutionList_T& ioRemovedElements,
+                         const Passenger& iPassenger) {
      /* if we are at the end of the list, we return the removedElements list
         because all the travel solutions have been matched */
     if (!hasNotReachedEnd()){
@@ -126,7 +127,7 @@ namespace TRAVELCCM {
         restriction meets a single travel solution */
       const TravelSolution& currentTravelSolution = getCurrentTravelSolution();
       bool curTSOK =
-        currentTravelSolution.restrictionMeetsTravelSolution(iRestriction);
+        currentTravelSolution.restrictionMeetsTravelSolution(iRestriction, iPassenger);
       if (!curTSOK) {
         // we add this travel solution to the temp list
         ioRemovedElements.push_back(&currentTravelSolution);
@@ -139,7 +140,44 @@ namespace TRAVELCCM {
       else {
         iterate();
       }
-      restrictionMeetsTSList(iRestriction, ioRemovedElements);
+      restrictionMeetsTSList(iRestriction, ioRemovedElements, iPassenger);
+    }
+  }
+
+  // ///////////////////////////////////////////////////////////////////////
+  const TravelSolution* TravelSolutionHolder::getCheapestTravelSolution() {
+    if (isVoid())
+      return NULL;
+    else {
+      begin();
+      const TravelSolution* cheapestTravelSolution_ptr =
+        &getCurrentTravelSolution();
+      iterate();
+      
+      while (hasNotReachedEnd()) {
+        const TravelSolution& lCurrentTravelSolution =
+          getCurrentTravelSolution();
+        bool isCheaper =
+          lCurrentTravelSolution.isCheaper (*cheapestTravelSolution_ptr);
+        if (isCheaper == true) {
+          cheapestTravelSolution_ptr = &lCurrentTravelSolution;
+        }
+        bool hasTheSamePrice =
+          lCurrentTravelSolution.hasTheSamePrice(*cheapestTravelSolution_ptr);
+        if (hasTheSamePrice == true) {
+          // then we cast a random number to determine which of the two
+          // "identical" travel solutions - from the customer's point of
+          // view - we will choose.
+          int randomIndicator = rand () % 2;
+          // we change only when we cast a 0, if more than two travel
+          // solutions have the same price, they do not have the
+          // same probability!!
+          if (randomIndicator == 0)
+            cheapestTravelSolution_ptr = &lCurrentTravelSolution;
+        }
+        iterate();
+      }
+      return cheapestTravelSolution_ptr;
     }
   }
 

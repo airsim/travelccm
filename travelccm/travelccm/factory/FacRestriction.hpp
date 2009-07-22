@@ -7,6 +7,7 @@
 // STL
 #include <string>
 // TRAVELCCM 
+#include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/factory/FacBomAbstract.hpp>
 #include <travelccm/bom/RestrictionHolder.hpp>
 
@@ -31,9 +32,9 @@ namespace TRAVELCCM {
         <br>This new object is added to the list of instantiated objects.
         @return Restriction& The newly created object. */
     Restriction& create ();
-    Restriction& create (std::string restrictionType);
-    Restriction& create (std::string restrictionType,
-                         std::string namePreference);
+    Restriction& create (std::string);
+    Restriction& create (std::string, std::string);
+    Restriction& create (std::string, DateTime_T);
 
     /* add a restriction in the list of restrictionHolder */
     void  addRestriction (RestrictionHolder& ioRestrictionHolder,
