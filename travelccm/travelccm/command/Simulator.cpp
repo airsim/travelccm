@@ -14,7 +14,7 @@
 namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
-  void Simulator::simulate(Passenger& ioPassenger,
+  bool Simulator::simulate(Passenger& ioPassenger,
                            TravelSolutionHolder& ioTravelSolutionHolder) {
     
     int numTravelSolIn = ioTravelSolutionHolder.numberOfTravelSolutions();
@@ -33,6 +33,8 @@ namespace TRAVELCCM {
                          << " travel solutions");
     
     TRAVELCCM_LOG_DEBUG ("Simulation ended properly!");
+
+    return (numTravelSolOut == 0);
   }
   
 }

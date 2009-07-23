@@ -77,7 +77,7 @@ namespace TRAVELCCM {
     std::string getBestTravelSolutionId();
 
     /** Perform a small simulation, which uses the Customer Choice Model.*/
-    void simulate();
+    bool simulate();
 
   private:
     /** Default Constructors. */

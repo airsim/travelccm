@@ -196,7 +196,7 @@ namespace TRAVELCCM {
   }
     
   // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_Service::simulate()  {
+  bool TRAVELCCM_Service::simulate()  {
     // add travel solutions to the travelsolution holder
     assert(_travelccmServiceContext != NULL);
 
@@ -255,13 +255,16 @@ namespace TRAVELCCM {
                          << passengerRestrictions.toString());
 
     // Call the underlying Use Case (command)
-    Simulator::simulate (passenger, travelSolutionHolder);
+    bool isNotVoid =
+      Simulator::simulate (passenger, travelSolutionHolder);
 
     /* We will need the different restrictions and their order so the first
        argument of the function orderedPreference will probably change
     */
     TRAVELCCM_LOG_DEBUG ("TravelSolutionHolder: "
                          << travelSolutionHolder.toString());
+
+    return isNotVoid;
   }
 
 }

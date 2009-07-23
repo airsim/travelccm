@@ -21,7 +21,7 @@ namespace TRAVELCCM {
 
     // ////////// Business Methods /////////
     /** Perform a small simulation, which uses the Customer Choice Model.*/
-    static void simulate (Passenger&, TravelSolutionHolder&);
+    static bool simulate (Passenger&, TravelSolutionHolder&);
 
     
   private:
