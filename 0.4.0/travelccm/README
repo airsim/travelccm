@@ -7,10 +7,10 @@ svn co https://travelccm.svn.sourceforge.net/svnroot/travelccm/trunk/travelccm t
 Then, you need the following packages (Fedora Core 6 names here, 
 but names may vary according to distributions):
   * libtool, autoconf, automake
-  * gettext-devel
   * gcc-c++
   * boost-devel
   * doxygen
+  * gettext-devel (optional)
   * tetex-latex (optional)
   * rpm-build (optional)
 
@@ -20,7 +20,7 @@ The latest stable source tarball (travelccm*.tar.gz or .bz2) can be found here:
 http://sourceforge.net/project/showfiles.php?group_id=261639
 
 Then, as usual, you can just type the following sequence:
-"./configure --prefix=/home/travelccm/dev/deliveries/travelccm-0.1.0 && make && make check"
+"./configure --prefix=/home/travelccm/dev/deliveries/travelccm-0.4.0 && make && make check"
 Of course, if you want to install the library (libtravelccm*.so*), 
 just type: "make install".
 

@@ -286,6 +286,15 @@ AC_CONFIG_FILES(
 	travelccm/core/Makefile
 	travelccm/config/Makefile
 	travelccm/batches/Makefile
+	man/Makefile
+	doc/Makefile
+	doc/images/Makefile
+	doc/tutorial/Makefile
+	doc/tutorial/src/Makefile
+	doc/local/Makefile
+	doc/local/index.doc
+	doc/doxygen_html.cfg
+	doc/sourceforge/howto_release_travelccm.html
 	test/Makefile
 	test/com/Makefile)
 AC_OUTPUT
