@@ -47,8 +47,6 @@ Summary:        Header files, libraries and development documentation for %{name
 Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
 Requires:       pkgconfig
-Requires(post): info
-Requires(preun): info
 
 %description    devel
 This package contains the header files, static libraries and
@@ -90,7 +88,7 @@ rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 # remove unpackaged files from the buildroot
 #rm -f $RPM_BUILD_ROOT%{_includedir}/%{name}/config.h
-rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+#rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib%{name}.la
 # chmod 644 doc/html/installdox doc/html/*.png doc/html/*.ico
 rm -rf %{mydocs} && mkdir -p %{mydocs}
@@ -104,19 +102,16 @@ rm -rf $RPM_BUILD_ROOT
 %postun -p /sbin/ldconfig
 
 %post devel
-/sbin/install-info %{_infodir}/%{name}-ref.info.* %{_infodir}/dir || :
+echo ""
 
 %preun devel 
-if [ "$1" = 0 ]; then
-   /sbin/install-info --delete %{_infodir}/%{name}-ref.info.* %{_infodir}/dir || :
-fi
+echo ""
 
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS ChangeLog COPYING NEWS README
 %{_bindir}/%{name}
 %{_libdir}/lib*.so.*
-%dir %{_datadir}/%{name}
 
 %files devel
 %defattr(-,root,root,-)
@@ -125,7 +120,6 @@ fi
 %{_libdir}/lib%{name}.so
 %{_libdir}/pkgconfig/%{name}.pc
 %{_datadir}/aclocal/%{name}.m4
-%{_infodir}/%{name}-ref.info.*
 %{_mandir}/man1/%{name}-config.1.*
 
 %files doc
