@@ -5,10 +5,10 @@
 #include <cppunit/tools/XmlDocument.h>
 #include <cppunit/tools/XmlElement.h>
 #include <cppunit/TestSuite.h>
-// RMOL Test Common
+// TRAVELCCM Test Common
 #include <test/com/XmlOutputterHookForCC.hpp>
 
-namespace RMOL {
+namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   void XmlOutputterHookForCC::beginDocument(CppUnit::XmlDocument* document) {

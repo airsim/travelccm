@@ -1,5 +1,5 @@
 /*!
-\page installation RMOL Installation
+\page installation TRAVELCCM Installation
 
 \section toc Table of Contents
 - \ref requirements
@@ -9,15 +9,15 @@
 - \ref msvc
 
 
-\section requirements RMOL Requirements
+\section requirements TRAVELCCM Requirements
 
 If you have a RPM-based Linux distribution, note that RPM packages are
 provided for the latest versions of Fedora (e.g., 10) on the <a
-href="http://sourceforge.net/project/showfiles.php?group_id=177703">RMOL
+href="http://sourceforge.net/project/showfiles.php?group_id=261639">TRAVELCCM
 project</a> download site. In that case, you do not have to bother
 with the installation from source code.
 
-Otherwise, RMOL should compile without errors or warnings on most
+Otherwise, TRAVELCCM should compile without errors or warnings on most
 GNU/Linux systems, on UNIX systems like Solaris SunOS, and on POSIX
 based environments for Microsoft Windows like Cygwin or MinGW with
 MSYS. It can be also built on Microsoft Windows NT/2000/XP using
@@ -41,46 +41,46 @@ HTML documentation.
 We strongly recommend that you use recent stable releases of the GCC, if
 possible. We do not actively work on supporting older versions of the GCC,
 and they may therefore (without prior notice) become unsupported in future
-releases of RMOL.
+releases of TRAVELCCM.
 
-In order to use all functionality provided by the RMOL library, it is
+In order to use all functionality provided by the TRAVELCCM library, it is
 recommended that you have some external libraries compiled and installed in
 your computer, namely:
 <a href="http://www.gnu.org/software/gsl">GSL</a> and
 <a href="http://www.boost.org">Boost</a>.
 
 
-\section download Obtaining the RMOL Source Codes
+\section download Obtaining the TRAVELCCM Source Codes
 
-RMOL is released under the Lesser GNU General Public License (LGPL)
-and hence the source code of the RMOL library is available for free
-download. To obtain the RMOL source code, visit the project pages on
+TRAVELCCM is released under the Lesser GNU General Public License (LGPL)
+and hence the source code of the TRAVELCCM library is available for free
+download. To obtain the TRAVELCCM source code, visit the project pages on
 SourceForge:
 - <a
-  href="http://sourceforge.net/projects/rmol">http://sourceforge.net/projects/rmol</a>
+  href="http://sourceforge.net/projects/travelccm">http://sourceforge.net/projects/travelccm</a>
 .
-and download the file named \c rmol-\<VERSION\>.tar.gz or 
-\c rmol-\<VERSION\>.tar.bz2, where \c \<VERSION\> is the latest release
+and download the file named \c travelccm-\<VERSION\>.tar.gz or 
+\c travelccm-\<VERSION\>.tar.bz2, where \c \<VERSION\> is the latest release
 number, e.g. 0.19.0.
 
 
-\section compilation General RMOL Configuration, Compilation and Installation Instructions
+\section compilation General TRAVELCCM Configuration, Compilation and Installation Instructions
 
-Assuming that you have already downloaded the latest RMOL sources, untar
+Assuming that you have already downloaded the latest TRAVELCCM sources, untar
 and unpack the sources, and enter the unpacked directory. Depending on the
 package type you have downloaded, use the following commands:
 
 \verbatim 
-% gzip -cd rmol-<VERSION>.tar.gz | tar xf - 
-% cd rmol-<VERSION> 
+% gzip -cd travelccm-<VERSION>.tar.gz | tar xf - 
+% cd travelccm-<VERSION> 
 \endverbatim
 
 \verbatim 
-% bzip2 -cd rmol-<VERSION>.tar.bz2 | tar xf - 
-% cd rmol-<VERSION> 
+% bzip2 -cd travelccm-<VERSION>.tar.bz2 | tar xf - 
+% cd travelccm-<VERSION> 
 \endverbatim
 
-Since version 0.2.0, the RMOL library uses autoconf, automake and libtool
+Since version 0.2.0, the TRAVELCCM library uses autoconf, automake and libtool
 for preparing Makefiles and configuration script, so the compilation
 procedure resembles a standard, well-known GNU method, i.e. 
 
@@ -96,7 +96,7 @@ most important are:
   PREFIX value. By default it is set to \c `/usr/local', so <tt>`make
   install'</tt> will install appropriate files into \c `/usr/local/include',
   \c `/usr/local/lib`, etc.
-- \c `--enable-debug' - build an extra library named \c `librmol_debug.*'
+- \c `--enable-debug' - build an extra library named \c `libtravelccm_debug.*'
   using special debugging flags for compiler and linker (disabled by default)
 - \c `--enable-exceptions' - enable exceptions handling of run-time errors
   instead of aborting the program (disabled by default)
@@ -111,7 +111,7 @@ Plese note that each \c `--enable-\<OPTION\>' switch can be replaced
 with its opposite switch \c `--disable-\<OPTION\>'.
 
 By default, the \c `configure' script checks for a few external
-libraries, which might be used by the RMOL library (cf. \ref
+libraries, which might be used by the TRAVELCCM library (cf. \ref
 requirements).
 
 If some external libraries are installed in a non-standard location in
@@ -157,7 +157,7 @@ one can observe something like this:
 
 \verbatim
 ------------------------------------------------------------------------------
-rmol-0.19.0 library configuration:
+travelccm-0.19.0 library configuration:
 ------------------------------------------------------------------------------
 
 Directories:
@@ -165,7 +165,7 @@ Directories:
   - exec_prefix ....... : ${prefix}
   - includedir ........ : ${prefix}/include
   - libdir ............ : ${exec_prefix}/lib
-  - docdir ............ : ${datarootdir}/doc/rmol-0.19.0
+  - docdir ............ : ${datarootdir}/doc/travelccm-0.19.0
   - mandir ............ : ${datarootdir}/man
   - infodir ........... : ${datarootdir}/info
 
@@ -217,20 +217,20 @@ External libraries:
     o CPPUNIT_LIBS .... : -lcppunit -ldl
 
 ------------------------------------------------------------------------------
-Now type 'make && make install' to build and install rmol-0.19.0 library
+Now type 'make && make install' to build and install travelccm-0.19.0 library
 ------------------------------------------------------------------------------
 
 \endverbatim
 
-Now, it is time for compiling and linking the RMOL library. To do so,
+Now, it is time for compiling and linking the TRAVELCCM library. To do so,
 please simply run the following command:
 
 \verbatim
 % make
 \endverbatim
 
-RMOL should compile without any errors or warnings. If this is not the
-case, please submit a bug-report on the RMOL project page at SourceForge.
+TRAVELCCM should compile without any errors or warnings. If this is not the
+case, please submit a bug-report on the TRAVELCCM project page at SourceForge.
 Please include information about your OS, compiler version, external
 libraries and their versions, etc.
 
@@ -284,49 +284,49 @@ to remove all files created during compilation process, or even
 to remove all files generated by the \c `configure' script.
 
 
-\section macosx Instructions for RMOL Configuration on MacOS X
+\section macosx Instructions for TRAVELCCM Configuration on MacOS X
 
-To compile and use RMOL under Mac OS X, you should install the latest
+To compile and use TRAVELCCM under Mac OS X, you should install the latest
 version of Apple's developer tools. The tools are delivered with MacOS X,
 but you may need to unpack them. The configuration procedure is similar to
 the one described above.
 
 
-\section msvc RMOL Compilation and Installation using Microsoft Visual C++ .NET and Intel MKL
+\section msvc TRAVELCCM Compilation and Installation using Microsoft Visual C++ .NET and Intel MKL
 
-It is possible to compile and link the RMOL library using the 
+It is possible to compile and link the TRAVELCCM library using the 
 <a href="http://msdn.microsoft.com/visualc/">Microsoft Visual C++ .NET</a>
 compiler.
 
-The next step is to compile and link the RMOL library. Assuming that you
-have already downloaded and unpacked the RMOL package, you should find a
-MSVC++ .NET project file <tt>rmol.vcproj</tt> in the <tt>win32</tt>
+The next step is to compile and link the TRAVELCCM library. Assuming that you
+have already downloaded and unpacked the TRAVELCCM package, you should find a
+MSVC++ .NET project file <tt>travelccm.vcproj</tt> in the <tt>win32</tt>
 sub-directory. Open this project file in the MSVC++ .NET environment. There
 are two default targets prepared for compilation and linking: <tt>Debug</tt>
 and <tt>Release</tt>. The former can be used to compile a non-optimised
 version of the library for debugging purposes, named
-<tt>rmol_debug.lib</tt>, whereas the latter one should produce an optimised
-library named <tt>rmol.lib</tt>. Both libraries are static ones and they
+<tt>travelccm_debug.lib</tt>, whereas the latter one should produce an optimised
+library named <tt>travelccm.lib</tt>. Both libraries are static ones and they
 should be created in <tt>win32/libs</tt> sub-directory.
 
-Finally, you can start using the RMOL library with your own programs and
-link them with RMOL and MKL. Observe that several things need to be
+Finally, you can start using the TRAVELCCM library with your own programs and
+link them with TRAVELCCM and MKL. Observe that several things need to be
 correctly set up:
-- The RMOL include directory must be defined. Settings for this can be found
+- The TRAVELCCM include directory must be defined. Settings for this can be found
 in the menu <tt>"Tools -&gt; Options -&gt; Projects and Solutions -&gt; VC++
 Directories -&gt; Include files"</tt>. Add a path to 
-<tt>"<RMOL source directory>"</tt>, e.g. <tt>"C:\rmol-3.10.4"</tt>.
-- The RMOL library directory must be defined. Settings for this can be found
+<tt>"<TRAVELCCM source directory>"</tt>, e.g. <tt>"C:\travelccm-3.10.4"</tt>.
+- The TRAVELCCM library directory must be defined. Settings for this can be found
 in the menu <tt>"Tools -&gt; Options -&gt; Projects and Solutions -&gt; VC++
 Directories -&gt; Library files"</tt>. Add a path to 
-<tt>"<RMOL source directory>\win32\libs"</tt>, e.g.
-<tt>"C:\rmol-3.10.4\win32\libs"</tt>.
+<tt>"<TRAVELCCM source directory>\win32\libs"</tt>, e.g.
+<tt>"C:\travelccm-3.10.4\win32\libs"</tt>.
 - The GSL library directory must be defined. Add another library path with
 <tt>"C:\Program Files\GSL\1.11\lib"</tt>.
-- Linking with RMOL and GSL must be set up. Do this by marking your project
+- Linking with TRAVELCCM and GSL must be set up. Do this by marking your project
 and go to the menu <tt>"Project -&gt; Properties -&gt; Configuration
 Properties -&gt; Linker -&gt; Input -&gt; Additional Dependencies"</tt>.
-There you need to add <tt>rmol_debug.lib</tt> or <tt>rmol.lib</tt> depending
+There you need to add <tt>travelccm_debug.lib</tt> or <tt>travelccm.lib</tt> depending
 on whether Debug or Release mode are being used. Furthermore, you need to
 add <tt>gsl_dll.lib</tt>.
 - The runtime library for linking needs to be set to <tt>Multi-threaded
