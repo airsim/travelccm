@@ -1,5 +1,5 @@
-#ifndef __RMOL_CPPUNITCORE_HPP
-#define __RMOL_CPPUNITCORE_HPP
+#ifndef __TRAVELCCM_CPPUNITCORE_HPP
+#define __TRAVELCCM_CPPUNITCORE_HPP
 
 // //////////////////////////////////////////////////////////////////////
 // Import section
@@ -11,11 +11,11 @@ int main (int argc, char* argv[]) {  \
   std::string xmlOutputFile (__FILE__);            \
   xmlOutputFile.resize (xmlOutputFile.length()-4); \
   xmlOutputFile.append("_results.xml");            \
-  return RMOL::CppUnitCore (xmlOutputFile.c_str()).main(argc, argv); \
+  return TRAVELCCM::CppUnitCore (xmlOutputFile.c_str()).main(argc, argv); \
 }
 // /////////// (END OF)  MACROS /////////////
 
-namespace RMOL {
+namespace TRAVELCCM {
   
   /** Class to handle CPPUnit functions. */
   class CppUnitCore {
@@ -35,4 +35,4 @@ namespace RMOL {
   };
   
 }
-#endif // __RMOL_CPPUNITCORE_HPP
+#endif // __TRAVELCCM_CPPUNITCORE_HPP

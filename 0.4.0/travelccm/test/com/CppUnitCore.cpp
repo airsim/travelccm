@@ -9,11 +9,11 @@
 #include <cppunit/TestResult.h>
 #include <cppunit/BriefTestProgressListener.h>
 #include <cppunit/XmlOutputter.h>
-// RMOL Test Common
+// TRAVELCCM Test Common
 #include <test/com/CppUnitCore.hpp>
 #include <test/com/XmlOutputterHookForCC.hpp>
 
-namespace RMOL {
+namespace TRAVELCCM {
   
   // //////////////////////////////////////////////////////////////////////
   CppUnitCore::CppUnitCore (const char* resultFileName) :

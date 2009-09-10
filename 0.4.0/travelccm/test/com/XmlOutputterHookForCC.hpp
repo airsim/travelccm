@@ -1,12 +1,12 @@
-#ifndef __RMOL_XMLOUTPUTTERHOOKFORCC_HPP
-#define __RMOL_XMLOUTPUTTERHOOKFORCC_HPP
+#ifndef __TRAVELCCM_XMLOUTPUTTERHOOKFORCC_HPP
+#define __TRAVELCCM_XMLOUTPUTTERHOOKFORCC_HPP
 
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
 #include <cppunit/XmlOutputterHook.h>
  
-namespace RMOL {
+namespace TRAVELCCM {
 
   /** Helper class to translate CPPUnit test output into something ANT can
       understand (for CruiseControl). */
@@ -34,4 +34,4 @@ namespace RMOL {
   };
 		
 }
-#endif // __RMOL_XMLOUTPUTTERHOOKFORCC_HPP
+#endif // __TRAVELCCM_XMLOUTPUTTERHOOKFORCC_HPP
