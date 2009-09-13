@@ -2,7 +2,7 @@
 #-------------------------------------------------------------------
 AC_PREREQ(2.59)
 AC_COPYRIGHT([Copyright (C) 2007-2009  Denis Arnaud <denis_arnaud@users.sourceforge.net>])
-AC_INIT([TRAVELCCM],[0.4.0],[denis_arnaud@users.sourceforge.net],[travelccm])
+AC_INIT([TRAVELCCM],[0.5.0],[denis_arnaud@users.sourceforge.net],[travelccm])
 AC_CONFIG_HEADER([travelccm/config.h])
 AC_CONFIG_SRCDIR([travelccm/basic/BasConst.cpp])
 AC_CONFIG_AUX_DIR([config])
@@ -15,7 +15,7 @@ RPM_RELEASE="1"
 AC_SUBST(RPM_RELEASE)
 
 # Shared library versioning
-GENERIC_LIBRARY_VERSION="0:4:0"
+GENERIC_LIBRARY_VERSION="0:5:0"
 #                        | | |
 #                 +------+ | +---+
 #                 |        |     |
