@@ -2,11 +2,11 @@
 #include <iostream>
 #include <string>
 // CPPUNIT
-#include <test/com/CppUnitCore.hpp>
+#include <extracppunit/CppUnitCore.hpp>
 // TRAVELCCM
 #include <travelccm/TRAVELCCM_Service.hpp>
 // TRAVEL-CCM Test Suite
-#include <test/TravelChoiceTestSuite.hpp>
+#include <test/travelccm/TravelChoiceTestSuite.hpp>
 
 // //////////////////////////////////////////////////////////////////////
 void testTravelChoiceHelper() {
