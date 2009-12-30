@@ -277,6 +277,12 @@ AC_CONFIG_FILES(
 	travelccm.pc
 	travelccm.spec
 	travelccm.m4
+	stdair/Makefile
+	stdair/basic/Makefile
+	stdair/bom/Makefile
+	stdair/factory/Makefile
+	stdair/config/Makefile
+	stdair/core/Makefile
 	travelccm/Makefile
 	travelccm/basic/Makefile
 	travelccm/bom/Makefile
@@ -295,8 +301,12 @@ AC_CONFIG_FILES(
 	doc/local/index.doc
 	doc/doxygen_html.cfg
 	doc/sourceforge/howto_release_travelccm.html
+	extracppunit/Makefile
 	test/Makefile
-	test/com/Makefile)
+	test/samples/Makefile
+	test/stdair/Makefile
+	test/travelccm/Makefile
+)
 AC_OUTPUT
 
 echo "
