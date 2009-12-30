@@ -1,3 +1,4 @@
+# travelccm/batches sub-directory
 include $(top_srcdir)/Makefile.common
 include $(srcdir)/sources.mk
 
@@ -13,4 +14,4 @@ travelccm_SOURCES = $(batches_h_sources) $(batches_cc_sources)
 travelccm_CXXFLAGS = $(BOOST_CFLAGS)
 #travelccm_LDADD = 
 travelccm_LDFLAGS = $(BOOST_PROGRAM_OPTIONS_LIB) \
-	$(top_builddir)/@PACKAGE@/core/lib@PACKAGE@.la
+	$(top_builddir)/travelccm/core/libtravelccm.la
