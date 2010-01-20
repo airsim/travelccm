@@ -1,35 +1,35 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// C
-#include <assert.h>
 // STL
+#include <cassert>
 #include <iomanip>
 #include <sstream>
 #include <iostream>
-// TRAVELCCM
+// StdAir
+#include <stdair/basic/BasChronometer.hpp>
+// TravelCCM
 #include <travelccm/basic/BasConst_TRAVELCCM_Service.hpp>
+#include <travelccm/bom/TravelSolutionHolder.hpp>
+#include <travelccm/bom/RestrictionHolder.hpp>
 #include <travelccm/factory/FacTRAVELCCMServiceContext.hpp>
 #include <travelccm/command/Simulator.hpp>
 #include <travelccm/service/TRAVELCCM_ServiceContext.hpp>
 #include <travelccm/service/Logger.hpp>
 #include <travelccm/TRAVELCCM_Service.hpp>
-#include <travelccm/bom/TravelSolutionHolder.hpp>
-#include <travelccm/bom/RestrictionHolder.hpp>
 
 namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
-  TRAVELCCM_Service::TRAVELCCM_Service () {
-    // Initialise the context
-    TRAVELCCM_ServiceContext& lTRAVELCCM_ServiceContext = 
-      FacTRAVELCCMServiceContext::instance().create ();
-    _travelccmServiceContext = &lTRAVELCCM_ServiceContext;
+  TRAVELCCM_Service::TRAVELCCM_Service () 
+    : _travelccmServiceContext (NULL) {
+    assert (false);
   }
 
   // //////////////////////////////////////////////////////////////////////
-  TRAVELCCM_Service::TRAVELCCM_Service (const TRAVELCCM_Service& iService) :
-    _travelccmServiceContext (iService._travelccmServiceContext) {
+  TRAVELCCM_Service::TRAVELCCM_Service (const TRAVELCCM_Service& iService)
+    : _travelccmServiceContext (NULL) {
+    assert (false);
   }
 
   // //////////////////////////////////////////////////////////////////////
@@ -40,6 +40,12 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   TRAVELCCM_Service::~TRAVELCCM_Service () {
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_Service::logInit (const LOG::EN_LogLevel iLogLevel,
+                                   std::ostream& ioLogOutputFile) {
+    Logger::instance().setLogParameters (iLogLevel, ioLogOutputFile);
   }
 
   // //////////////////////////////////////////////////////////////////////
@@ -54,18 +60,14 @@ namespace TRAVELCCM {
   }
   
   // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_Service::logInit (const LOG::EN_LogLevel iLogLevel,
-                                   std::ostream& ioLogOutputFile) {
-    Logger::instance().setLogParameters (iLogLevel, ioLogOutputFile);
-  }
-
-  // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_Service::createPassenger(std::string passengerType) {
-    _travelccmServiceContext->createPassenger(passengerType);
+  void TRAVELCCM_Service::createPassenger (const std::string& passengerType) {
+    assert (_travelccmServiceContext != NULL);
+    _travelccmServiceContext->createPassenger (passengerType);
   }
 
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_Service::initializePassenger() {
+    assert (_travelccmServiceContext != NULL);
     _travelccmServiceContext->intializePassenger();
   }
 
@@ -114,17 +116,20 @@ namespace TRAVELCCM {
               std::string preferredAirline, std::string preferredCabin,
               DateTime_T departureTime) {
     assert (_travelccmServiceContext != NULL);
-    _travelccmServiceContext->addAndLinkRequest(refundability, changeability,
-                                                saturdayNightStay, preferredAirline,
-                                                preferredCabin, departureTime);
+    _travelccmServiceContext->addAndLinkRequest (refundability, changeability,
+                                                 saturdayNightStay,
+                                                 preferredAirline,
+                                                 preferredCabin, departureTime);
   }
 
   // //////////////////////////////////////////////////////////////////////
   TravelSolutionHolder& TRAVELCCM_Service::getChoosenTravelSolutions() {
+    assert (_travelccmServiceContext != NULL);
 
     // Retrieve the travel solution holder in the service context.
     TravelSolutionHolder& travelSolutionHolder =
       _travelccmServiceContext->getTravelSolutionHolder();
+
     // Retrieve the passenger
     Passenger& passenger = _travelccmServiceContext->getPassenger();
     
@@ -141,31 +146,40 @@ namespace TRAVELCCM {
   // //////////////////////////////////////////////////////////////////////
   const TravelSolution* TRAVELCCM_Service::
   getBestTravelSolution (TravelSolutionHolder& ioTravelSolutionHolder) {
-    if (ioTravelSolutionHolder.isVoid())
+
+    if (ioTravelSolutionHolder.isVoid()) {
       return NULL;
-    else {
+      
+    } else {
       ioTravelSolutionHolder.begin();
       const TravelSolution* oBestTravelSolution_ptr =
         &ioTravelSolutionHolder.getCurrentTravelSolution();
+      
       while (ioTravelSolutionHolder.hasNotReachedEnd()) {
         const TravelSolution& lCurrentTravelSolution =
           ioTravelSolutionHolder.getCurrentTravelSolution();
-        bool isCheaper =
-          lCurrentTravelSolution.isCheaper(*oBestTravelSolution_ptr);
+
+        const bool isCheaper =
+          lCurrentTravelSolution.isCheaper (*oBestTravelSolution_ptr);
         if (isCheaper == true) {
+          
           oBestTravelSolution_ptr = &lCurrentTravelSolution ;
         }
-        bool hasTheSamePrice =
+        
+        const bool hasTheSamePrice =
           lCurrentTravelSolution.hasTheSamePrice (*oBestTravelSolution_ptr);
         if (hasTheSamePrice == true) {
-          int randomIndicator = rand () % 2;
+          
+          const int randomIndicator = rand () % 2;
           // we change only when we cast a 0, if more than two travel solutions
           // have the same price, they do not have the same probability!!
           if (randomIndicator == 0)
             oBestTravelSolution_ptr = &lCurrentTravelSolution ;
         }
+        
         ioTravelSolutionHolder.iterate();
       }
+      
       return oBestTravelSolution_ptr;
     }
   }
@@ -174,32 +188,38 @@ namespace TRAVELCCM {
   const TravelSolution* TRAVELCCM_Service::
   getBestTravelSolutionByMatchingIndicator () {
     assert (_travelccmServiceContext != NULL);
+    
     return _travelccmServiceContext->getBestAndCheapestTravelSolutionByMatchingIndicator();
   }
 
   // ///////////////////////////////////////////////////////////////////////
   void TRAVELCCM_Service::addRestrictionsFromRequest () {
+    assert (_travelccmServiceContext != NULL);
+    
     _travelccmServiceContext->addAndOrderRestrictionsFromRequest ();
   }
 
   // //////////////////////////////////////////////////////////////////////
   std::string TRAVELCCM_Service::getBestTravelSolutionId() {
     TravelSolutionHolder& lTravelSolutionHolder = getChoosenTravelSolutions();
+    
     const TravelSolution* lBestTravelSolution_ptr =
-      getBestTravelSolution(lTravelSolutionHolder);
-    if (lBestTravelSolution_ptr == NULL)
+      getBestTravelSolution (lTravelSolutionHolder);
+
+    if (lBestTravelSolution_ptr == NULL) {
       return "";
-    else {
-      std::string id = lBestTravelSolution_ptr->getId();
+      
+    } else {
+      const std::string id = lBestTravelSolution_ptr->getId();
       return id;
     }
   }
     
   // //////////////////////////////////////////////////////////////////////
   bool TRAVELCCM_Service::simulate()  {
-    // add travel solutions to the travelsolution holder
-    assert(_travelccmServiceContext != NULL);
+    assert (_travelccmServiceContext != NULL);
 
+    // add travel solutions to the travelsolution holder
     // AF404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
     /*
     addTravelSolution ("NCE","LHR", Date_T(2009,05,1), Duration_T(12,00,00),
@@ -255,12 +275,16 @@ namespace TRAVELCCM {
                          << passengerRestrictions.toString());
 
     // Call the underlying Use Case (command)
-    bool isNotVoid =
-      Simulator::simulate (passenger, travelSolutionHolder);
+    stdair::BasChronometer lSimulateChronometer;
+    lSimulateChronometer.start();
+    const bool isNotVoid = Simulator::simulate (passenger, travelSolutionHolder);
 
+    const double lSimulateMeasure = lSimulateChronometer.elapsed();
+    
     /* We will need the different restrictions and their order so the first
        argument of the function orderedPreference will probably change
     */
+    TRAVELCCM_LOG_DEBUG ("Simulation done in " << lSimulateMeasure);
     TRAVELCCM_LOG_DEBUG ("TravelSolutionHolder: "
                          << travelSolutionHolder.toString());
 

@@ -5,6 +5,7 @@
 // Import section
 // //////////////////////////////////////////////////////////////////////
 // STL
+#include <iosfwd>
 #include <string>
 // Boost (Extended STL)
 #include <boost/date_time/gregorian/gregorian.hpp>
@@ -21,13 +22,20 @@ namespace TRAVELCCM {
   /** Interface for the TRAVELCCM Services. */
   class TRAVELCCM_Service {
   public:
-    /** Constructor. */
+    // ////////// Constructors and destructors //////////
+    /** Constructor.
+        @param std::ostream& Output log stream (for instance, std::cout). */
     TRAVELCCM_Service (std::ostream& ioLogStream);
+    
     /** Destructor. */
     ~TRAVELCCM_Service();
 
-    /** create a passenger in the context thanks to his type. */
-    void createPassenger(std::string);
+    
+  public:
+    // ////////// Use Cases //////////
+    /** Create a passenger in the context for the given type. */
+    void createPassenger (const std::string&);
+    
     /** Initialize the different fields of a passenger after creating it. */
     void initializePassenger();
 
@@ -59,27 +67,29 @@ namespace TRAVELCCM {
        request */
     void addRestrictionsFromRequest ();
     
-    /** returns the holder of travel solutions after the algorithm of
+    /** Return the holder of travel solutions after the algorithm of
         preferred choices */
     TravelSolutionHolder& getChoosenTravelSolutions();
 
-    // TO DO: revise the choice process since the travel solution returned is
-    // not necessarily the cheapestone. Idem for the follwing function.
-    /** returns the cheapest travel solution amongs those retained by the
+    // TODO: revise the choice process since the travel solution returned is
+    // not necessarily the cheapest one. Idem for the following function.
+    /** Return the cheapest travel solution amongs those retained by the
         customer, that is the one he will buy */
-    const TravelSolution*  getBestTravelSolution(TravelSolutionHolder&);
+    const TravelSolution* getBestTravelSolution (TravelSolutionHolder&);
 
-    /** returns one of the cheapest travel solutions which has the best matching
+    /** Return one of the cheapest travel solutions which has the best matching
         indicator */
     const TravelSolution* getBestTravelSolutionByMatchingIndicator ();
     
-    /** returns the key of the cheapest travel solution */
+    /** Return the key of the cheapest travel solution */
     std::string getBestTravelSolutionId();
 
     /** Perform a small simulation, which uses the Customer Choice Model.*/
     bool simulate();
 
+    
   private:
+    // /////// Construction and Destruction helper methods ///////
     /** Default Constructors. */
     TRAVELCCM_Service ();
     TRAVELCCM_Service (const TRAVELCCM_Service&);

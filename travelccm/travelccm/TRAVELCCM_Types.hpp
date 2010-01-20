@@ -5,11 +5,10 @@
 // Import section
 // //////////////////////////////////////////////////////////////////////
 // STL
-#include <vector>
-#include <list>
+#include <string>
+#include <map>
 // Boost (Extended STL)
 #include <boost/date_time/gregorian/gregorian.hpp>
-// Boost
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 namespace TRAVELCCM {
