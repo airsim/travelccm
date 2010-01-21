@@ -29,8 +29,13 @@ void testTravelChoiceHelper() {
     logOutputFile.open (lLogFilename.c_str());
     logOutputFile.clear();
     
-    // Initialise the list of classes/buckets
-    // TRAVELCCM::TRAVELCCM_Service travelccmService (logOutputFile);
+    // Initialise the service context
+    const stdair::BasLogParams lLogParams (stdair::LOG::DEBUG, logOutputFile);
+    const TRAVELCCM::BasTravelCCMType lCCMType (TRAVELCCM::BasTravelCCMType::PREF_BASED);
+    TRAVELCCM::TRAVELCCM_Service travelccmService (lLogParams, lCCMType);
+    
+    // Start a mini-simulation
+    travelccmService.simulate();
     
   } catch (const std::exception& stde) {
     std::cerr << "Standard exception: " << stde.what() << std::endl;
