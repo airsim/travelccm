@@ -4,13 +4,12 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// STL
-#include <iosfwd>
-#include <string>
-// Boost (Extended STL)
-#include <boost/date_time/gregorian/gregorian.hpp>
-// TRAVELCCM
+// StdAir
+#include <stdair/STDAIR_Types.hpp>
+#include <stdair/basic/BasLogParams.hpp>
+// TravelCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
+#include <travelccm/basic/BasTravelCCMType.hpp>
 
 namespace TRAVELCCM {
 
@@ -24,8 +23,27 @@ namespace TRAVELCCM {
   public:
     // ////////// Constructors and destructors //////////
     /** Constructor.
-        @param std::ostream& Output log stream (for instance, std::cout). */
-    TRAVELCCM_Service (std::ostream& ioLogStream);
+        <br>The init() method is called; see the corresponding documentation
+        for more details.
+        <br>Moreover, a reference on an output stream is given, so
+        that log outputs can be directed onto that stream.       
+        @param const stdair::BasLogParams& Parameters for the output log stream.
+        @param const BasTravelCCMType& Type of the customer-choice
+               model type (e.g., Preference-based or Logit). */
+    TRAVELCCM_Service (const stdair::BasLogParams&, const BasTravelCCMType&);
+    
+    /** Constructor.
+        <br>The init() method is called; see the corresponding documentation
+        for more details.
+        <br>Moreover, as no reference on any output stream is given,
+        it is assumed that the StdAir log service has already been
+        initialised with the proper log output stream by some other
+        methods in the calling chain (for instance, when the TRAVELCCM_Service
+        is itself being initialised by another library service such as
+        DSIM_Service).
+        @param const BasTravelCCMType& Type of the customer-choice
+               model type (e.g., Preference-based or Logit). */
+    TRAVELCCM_Service (const BasTravelCCMType&);
     
     /** Destructor. */
     ~TRAVELCCM_Service();
@@ -94,12 +112,14 @@ namespace TRAVELCCM {
     TRAVELCCM_Service ();
     TRAVELCCM_Service (const TRAVELCCM_Service&);
 
-    /** Initialise. */
-    void init (std::ostream& ioLogStream);
-    
     /** Initialise the log. */
-    void logInit (const LOG::EN_LogLevel iLogLevel, std::ostream& ioLogStream);
+    void logInit (const stdair::BasLogParams&);
 
+    /** Initialise.
+        @param const BasTravelCCMType& Type of the customer-choice
+               model type (e.g., Preference-based or Logit). */
+    void init (const BasTravelCCMType&);
+    
     /** Finaliser. */
     void finalise ();
 

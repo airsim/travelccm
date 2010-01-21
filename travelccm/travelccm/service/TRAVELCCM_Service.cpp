@@ -3,11 +3,10 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <cassert>
-#include <iomanip>
-#include <sstream>
-#include <iostream>
 // StdAir
 #include <stdair/basic/BasChronometer.hpp>
+#include <stdair/bom/BomManager.hpp> // for display()
+#include <stdair/service/Logger.hpp>
 // TravelCCM
 #include <travelccm/basic/BasConst_TRAVELCCM_Service.hpp>
 #include <travelccm/bom/TravelSolutionHolder.hpp>
@@ -15,7 +14,6 @@
 #include <travelccm/factory/FacTRAVELCCMServiceContext.hpp>
 #include <travelccm/command/Simulator.hpp>
 #include <travelccm/service/TRAVELCCM_ServiceContext.hpp>
-#include <travelccm/service/Logger.hpp>
 #include <travelccm/TRAVELCCM_Service.hpp>
 
 namespace TRAVELCCM {
@@ -33,9 +31,23 @@ namespace TRAVELCCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
-  TRAVELCCM_Service::TRAVELCCM_Service (std::ostream& ioLogStream) {
+  TRAVELCCM_Service::TRAVELCCM_Service (const BasTravelCCMType& iCCMType) 
+    : _travelccmServiceContext (NULL) {
+
     // Initialise the context
-    init (ioLogStream);
+    init (iCCMType);
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  TRAVELCCM_Service::TRAVELCCM_Service (const stdair::BasLogParams& iLogParams,
+                                        const BasTravelCCMType& iCCMType) 
+    : _travelccmServiceContext (NULL) {
+    
+    // Set the log file
+    logInit (iLogParams);
+
+    // Initialise the (remaining of the) context
+    init (iCCMType);
   }
 
   // //////////////////////////////////////////////////////////////////////
@@ -43,19 +55,15 @@ namespace TRAVELCCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_Service::logInit (const LOG::EN_LogLevel iLogLevel,
-                                   std::ostream& ioLogOutputFile) {
-    Logger::instance().setLogParameters (iLogLevel, ioLogOutputFile);
+  void TRAVELCCM_Service::logInit (const stdair::BasLogParams& iLogParams) {
+    stdair::Logger::init (iLogParams);
   }
 
   // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_Service::init (std::ostream& ioLogStream) {
-    // Set the log file
-    logInit (LOG::DEBUG, ioLogStream);
-
+  void TRAVELCCM_Service::init (const BasTravelCCMType& iCCMType) {
     // Initialise the context
     TRAVELCCM_ServiceContext& lTRAVELCCM_ServiceContext = 
-      FacTRAVELCCMServiceContext::instance().create();
+      FacTRAVELCCMServiceContext::instance().create (iCCMType);
     _travelccmServiceContext = &lTRAVELCCM_ServiceContext;
   }
   
@@ -221,7 +229,6 @@ namespace TRAVELCCM {
 
     // add travel solutions to the travelsolution holder
     // AF404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
-    /*
     addTravelSolution ("NCE","LHR", Date_T(2009,05,1), Duration_T(12,00,00),
                        Duration_T(14,00,00), Duration_T(02,00,00), false,
                        "AF", "ECO", 404, 200, 0, false, false, "T1");
@@ -243,15 +250,13 @@ namespace TRAVELCCM {
 
     _travelccmServiceContext->createPassenger("L");
     _travelccmServiceContext->intializePassenger();
-    */
 
     /** Add a request for the passenger */
-    /*
     Date_T date(2009, 6, 1);
     Duration_T duration(8, 30, 0);
     DateTime_T dateTime(date, duration);
     addRequest (false, true, false, "NONE", "NONE", dateTime);
-    */
+
     /** Add the restrictions stem from the previous request */
     _travelccmServiceContext->addAndOrderRestrictionsFromRequest();
 
@@ -266,13 +271,17 @@ namespace TRAVELCCM {
     passenger.begin();
     travelSolutionHolder.begin();
 
-    TRAVELCCM_LOG_DEBUG (travelSolutionHolder.numberOfTravelSolutions());
-    TRAVELCCM_LOG_DEBUG ("TravelSolutionHolder: "
-                         << travelSolutionHolder.toString());
+    // DEBUG
+    STDAIR_LOG_DEBUG (travelSolutionHolder.numberOfTravelSolutions());
+    STDAIR_LOG_DEBUG ("TravelSolutionHolder: "
+                      << travelSolutionHolder.toString());
+    
     RestrictionHolder& passengerRestrictions =
       passenger.getPassengerRestrictions();
-    TRAVELCCM_LOG_DEBUG ("RestrictionHolder: "
-                         << passengerRestrictions.toString());
+
+    // DEBUG
+    STDAIR_LOG_DEBUG ("RestrictionHolder: "
+                      << passengerRestrictions.toString());
 
     // Call the underlying Use Case (command)
     stdair::BasChronometer lSimulateChronometer;
@@ -284,9 +293,10 @@ namespace TRAVELCCM {
     /* We will need the different restrictions and their order so the first
        argument of the function orderedPreference will probably change
     */
-    TRAVELCCM_LOG_DEBUG ("Simulation done in " << lSimulateMeasure);
-    TRAVELCCM_LOG_DEBUG ("TravelSolutionHolder: "
-                         << travelSolutionHolder.toString());
+    // DEBUG
+    STDAIR_LOG_DEBUG ("Simulation done in " << lSimulateMeasure);
+    STDAIR_LOG_DEBUG ("TravelSolutionHolder: "
+                      << travelSolutionHolder.toString());
 
     return isNotVoid;
   }

@@ -1,33 +1,32 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// C
-#include <assert.h>
 // STL
+#include <cassert>
 #include <iostream>
 #include <iomanip>
+// StdAir
+#include <stdair/service/Logger.hpp>
 // TRAVELCCM 
 #include <travelccm/bom/Passenger.hpp>
 #include <travelccm/bom/Request.hpp>
 #include <travelccm/bom/DepartureTimePreferencePattern.hpp>
 #include <travelccm/bom/RestrictionHolder.hpp>
 #include <travelccm/bom/Restriction.hpp>
-// SERVICE
-#include <travelccm/service/Logger.hpp>
 
 namespace TRAVELCCM {
 
   // ////////////////////////////////////////////////////////////////////
-  Passenger::Passenger () {
-    _passengerType = "NONE";
-    _passengerRestrictions = NULL;
-    _request = NULL;
-    _departureTimePreferencePattern = NULL;
+  Passenger::Passenger ()
+    : _passengerType ("NONE"),  _passengerRestrictions (NULL),
+      _request (NULL),  _departureTimePreferencePattern (NULL) {
   }
 
   // ////////////////////////////////////////////////////////////////////
-  Passenger::Passenger (std::string passType) {
-    _passengerType = passType;
+  Passenger::Passenger (const std::string& passType)
+    : _passengerType (passType),  _passengerRestrictions (NULL),
+      _request (NULL),  _departureTimePreferencePattern (NULL)  {
+    
     /* For the moment, only 2 different types of passengers are implemented;
        business and leisure.
        But we can imagine as many types as possible to reflect the different
@@ -35,9 +34,6 @@ namespace TRAVELCCM {
     /* We create a list of restrictions void, and we add the different elements
        of the list when building the different objects, in service or command
     */ 
-    _passengerRestrictions = NULL;
-    _request = NULL;
-    _departureTimePreferencePattern = NULL;
   }
 
   // ////////////////////////////////////////////////////////////////////
@@ -59,10 +55,12 @@ namespace TRAVELCCM {
     if (_request != NULL) {
       oString << "passenger's request: " << _request->toString() << ";";
     }
+    
     if (_passengerRestrictions != NULL) {
       oString << "passenger's restrictions: "
               << _passengerRestrictions->toString() << ";";
     }
+    
     if (_departureTimePreferencePattern != NULL) {
       oString << "passenger's departure time preference pattern: "
               << _departureTimePreferencePattern->toString() << ";";
@@ -84,6 +82,7 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   void Passenger::begin() {
+    assert (_passengerRestrictions != NULL);
     _passengerRestrictions->begin();
   }
 
@@ -102,13 +101,14 @@ namespace TRAVELCCM {
     DateTime_T lowerBoundDateTime = departureTime - lowerBound;
     DateTime_T upperBoundDateTime = departureTime + upperBound;
     
-    DateTimePair_T oDateTimePair(lowerBoundDateTime, upperBoundDateTime);
+    DateTimePair_T oDateTimePair (lowerBoundDateTime, upperBoundDateTime);
     return oDateTimePair;
   }
 
   // /////////////////////////////////////////////////////////////////////
-  const Duration_T Passenger::getLowerBound(DateTime_T departureTime) const {
-    // retrieve the lower time duration, that is up to which amount of
+  const Duration_T Passenger::getLowerBound (DateTime_T departureTime) const {
+
+    // Retrieve the lower time duration, that is up to which amount of
     // time before the passenger is ready to leave
     const DurationPair_T lowerPair = getLowerPair(departureTime);
     const Duration_T lowerDurationTime = lowerPair.first;
@@ -136,8 +136,9 @@ namespace TRAVELCCM {
   }
 
   // /////////////////////////////////////////////////////////////////////
-  const Duration_T Passenger::getUpperBound(DateTime_T departureTime) const {
-    // retrieve the lower time duration, that is up to which amount of
+  const Duration_T Passenger::getUpperBound (DateTime_T departureTime) const {
+    
+    // Retrieve the lower time duration, that is up to which amount of
     // time after the passenger is ready to leave 
     const DurationPair_T lowerPair = getLowerPair(departureTime);
     const Duration_T lowerDurationTime = lowerPair.second;
@@ -193,7 +194,7 @@ namespace TRAVELCCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
-  const DurationPair_T Passenger::getUpperPair(DateTime_T departureTime) const {
+  const DurationPair_T Passenger::getUpperPair (DateTime_T departureTime) const {
     assert (_departureTimePreferencePattern != NULL);
     
     // get the lower and upper bounds of the window
@@ -215,11 +216,13 @@ namespace TRAVELCCM {
        See the constructor where the list of restrictions are attributed
        to each type of passenger
     */
+    assert (_passengerRestrictions != NULL);
     return *_passengerRestrictions;
   }
 
   // /////////////////////////////////////////////////////////////////////
   Request& Passenger::getPassengerRequest() {
+    assert (_request != NULL);
     return *_request;
   }
 

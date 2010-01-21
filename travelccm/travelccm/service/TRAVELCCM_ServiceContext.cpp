@@ -1,19 +1,20 @@
  // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// C
-#include <assert.h>
-// TRAVELCCM
+// STL
+#include <cassert>
+// StdAir
+#include <stdair/service/Logger.hpp>
+// TravelCCM Basic
 #include <travelccm/basic/BasConst_TRAVELCCM_Service.hpp>
+// TravelCCM Bom
 #include <travelccm/bom/TravelSolution.hpp>
 #include <travelccm/bom/TravelSolutionHolder.hpp>
 #include <travelccm/bom/Restriction.hpp>
 #include <travelccm/bom/RestrictionHolder.hpp>
 #include <travelccm/bom/Passenger.hpp>
 #include <travelccm/bom/CCM.hpp>
-#include <travelccm/service/TRAVELCCM_ServiceContext.hpp>
-#include <travelccm/service/Logger.hpp>
-// FACTORY
+// TravelCCM Factory
 #include <travelccm/factory/FacTravelSolution.hpp>
 #include <travelccm/factory/FacTravelSolutionHolder.hpp>
 #include <travelccm/factory/FacRestriction.hpp>
@@ -22,49 +23,80 @@
 #include <travelccm/factory/FacRequest.hpp>
 #include <travelccm/factory/FacDepartureTimePreferencePattern.hpp>
 #include <travelccm/factory/FacSupervisor.hpp>
-// COMMAND
+// TravelCCM Command
 #include <travelccm/command/FileMgr.hpp>
-
+// TravelCCM Service
+#include <travelccm/service/TRAVELCCM_ServiceContext.hpp>
 
 namespace TRAVELCCM {
   
   // //////////////////////////////////////////////////////////////////////
-  TRAVELCCM_ServiceContext::TRAVELCCM_ServiceContext () {
-    init();
+  TRAVELCCM_ServiceContext::TRAVELCCM_ServiceContext() :
+    _passenger (NULL), _travelSolutionHolder (NULL) {
+    assert (false);
   }
   
   // //////////////////////////////////////////////////////////////////////
-  TRAVELCCM_ServiceContext::TRAVELCCM_ServiceContext (const TRAVELCCM_ServiceContext&) {
-    init ();
+  TRAVELCCM_ServiceContext::
+  TRAVELCCM_ServiceContext (const TRAVELCCM_ServiceContext&) {
+    assert (false);
   }
 
+  // //////////////////////////////////////////////////////////////////////
+  TRAVELCCM_ServiceContext::
+  TRAVELCCM_ServiceContext (const BasTravelCCMType& iCCMType) :
+    _passenger (NULL), _travelSolutionHolder (NULL), _ccmType (iCCMType) {
+
+    // Set the travel solution holder
+    _travelSolutionHolder = &FacTravelSolutionHolder::instance().create();
+  }
+  
   // //////////////////////////////////////////////////////////////////////
   TRAVELCCM_ServiceContext::~TRAVELCCM_ServiceContext() {
   }
   
   // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_ServiceContext::init () {
-    // set the travel solution holder
-    _travelSolutionHolder = &FacTravelSolutionHolder::instance().create();
+  const std::string TRAVELCCM_ServiceContext::shortDisplay() const {
+    std::ostringstream oStr;
+    oStr << "TRAVELCCM_ServiceContext: " << std::endl
+         << "Customer-choice model type: "
+         << _ccmType << std::endl;
+    return oStr.str();
   }
-  
+
   // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_ServiceContext::createPassenger(std::string passengerType) {
-    _passenger = &FacPassenger::instance().create(passengerType);
+  const std::string TRAVELCCM_ServiceContext::display() const {
+    std::ostringstream oStr;
+    oStr << shortDisplay();
+    return oStr.str();
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_ServiceContext::
+  createPassenger (const std::string& passengerType) {
+    _passenger = &FacPassenger::instance().create (passengerType);
   }
 
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_ServiceContext::intializePassenger() {
-    // set the restriction holder of the passenger
+
+    // Set the restriction holder of the passenger
     RestrictionHolder& lRestrictionHolder =
       FacRestrictionHolder::instance().create();
-    FacPassenger::instance().linkPassengerWithRestrictionHolder(*_passenger, lRestrictionHolder);
     
-    // set the departure time preference pattern of the passenger
+    assert (_passenger != NULL);
+    FacPassenger::instance().
+      linkPassengerWithRestrictionHolder (*_passenger, lRestrictionHolder);
+    
+    // Set the departure time preference pattern of the passenger
     const std::string& passengerType = _passenger->getPassengerType();
+    
     DepartureTimePreferencePattern& lDepartureTimePreferencePattern =
-      FacDepartureTimePreferencePattern::instance().create(passengerType);
-    FacPassenger::instance().linkPassengerWithDepartureTimePreferencePattern(*_passenger, lDepartureTimePreferencePattern);
+      FacDepartureTimePreferencePattern::instance().create (passengerType);
+    
+    FacPassenger::instance().
+      linkPassengerWithDepartureTimePreferencePattern (*_passenger,
+                                                       lDepartureTimePreferencePattern);
   }
 
   // //////////////////////////////////////////////////////////////////////
@@ -89,6 +121,7 @@ namespace TRAVELCCM {
                                            iCabinCode, iFlightNumber, iFare,
                                            iStopsNumber, iSNS, iChangeability,
                                            id);
+
     assert (_travelSolutionHolder != NULL);
     FacTravelSolution::instance().addTravelSolution (*_travelSolutionHolder,
                                                      aTravelSolution);
@@ -98,7 +131,9 @@ namespace TRAVELCCM {
   void TRAVELCCM_ServiceContext::
   addRestriction (const std::string& iRestrictionType) {
     Restriction& aRestriction =
-      FacRestriction::instance().create(iRestrictionType);
+      FacRestriction::instance().create (iRestrictionType);
+
+    assert (_passenger != NULL);
     _passenger->addRestriction(aRestriction);
   }
 
@@ -107,7 +142,9 @@ namespace TRAVELCCM {
   addRestriction (const std::string& iRestrictionType,
                   const std::string& iNamePreference) {
     Restriction& aRestriction =
-      FacRestriction::instance().create(iRestrictionType, iNamePreference);
+      FacRestriction::instance().create (iRestrictionType, iNamePreference);
+
+    assert (_passenger != NULL);
     _passenger->addRestriction(aRestriction);
   }
 
@@ -116,8 +153,10 @@ namespace TRAVELCCM {
   addRestriction (const std::string& iRestrictionType,
                   const DateTime_T iDepartureTime) {
     Restriction& aRestriction =
-      FacRestriction::instance().create(iRestrictionType, iDepartureTime);
-    _passenger->addRestriction(aRestriction);
+      FacRestriction::instance().create (iRestrictionType, iDepartureTime);
+    
+    assert (_passenger != NULL);
+    _passenger->addRestriction (aRestriction);
   }
 
   // //////////////////////////////////////////////////////////////////////
@@ -134,18 +173,20 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   RestrictionHolder& TRAVELCCM_ServiceContext::getRestrictionHolder() const {
+    assert (_passenger != NULL);
     return _passenger->getPassengerRestrictions();
   }
   
   // //////////////////////////////////////////////////////////////////////
   TravelSolutionHolder& TRAVELCCM_ServiceContext::
-                               getTravelSolutionHolder() const {
+  getTravelSolutionHolder() const {
+    assert (_travelSolutionHolder != NULL);
     return *_travelSolutionHolder;
   }
 
   // //////////////////////////////////////////////////////////////////////
   Passenger& TRAVELCCM_ServiceContext::getPassenger() const {
-    assert(_passenger != NULL);
+    assert (_passenger != NULL);
     return *_passenger;
   }
 
@@ -162,23 +203,24 @@ namespace TRAVELCCM {
   getBestAndCheapestTravelSolutionByMatchingIndicator () {
     // passenger type, request and int
     assert (_passenger != NULL);
-    assert (_travelSolutionHolder != NULL);
 
     const Request& iRequest = _passenger->getPassengerRequest();
     const std::string iPassengerType = _passenger->getPassengerType();
 
     // filtrate to keep only the travel solution with the highest matching
     // indicator.
-    CCM::getBestTravelSolutionByMatchingIndicator(iPassengerType, iRequest,
-                                                  _travelSolutionHolder);
+    CCM::getBestTravelSolutionByMatchingIndicator (iPassengerType, iRequest,
+                                                   _travelSolutionHolder);
 
-    if (_travelSolutionHolder->isVoid())
+    assert (_travelSolutionHolder != NULL);
+    if (_travelSolutionHolder->isVoid()) {
       return NULL;
-    else {
-      const TravelSolution* cheapestTravelSolution =
-        _travelSolutionHolder->getCheapestTravelSolution();
-      return cheapestTravelSolution;
     }
+    
+    const TravelSolution* cheapestTravelSolution =
+      _travelSolutionHolder->getCheapestTravelSolution();
+
+    return cheapestTravelSolution;
   }
   
   // /////////////////////////////////////////////////////////////////////
@@ -196,51 +238,61 @@ namespace TRAVELCCM {
     assert (_passenger != NULL);
     Request& request = _passenger->getPassengerRequest();
 
-    std::string passengerType = _passenger->getPassengerType();
+    const std::string& passengerType = _passenger->getPassengerType();
     
     // retrieve the characteristics of the fare in the Request class
     const bool refundability = request.getRefundability();
     const bool changeability = request.getChangeability();
     const bool saturdayNightStay = request.getSaturdayNightStay();
-    const std::string preferredAirline = request.getPreferredAirline();
-    const std::string preferredCabin = request.getPreferredCabin();
-    const DateTime_T departureTime = request.getDepartureTime();
+    const std::string& preferredAirline = request.getPreferredAirline();
+    const std::string& preferredCabin = request.getPreferredCabin();
+    const DateTime_T& departureTime = request.getDepartureTime();
+
     if (passengerType == "B") {
       // there is always a departure time request so we always add a time
       // restriction
       addRestriction("timePreference", departureTime);
+      
       if (saturdayNightStay) {
         addRestriction("saturdayStay");
       }
+      
       if (refundability) {
         addRestriction("refundability");
       }
+      
       if (preferredAirline != "NONE") {
-        addRestriction("preferredAirline", preferredAirline);
+        addRestriction ("preferredAirline", preferredAirline);
       }
+      
       if (preferredCabin != "NONE") {
-        addRestriction("preferredCabin", preferredCabin);
+        addRestriction ("preferredCabin", preferredCabin);
       }
+      
       if (changeability) {
-        addRestriction("changeability");
+        addRestriction ("changeability");
       }
       
     } else if (passengerType == "L") {
       if (changeability) {
-        addRestriction("changeability");
+        addRestriction ("changeability");
       }
-      addRestriction("timePreference", departureTime);
+      
+      addRestriction ("timePreference", departureTime);
       if (preferredAirline != "NONE") {
-        addRestriction("preferredAirline", preferredAirline);
+        addRestriction ("preferredAirline", preferredAirline);
       }
+      
       if (saturdayNightStay) {
-        addRestriction("saturdayStay");
+        addRestriction ("saturdayStay");
       }
+      
       if (refundability) {
-        addRestriction("refundability");
+        addRestriction ("refundability");
       }
+      
       if (preferredCabin != "NONE") {
-        addRestriction("preferredCabin", preferredCabin);
+        addRestriction ("preferredCabin", preferredCabin);
       }
     }
   }

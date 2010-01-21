@@ -2,32 +2,28 @@
 // Import section
 // //////////////////////////////////////////////////////////////////////
 // STL
-#include <iostream>
-#include <istream>
-#include <sstream>
+#include <cassert>
 #include <fstream>
-// Boost (Extended STL)
-#include <boost/date_time/gregorian/gregorian.hpp>
+// StdAir
+#include <stdair/service/Logger.hpp>
 // TRAVEL-CCM
 #include <travelccm/bom/TravelSolution.hpp>
 #include <travelccm/bom/TravelSolutionHolder.hpp>
 #include <travelccm/factory/FacTravelSolution.hpp>
 #include <travelccm/factory/FacTravelSolutionHolder.hpp>
 #include <travelccm/command/FileMgr.hpp>
-#include <travelccm/service/Logger.hpp>
 
 namespace TRAVELCCM {
 
   // ////////////////////////////////////////////////////////////////////
   void FileMgr::
-  readAndProcessTravelSolutionInputFile(const std::string& iInputFileName,
-                             TravelSolutionHolder& ioTravelSolutionHolder) {
+  readAndProcessTravelSolutionInputFile (const std::string& iInputFileName,
+                                         TravelSolutionHolder& ioTravelSolutionHolder) {
 
     // Open the input file
     std::ifstream inputFile (iInputFileName.c_str());
     if (! inputFile) {
-      TRAVELCCM_LOG_ERROR ("Can not open input file \"" << iInputFileName
-                           << "\"");
+      STDAIR_LOG_ERROR ("Can not open input file \"" << iInputFileName << "\"");
       throw new FileNotFoundException();
     }
     

@@ -1,13 +1,12 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// C
-#include <assert.h>
-// TRAVEL-CCM
+// STL
+#include <cassert>
+// Travel-CCM
 #include <travelccm/factory/FacBomAbstract.hpp>
 #include <travelccm/factory/FacServiceAbstract.hpp>
 #include <travelccm/factory/FacSupervisor.hpp>
-#include <travelccm/service/Logger.hpp>
 
 namespace TRAVELCCM {
 
@@ -34,15 +33,9 @@ namespace TRAVELCCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
-  void FacSupervisor::registerLoggerService (Logger* ioLogger_ptr) {
-    _logger = ioLogger_ptr;
-  }
-
-  // //////////////////////////////////////////////////////////////////////
   FacSupervisor::~FacSupervisor() {
     cleanBomLayer();
     cleanServiceLayer();
-    cleanLoggerService();
  }
 
   // //////////////////////////////////////////////////////////////////////
@@ -74,16 +67,10 @@ namespace TRAVELCCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
-  void FacSupervisor::cleanLoggerService() {
-    delete _logger; _logger = NULL;
-  }
-  
-  // //////////////////////////////////////////////////////////////////////
   void FacSupervisor::cleanFactory () {
 	if (_instance != NULL) {
 		_instance->cleanBomLayer();
 		_instance->cleanServiceLayer();
-        _instance->cleanLoggerService();
  	}
     delete (_instance); _instance = NULL;
   }

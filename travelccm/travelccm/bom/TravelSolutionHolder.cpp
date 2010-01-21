@@ -1,14 +1,15 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// C
-#include <assert.h>
 // STL
-#include <iostream>
+#include <cassert>
+#include <istream>
+#include <ostream>
 #include <iomanip>
+// StdAir
+#include <stdair/service/Logger.hpp>
 // TRAVELCCM
 #include <travelccm/bom/TravelSolutionHolder.hpp>
-#include <travelccm/service/Logger.hpp>
 
 namespace TRAVELCCM {
 
@@ -67,7 +68,7 @@ namespace TRAVELCCM {
     return oKey;
   }
 
-   // //////////////////////////////////////////////////////////////////////
+  // //////////////////////////////////////////////////////////////////////
   const TravelSolution& TravelSolutionHolder::getCurrentTravelSolution () const {
     const TravelSolution* resultTravelSolution_ptr = *_itCurrentTravelSolution;
     assert (resultTravelSolution_ptr != NULL);
@@ -114,71 +115,82 @@ namespace TRAVELCCM {
   
   // //////////////////////////////////////////////////////////////////////
   void TravelSolutionHolder::
-  restrictionMeetsTSList(const Restriction& iRestriction,
-                         TravelSolutionList_T& ioRemovedElements,
-                         const Passenger& iPassenger) {
-     /* if we are at the end of the list, we return the removedElements list
-        because all the travel solutions have been matched */
-    if (!hasNotReachedEnd()){
+  restrictionMeetsTSList (const Restriction& iRestriction,
+                          TravelSolutionList_T& ioRemovedElements,
+                          const Passenger& iPassenger) {
+    /* if we are at the end of the list, we return the removedElements list
+       because all the travel solutions have been matched */
+    if (hasNotReachedEnd() == false) {
       return;
     }
-    else {
-    /** call a function in the TravelSolution class which returns if a
+    
+    /** Call a function in the TravelSolution class which returns if a
         restriction meets a single travel solution */
-      const TravelSolution& currentTravelSolution = getCurrentTravelSolution();
-      bool curTSOK =
-        currentTravelSolution.restrictionMeetsTravelSolution(iRestriction, iPassenger);
-      if (!curTSOK) {
-        // we add this travel solution to the temp list
-        ioRemovedElements.push_back(&currentTravelSolution);
-        // TRAVELCCM_LOG_DEBUG (currentTravelSolution.toString());
-        // we erase this travel solution from the current holder
-        eraseCurrentTravelSolution();
-      }
+    const TravelSolution& currentTravelSolution = getCurrentTravelSolution();
+    const bool curTSOK =
+      currentTravelSolution.restrictionMeetsTravelSolution (iRestriction,
+                                                            iPassenger);
+    if (curTSOK == false) {
+      // we add this travel solution to the temp list
+      ioRemovedElements.push_back(&currentTravelSolution);
+      // STDAIR_LOG_DEBUG (currentTravelSolution.toString());
+      // we erase this travel solution from the current holder
+      eraseCurrentTravelSolution();
+      
+    } else {
       /* if the travel solution matches the restriction, we do not alter the
          temporary list, and test the next elements */
-      else {
-        iterate();
-      }
-      restrictionMeetsTSList(iRestriction, ioRemovedElements, iPassenger);
+      iterate();
     }
+
+    restrictionMeetsTSList (iRestriction, ioRemovedElements, iPassenger);
   }
 
   // ///////////////////////////////////////////////////////////////////////
   const TravelSolution* TravelSolutionHolder::getCheapestTravelSolution() {
-    if (isVoid())
+
+    if (isVoid()) {
       return NULL;
-    else {
-      begin();
-      const TravelSolution* cheapestTravelSolution_ptr =
-        &getCurrentTravelSolution();
-      iterate();
+    };
+
+    begin();
+    const TravelSolution* cheapestTravelSolution_ptr =
+      &getCurrentTravelSolution();
+    iterate();
       
-      while (hasNotReachedEnd()) {
-        const TravelSolution& lCurrentTravelSolution =
-          getCurrentTravelSolution();
-        bool isCheaper =
-          lCurrentTravelSolution.isCheaper (*cheapestTravelSolution_ptr);
-        if (isCheaper == true) {
+    while (hasNotReachedEnd()) {
+      const TravelSolution& lCurrentTravelSolution =
+        getCurrentTravelSolution();
+      
+      assert (cheapestTravelSolution_ptr != NULL);
+      const bool isCheaper =
+        lCurrentTravelSolution.isCheaper (*cheapestTravelSolution_ptr);
+      
+      if (isCheaper == true) {
+        cheapestTravelSolution_ptr = &lCurrentTravelSolution;
+      }
+      assert (cheapestTravelSolution_ptr != NULL);
+      
+      const bool hasTheSamePrice =
+        lCurrentTravelSolution.hasTheSamePrice (*cheapestTravelSolution_ptr);
+      if (hasTheSamePrice == true) {
+        // then we cast a random number to determine which of the two
+        // "identical" travel solutions - from the customer's point of
+        // view - we will choose.
+        int randomIndicator = rand () % 2;
+        
+        // We change only when we cast a 0, if more than two travel
+        // solutions have the same price, they do not have the
+        // same probability!!
+        if (randomIndicator == 0) {
           cheapestTravelSolution_ptr = &lCurrentTravelSolution;
         }
-        bool hasTheSamePrice =
-          lCurrentTravelSolution.hasTheSamePrice(*cheapestTravelSolution_ptr);
-        if (hasTheSamePrice == true) {
-          // then we cast a random number to determine which of the two
-          // "identical" travel solutions - from the customer's point of
-          // view - we will choose.
-          int randomIndicator = rand () % 2;
-          // we change only when we cast a 0, if more than two travel
-          // solutions have the same price, they do not have the
-          // same probability!!
-          if (randomIndicator == 0)
-            cheapestTravelSolution_ptr = &lCurrentTravelSolution;
-        }
-        iterate();
       }
-      return cheapestTravelSolution_ptr;
+      
+      iterate();
     }
+    
+    return cheapestTravelSolution_ptr;
   }
 
 }

@@ -6,6 +6,7 @@
 // //////////////////////////////////////////////////////////////////////
 // TRAVELCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
+#include <travelccm/basic/BasTravelCCMType.hpp>
 #include <travelccm/factory/FacServiceAbstract.hpp>
 
 namespace TRAVELCCM {
@@ -30,7 +31,7 @@ namespace TRAVELCCM {
     /** Create a new ServiceContext object.
         <br>This new object is added to the list of instantiated objects.
         @return ServiceContext& The newly created object. */
-    TRAVELCCM_ServiceContext& create ();
+    TRAVELCCM_ServiceContext& create (const BasTravelCCMType&);
 
     
   protected:

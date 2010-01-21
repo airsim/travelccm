@@ -1,13 +1,12 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// C
-#include <assert.h>
+// STL
+#include <cassert>
 // TRAVELCCM 
 #include <travelccm/factory/FacRequest.hpp>
 #include <travelccm/bom/Request.hpp>
 #include <travelccm/factory/FacSupervisor.hpp>
-#include <travelccm/service/Logger.hpp>
 
 namespace TRAVELCCM {
 

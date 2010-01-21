@@ -1,8 +1,8 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// C
-#include <assert.h>
+// STL
+#include <cassert>
 // TRAVELCCM
 #include <travelccm/service/TRAVELCCM_ServiceContext.hpp>
 #include <travelccm/factory/FacSupervisor.hpp>
@@ -30,10 +30,11 @@ namespace TRAVELCCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
-  TRAVELCCM_ServiceContext& FacTRAVELCCMServiceContext::create () {
+  TRAVELCCM_ServiceContext& FacTRAVELCCMServiceContext::
+  create (const BasTravelCCMType& iCCMType) {
     TRAVELCCM_ServiceContext* aServiceContext_ptr = NULL;
 
-    aServiceContext_ptr = new TRAVELCCM_ServiceContext ();
+    aServiceContext_ptr = new TRAVELCCM_ServiceContext (iCCMType);
     assert (aServiceContext_ptr != NULL);
 
     // The new object is added to the Bom pool

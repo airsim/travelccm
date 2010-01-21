@@ -6,15 +6,14 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <string>
-// Boost (Extended STL)
-#include <boost/date_time/gregorian/gregorian.hpp>
-// TRAVELCCM
+// TravelCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
-#include <travelccm/TRAVELCCM_Types.hpp>
-#include <travelccm/service/ServiceAbstract.hpp>
+#include <travelccm/basic/BasTravelCCMType.hpp>
 #include <travelccm/bom/Request.hpp>
+#include <travelccm/service/ServiceAbstract.hpp>
 
 namespace TRAVELCCM {
+
   // Forward declarations.
   class Passenger;
   class TravelSolution;
@@ -29,19 +28,41 @@ namespace TRAVELCCM {
     friend class TRAVELCCM_Service;
     friend class FacTRAVELCCMServiceContext;
 
-  private:
-    /** Constructors. */
-    TRAVELCCM_ServiceContext ();
-    TRAVELCCM_ServiceContext (const TRAVELCCM_ServiceContext&);
-    void init ();
-    
-    /** Initialise the StudyStatManager. */
-    void initStudyStatManager ();
-    /** Destructor. */
-    ~TRAVELCCM_ServiceContext();
+  public:
+    // ///////// Getters //////////
+    /** Get the list of travel solutions. */
+    TravelSolutionHolder& getTravelSolutionHolder() const;
 
+    /** Get the passenger. */
+    Passenger& getPassenger () const;
+    
+    /** Get the restriction holder in the passenger class. */
+    RestrictionHolder& getRestrictionHolder() const;
+
+    /** Get the customer-choice model type. */
+    const BasTravelCCMType& getTravelCCMType () const {
+      return _ccmType;
+    }
+
+    
+    // ///////// Setters //////////
+    /** Set the customer-choice model type. */
+    void setTravelCCMType (const BasTravelCCMType& iCCMType) {
+      _ccmType = iCCMType;
+    }
+
+
+    // ///////// Display Methods //////////
+    /** Display the short AIRINV_ServiceContext content. */
+    const std::string shortDisplay() const;
+    
+    /** Display the full AIRINV_ServiceContext content. */
+    const std::string display() const;
+
+    
+  private:
     /** To create the passenger */
-    void createPassenger(std::string);
+    void createPassenger (const std::string&);
 
     /** To intialize the different field of the passenger, that is the
         departure time preference pattern and the restriction holder.
@@ -49,8 +70,7 @@ namespace TRAVELCCM {
     void intializePassenger();
 
     /** Set the TravelSolutionHolder */
-    void setTravelSolutionHolder (
-                     TravelSolutionHolder* ioTravelSolutionHolderPtr){
+    void setTravelSolutionHolder (TravelSolutionHolder* ioTravelSolutionHolderPtr) {
       _travelSolutionHolder = ioTravelSolutionHolderPtr;
     }
 
@@ -91,17 +111,31 @@ namespace TRAVELCCM {
         of the fares desired by the passenger, found in the request field */
     void addAndOrderRestrictionsFromRequest();
 
+    
   private:
-    // /////// Attributes ///////
+    // /////// Construction / initialisation ////////
+    /** Constructors. */
+    TRAVELCCM_ServiceContext ();
+    TRAVELCCM_ServiceContext (const BasTravelCCMType&);
+    TRAVELCCM_ServiceContext (const TRAVELCCM_ServiceContext&);
+
+    /** Destructor. */
+    ~TRAVELCCM_ServiceContext();
+
+    /** Initialise the StudyStatManager. */
+    void initStudyStatManager ();
+    
+    
+  private:
+    // //////////// Attributes //////////////////
+    /** Reference on the passenger. */
     Passenger* _passenger;
+    
+    /** Reference on the list of travel solutions. */
     TravelSolutionHolder* _travelSolutionHolder;
 
-  public:
-    TravelSolutionHolder& getTravelSolutionHolder() const;
-    Passenger& getPassenger () const ;
-    // return the restriction holder in the passenger class
-    RestrictionHolder& getRestrictionHolder() const;
-    
+    /** Airline code. */
+    BasTravelCCMType _ccmType;
   };
 
 }

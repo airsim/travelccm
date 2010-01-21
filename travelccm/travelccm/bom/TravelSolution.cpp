@@ -1,19 +1,18 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// C
-#include <assert.h>
 // STL
+#include <cassert>
 #include <iostream>
 #include <iomanip>
+// StdAir
+#include <stdair/service/Logger.hpp>
 // TRAVELCCM 
 #include <travelccm/bom/TravelSolution.hpp>
 #include <travelccm/bom/Restriction.hpp>
 #include <travelccm/bom/Passenger.hpp>
 #include <travelccm/bom/Request.hpp>
 #include <travelccm/bom/DepartureTimePreferencePattern.hpp>
-// SERVICE
-#include <travelccm/service/Logger.hpp>
 
 namespace TRAVELCCM {
 

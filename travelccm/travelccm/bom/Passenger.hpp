@@ -101,7 +101,7 @@ namespace TRAVELCCM {
     /** Default constructors. */
     Passenger ();
     Passenger (const Passenger&);
-    Passenger (std::string);
+    Passenger (const std::string&);
 
     /** Destructor. */
     ~Passenger();

@@ -1,14 +1,14 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// C
-#include <assert.h>
 // STL
+#include <cassert>
 #include <ostream>
 #include <istream>
 #include <iomanip>
+// StdAir
+#include <stdair/service/Logger.hpp>
 // TRAVELCCM 
-#include <travelccm/service/Logger.hpp>
 #include <travelccm/bom/Restriction.hpp>
 
 namespace TRAVELCCM {
@@ -79,7 +79,6 @@ namespace TRAVELCCM {
               << " )";
     }
     
-    oString << std::endl;
     return oString.str();
   }
     

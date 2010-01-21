@@ -1,13 +1,12 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// C
-#include <assert.h>
+// STL
+#include <cassert>
 // TRAVELCCM 
 #include <travelccm/bom/DepartureTimePreferencePattern.hpp>
 #include <travelccm/factory/FacDepartureTimePreferencePattern.hpp>
 #include <travelccm/factory/FacSupervisor.hpp>
-#include <travelccm/service/Logger.hpp>
 
 namespace TRAVELCCM {
 
