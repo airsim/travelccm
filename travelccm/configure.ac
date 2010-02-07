@@ -110,6 +110,48 @@ if test -z "${CXXFLAGS}"; then
 fi
 
 
+# -----------------------------------------------------------
+# Python
+# -----------------------------------------------------------
+PGAC_CHECK_PYTHON_EMBED_SETUP
+AC_SUBST(PYTHON_VERSION)
+AC_SUBST(PYTHON_LIBS)
+AC_SUBST(PYTHON_CFLAGS)
+AC_SUBST(PYTHON_ADD_LIBS)
+
+# --------------------------------------------------------------------
+# Support for MySQL (C client API): http://www.mysql.org
+# --------------------------------------------------------------------
+AX_MYSQL
+AC_SUBST(MYSQL_VERSION)
+AC_SUBST(MYSQL_CFLAGS)
+AC_SUBST(MYSQL_LIBS)
+
+# --------------------------------------------------------------------
+# Support for SOCI http://soci.sourceforge.net
+# --------------------------------------------------------------------
+AX_SOCI
+AC_SUBST(SOCI_VERSION)
+AC_SUBST(SOCI_CFLAGS)
+AC_SUBST(SOCI_LIBS)
+
+# -----------------------------------------------------------
+# MPICH2: http://www.mcs.anl.gov/research/projects/mpich2
+# Note: Boost.MPI depends on MPICH2, rather than on OpenMPI
+# -----------------------------------------------------------
+#AX_MPICH2
+#AC_SUBST(MPICH2_VERSION)
+#AC_SUBST(MPICH2_CFLAGS)
+#AC_SUBST(MPICH2_LIBS)
+
+# -----------------------------------------------------------
+# OpenMPI: http://www.open-mpi.org
+# -----------------------------------------------------------
+#AX_OPENMPI
+#AC_SUBST(OPENMPI_VERSION)
+#AC_SUBST(OPENMPI_CFLAGS)
+#AC_SUBST(OPENMPI_LIBS)
+
 # --------------------------------------------------------
 # Boost (STL Extensions: http://www.boost.org)
 # --------------------------------------------------------
@@ -120,6 +162,28 @@ AC_SUBST(BOOST_LIBS)
 AC_SUBST(BOOST_DATE_TIME_LIB)
 AC_SUBST(BOOST_PROGRAM_OPTIONS_LIB)
 AC_SUBST(BOOST_FILESYSTEM_LIB)
+AC_SUBST(BOOST_THREAD_LIB)
+AC_SUBST(BOOST_PYTHON_LIB)
+AC_SUBST(BOOST_SIGNALS_LIB)
+AC_SUBST(BOOST_ASIO_LIB)
+AC_SUBST(BOOST_MPI_LIB)
+AC_SUBST(BOOST_MPI_PYTHON_LIB)
+
+# --------------------------------------------------------------------
+# Support for MySQL (C client API): http://www.mysql.org
+# --------------------------------------------------------------------
+AX_MYSQL
+AC_SUBST(MYSQL_VERSION)
+AC_SUBST(MYSQL_CFLAGS)
+AC_SUBST(MYSQL_LIBS)
+
+# --------------------------------------------------------
+# SOCI (Database API: http://soci.sourceforge.net)
+# --------------------------------------------------------
+AX_SOCI([3.0])
+AC_SUBST(SOCI_VERSION)
+AC_SUBST(SOCI_CFLAGS)
+AC_SUBST(SOCI_LIBS)
 
 
 # -------------------------------------------------------------------
@@ -280,6 +344,7 @@ AC_CONFIG_FILES(
 	stdair/Makefile
 	stdair/basic/Makefile
 	stdair/bom/Makefile
+	stdair/dbadaptor/Makefile
 	stdair/factory/Makefile
 	stdair/config/Makefile
 	stdair/service/Makefile
@@ -309,6 +374,26 @@ AC_CONFIG_FILES(
 	test/travelccm/Makefile
 )
 AC_OUTPUT
+
+# OpenMPI
+if test "x$HAVE_OPENMPI" = "x1"; then
+   OPENMPI_OUTPUT="  - OPENMPI ........... :
+    o OPENMPI_VERSION . : ${MPIGEN_VERSION}
+    o OPENMPI_CFLAGS .. : ${MPIGEN_CFLAGS}
+    o OPENMPI_LIBS .... : ${MPIGEN_LIBS}"
+else
+   OPENMPI_OUTPUT="  - OPENMPI ........... : No"
+fi
+
+# MPICH2
+if test "x$HAVE_MPICH2" = "x1"; then
+   MPICH2_OUTPUT="  - MPICH2 ............ :
+    o MPICH2_VERSION .. : ${MPIGEN_VERSION}
+    o MPICH2_CFLAGS ... : ${MPIGEN_CFLAGS}
+    o MPICH2_LIBS ..... : ${MPIGEN_LIBS}"
+else
+   MPICH2_OUTPUT="  - MPICH2 ............ : No"
+fi
 
 echo "
 ------------------------------------------------------------------------------
@@ -353,6 +438,17 @@ Compiler/linker flags/libs/defs:
   - LIBS .............. : ${LIBS}
 
 External libraries:
+
+${OPENMPI_OUTPUT}
+
+${MPICH2_OUTPUT}
+
+  - Python ............. :
+    o PYTHON_version ... : ${PYTHON_VERSION}
+    o PYTHON_CFLAGS .... : ${PYTHON_CFLAGS}
+    o PYTHON_LIBS ...... : ${PYTHON_LIBS} 
+    o PYTHON_ADD_LIBS .. : ${PYTHON_ADD_LIBS} 
+
   - Boost ............. :
     o BOOST_VERSION ... : ${BOOST_VERSION}
     o BOOST_CFLAGS .... : ${BOOST_CFLAGS}
@@ -360,6 +456,22 @@ External libraries:
     o BOOST_DT_LIB .... : ${BOOST_DATE_TIME_LIB}
     o BOOST_PO_LIB .... : ${BOOST_PROGRAM_OPTIONS_LIB}
     o BOOST_FS_LIB .... : ${BOOST_FILESYSTEM_LIB}
+    o BOOST_THRD_LIB .. : ${BOOST_THREAD_LIB}
+    o BOOST_PY_LIB .... : ${BOOST_PYTHON_LIB}
+    o BOOST_ASIO_LIB .. : ${BOOST_ASIO_LIB}
+    o BOOST_SIG_LIB ... : ${BOOST_SIGNALS_LIB}
+    o BOOST_MPI_LIB ... : ${BOOST_MPI_LIB}
+    o BOOST_MPIPY_LIB . : ${BOOST_MPI_PYTHON_LIB}
+
+  - MySQL ............. :
+    o MYSQL_version ... : ${MYSQL_VERSION}
+    o MYSQL_CFLAGS .... : ${MYSQL_CFLAGS}
+    o MYSQL_LIBS ...... : ${MYSQL_LIBS} 
+
+  - Soci .............. :
+    o SOCI_VERSION .... : ${SOCI_VERSION}
+    o SOCI_CFLAGS ..... : ${SOCI_CFLAGS}
+    o SOCI_LIBS ....... : ${SOCI_LIBS}
 
   - CPPUNIT ........... :
     o CPPUNIT_VERSION . : ${CPPUNIT_VERSION}
