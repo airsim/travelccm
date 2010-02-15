@@ -18,13 +18,13 @@ namespace TRAVELCCM {
 
   // ////////////////////////////////////////////////////////////////////
   Passenger::Passenger ()
-    : _passengerType ("NONE"), _request (NULL),
+    : _passengerType (stdair::PassengerType::LAST_VALUE), _request (NULL),
       _departureTimePreferencePattern (NULL), _passengerRestrictions (NULL) {
   }
 
   // ////////////////////////////////////////////////////////////////////
-  Passenger::Passenger (const std::string& passType)
-    : _passengerType (passType), _request (NULL),
+  Passenger::Passenger (const stdair::PassengerType& iPaxType)
+    : _passengerType (iPaxType), _request (NULL),
       _departureTimePreferencePattern (NULL), _passengerRestrictions (NULL)  {
     
     /* For the moment, only 2 different types of passengers are implemented;
@@ -87,7 +87,7 @@ namespace TRAVELCCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
-  const std::string  Passenger::getPassengerType() const {
+  const stdair::PassengerType&  Passenger::getPassengerType() const {
     return _passengerType;
   }
 

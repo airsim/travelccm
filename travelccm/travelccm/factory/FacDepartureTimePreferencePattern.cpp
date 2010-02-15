@@ -3,7 +3,9 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <cassert>
-// TRAVELCCM 
+// StdAir
+#include <stdair/service/Logger.hpp>
+// TravelCCM 
 #include <travelccm/bom/DepartureTimePreferencePattern.hpp>
 #include <travelccm/factory/FacDepartureTimePreferencePattern.hpp>
 #include <travelccm/factory/FacSupervisor.hpp>
@@ -18,7 +20,8 @@ namespace TRAVELCCM {
   }
 
   // ////////////////////////////////////////////////////////////////////
-  FacDepartureTimePreferencePattern& FacDepartureTimePreferencePattern::instance () {
+  FacDepartureTimePreferencePattern& FacDepartureTimePreferencePattern::
+  instance () {
 
     if (_instance == NULL) {
       _instance = new FacDepartureTimePreferencePattern();

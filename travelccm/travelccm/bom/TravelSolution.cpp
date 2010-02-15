@@ -275,13 +275,14 @@ namespace TRAVELCCM {
 
   // ///////////////////////////////////////////////////////////////////////
   int TravelSolution::
-  CalculateMatchingNumber (std::string iPassengerType, const Request& iRequest,
+  CalculateMatchingNumber (const stdair::PassengerType& iPaxType,
+                           const Request& iRequest,
                            int baseNumber) const {
     int matchingIndicator = 0;
     int numberOfRestrictions = iRequest.getNumberOfRestrictions();
     // the preferred departure time is still to be added
     
-    if (iPassengerType == "B") {
+    if (iPaxType == stdair::PassengerType::BUSINESS) {
       // if the passenger wants that condition to be respected...
       bool saturdayNightStay = iRequest.getSaturdayNightStay();
       if (saturdayNightStay) {
@@ -291,6 +292,7 @@ namespace TRAVELCCM {
           matchingIndicator += baseNumber^(numberOfRestrictions - 1);
         }
       }
+      
       bool refundability = iRequest.getRefundability();
       if (refundability) {
         bool travelSolutionRefundability = getRefundable();
@@ -298,21 +300,24 @@ namespace TRAVELCCM {
           matchingIndicator += baseNumber^(numberOfRestrictions - 2);
         }
       }
+      
       // to be changed if there are serveral preferred airlines
-      std::string preferredAirline = iRequest.getPreferredAirline();
+      stdair::AirlineCode_T preferredAirline = iRequest.getPreferredAirline();
       if (preferredAirline != "NONE") {
         std::string travelSolutionPreferredAirline = getAirlineName();
         if (preferredAirline == travelSolutionPreferredAirline) {
           matchingIndicator += baseNumber^(numberOfRestrictions - 3);
         }
       }
-      std::string preferredCabin = iRequest.getPreferredCabin();
+      
+      stdair::CabinCode_T preferredCabin = iRequest.getPreferredCabin();
       if (preferredCabin != "NONE") {
         std::string travelSolutionPreferredCabin = getCabin();
         if (preferredCabin == travelSolutionPreferredCabin) {
           matchingIndicator += baseNumber^(numberOfRestrictions - 4);
         }
       }
+      
       bool changeability = iRequest.getChangeability();
       if (changeability) {
         bool travelSolutionChangeability = getChangeable();
@@ -320,9 +325,8 @@ namespace TRAVELCCM {
           matchingIndicator += baseNumber^(numberOfRestrictions - 5);
         }
       } 
-    }
-    
-    else if (iPassengerType == "L") {
+
+    } else if (iPaxType == stdair::PassengerType::LEISURE) {
       bool changeability = iRequest.getChangeability();
       if (changeability) {
         bool travelSolutionChangeability = getChangeable();
@@ -330,14 +334,16 @@ namespace TRAVELCCM {
           matchingIndicator += baseNumber^(numberOfRestrictions - 1);
         }
       }
+      
       // to be changed if there are serveral preferred airlines
-      std::string preferredAirline = iRequest.getPreferredAirline();
+      stdair::AirlineCode_T preferredAirline = iRequest.getPreferredAirline();
       if (preferredAirline != "NONE") {
         std::string travelSolutionPreferredAirline = getAirlineName();
         if (preferredAirline == travelSolutionPreferredAirline) {
           matchingIndicator += baseNumber^(numberOfRestrictions - 2);
         }
       }
+      
       bool saturdayNightStay = iRequest.getSaturdayNightStay();
       if (saturdayNightStay) {
         bool travelSolutionSaturdayNightStay = getSaturdayNightStay();
@@ -345,6 +351,7 @@ namespace TRAVELCCM {
           matchingIndicator += baseNumber^(numberOfRestrictions - 3);
         }
       }
+      
       bool refundability = iRequest.getRefundability();
       if (refundability) {
         bool travelSolutionRefundability = getRefundable();
@@ -352,7 +359,8 @@ namespace TRAVELCCM {
           matchingIndicator += baseNumber^(numberOfRestrictions - 4);
         }
       }
-      std::string preferredCabin = iRequest.getPreferredCabin();
+      
+      stdair::CabinCode_T preferredCabin = iRequest.getPreferredCabin();
       if (preferredCabin != "NONE") {
         std::string travelSolutionPreferredCabin = getCabin();
         if (preferredCabin == travelSolutionPreferredCabin) {

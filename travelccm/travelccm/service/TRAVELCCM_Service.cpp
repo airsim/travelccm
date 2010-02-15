@@ -68,9 +68,9 @@ namespace TRAVELCCM {
   }
   
   // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_Service::createPassenger (const std::string& passengerType) {
+  void TRAVELCCM_Service::createPassenger(const stdair::PassengerType& iPaxType){
     assert (_travelccmServiceContext != NULL);
-    _travelccmServiceContext->createPassenger (passengerType);
+    _travelccmServiceContext->createPassenger (iPaxType);
   }
 
   // //////////////////////////////////////////////////////////////////////
@@ -81,15 +81,15 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_Service::
-  addTravelSolution  (const std::string& iDepartureAirport,
-                      const std::string& iArrivalAirport,
-                      const Date_T& iDepartureDate,
-                      const Duration_T& iDepartureTime,
-                      const Duration_T& iArrivalTime,
-                      const Duration_T& iDuration,
+  addTravelSolution  (const stdair::AirportCode_T& iDepartureAirport,
+                      const stdair::AirportCode_T& iArrivalAirport,
+                      const stdair::Date_T& iDepartureDate,
+                      const stdair::Duration_T& iDepartureTime,
+                      const stdair::Duration_T& iArrivalTime,
+                      const stdair::Duration_T& iDuration,
                       const bool iRefundability,
-                      const std::string& iAirlineCode,
-                      const std::string& iCabinCode,
+                      const stdair::AirlineCode_T& iAirlineCode,
+                      const stdair::CabinCode_T& iCabinCode,
                       const int iFlightNumber, double iFare,
                       int iStopsNumber,  bool iSNS, bool iChangeability,
                       const std::string& id) {
@@ -121,8 +121,9 @@ namespace TRAVELCCM {
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_Service::
   addRequest (bool refundability, bool changeability, bool saturdayNightStay,
-              std::string preferredAirline, std::string preferredCabin,
-              DateTime_T departureTime) {
+              const stdair::AirlineCode_T& preferredAirline,
+              const stdair::CabinCode_T& preferredCabin,
+              const stdair::DateTime_T& departureTime) {
     assert (_travelccmServiceContext != NULL);
     _travelccmServiceContext->addAndLinkRequest (refundability, changeability,
                                                  saturdayNightStay,
@@ -229,30 +230,34 @@ namespace TRAVELCCM {
 
     // add travel solutions to the travelsolution holder
     // AF404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
-    addTravelSolution ("NCE","LHR", Date_T(2009,05,1), Duration_T(12,00,00),
+    addTravelSolution ("NCE","LHR", stdair::Date_T(2009,05,1),
+                       Duration_T(12,00,00),
                        Duration_T(14,00,00), Duration_T(02,00,00), false,
                        "AF", "ECO", 404, 200, 0, false, false, "T1");
     
     // AF404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
-    addTravelSolution ("NCE","LHR", Date_T(2009,05,1), Duration_T(12,00,00),
+    addTravelSolution ("NCE","LHR", stdair::Date_T(2009,05,1),
+                       Duration_T(12,00,00),
                        Duration_T(14,00,00), Duration_T(02,00,00), true, "AF",
                        "ECO", 404, 200, 0, false, false, "T2");
     
     // BA404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
-    addTravelSolution ("NCE","LHR", Date_T(2009,06,1), Duration_T(12,00,00),
+    addTravelSolution ("NCE","LHR", stdair::Date_T(2009,06,1),
+                       Duration_T(12,00,00),
                        Duration_T(14,00,00), Duration_T(02,00,00), false, "BA",
                        "ECO", 404, 200, 0, true, false, "T3");
     
     // BA404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
-    addTravelSolution ("NCE","LHR", Date_T(2009,06,1), Duration_T(12,00,00),
+    addTravelSolution ("NCE","LHR", stdair::Date_T(2009,06,1),
+                       Duration_T(12,00,00),
                        Duration_T(14,00,00), Duration_T(02,00,00), true, "BA",
                        "ECO", 404, 200, 0, true, false, "T4");
 
-    _travelccmServiceContext->createPassenger("L");
+    _travelccmServiceContext->createPassenger (stdair::PassengerType::LEISURE);
     _travelccmServiceContext->intializePassenger();
 
     /** Add a request for the passenger */
-    Date_T date(2009, 6, 1);
+    stdair::Date_T date(2009, 6, 1);
     Duration_T duration(8, 30, 0);
     DateTime_T dateTime(date, duration);
     addRequest (false, true, false, "NONE", "NONE", dateTime);

@@ -4,9 +4,14 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// TRAVELCCM 
+// TravelCCM 
 #include <travelccm/bom/BomAbstract.hpp>
 #include <travelccm/bom/TravelSolutionList.hpp>
+
+// Forward declarations
+namespace stdair {
+  struct PassengerType;
+}
 
 namespace TRAVELCCM {
 
@@ -59,7 +64,7 @@ namespace TRAVELCCM {
         solutions in the travel solution holder - better from the customer's
         point of view. */
     static void
-    getBestTravelSolutionByMatchingIndicator(const std::string iPassengerType,
+    getBestTravelSolutionByMatchingIndicator (const stdair::PassengerType&,
                                               const Request& iRequest,
                                               TravelSolutionHolder* travelSolutionHolder_ptr);
     

@@ -5,7 +5,7 @@
 // STL
 #include <string>
 #include <map>
-// TRAVEL CCM
+// TravelCCM
 #include <travelccm/bom/BomAbstract.hpp>
 #include <travelccm/TRAVELCCM_Types.hpp>
 

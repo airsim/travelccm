@@ -11,9 +11,14 @@
 #include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/basic/BasTravelCCMType.hpp>
 
+// Forward declarations
+namespace stdair {
+  struct PassengerType;
+}
+
 namespace TRAVELCCM {
 
-  /** Forward declaration. */
+  // Forward declarations
   class TRAVELCCM_ServiceContext;
   class TravelSolutionHolder;
   class TravelSolution;
@@ -52,21 +57,21 @@ namespace TRAVELCCM {
   public:
     // ////////// Use Cases //////////
     /** Create a passenger in the context for the given type. */
-    void createPassenger (const std::string&);
+    void createPassenger (const stdair::PassengerType&);
     
     /** Initialize the different fields of a passenger after creating it. */
     void initializePassenger();
 
     /** add a travel solution to the context */
-    void addTravelSolution (const std::string& iDepartureAirport,
-                            const std::string& iArrivalAirport,
-                            const Date_T& iDepartureDate,
-                            const Duration_T& iDepartureTime,
-                            const Duration_T& iArrivalTime,
-                            const Duration_T& iDuration,
+    void addTravelSolution (const stdair::AirportCode_T& iDepartureAirport,
+                            const stdair::AirportCode_T& iArrivalAirport,
+                            const stdair::Date_T& iDepartureDate,
+                            const stdair::Duration_T& iDepartureTime,
+                            const stdair::Duration_T& iArrivalTime,
+                            const stdair::Duration_T& iDuration,
                             const bool iRefundability,
-                            const std::string& iAirlineCode,
-                            const std::string& iCabinCode,
+                            const stdair::AirlineCode_T& iAirlineCode,
+                            const stdair::CabinCode_T& iCabinCode,
                             const int iFlightNumber, double iFare,
                             int iStopsNumber,  bool iSNS, bool iChangeability,
                             const std::string& id);
@@ -79,7 +84,8 @@ namespace TRAVELCCM {
                          const std::string& iNamePreference);
 
     /** Add a request to the context. */
-    void addRequest (bool, bool, bool, std::string, std::string, DateTime_T);
+    void addRequest (bool, bool, bool, const stdair::AirlineCode_T&,
+                     const stdair::CabinCode_T&, const stdair::DateTime_T&);
 
     /* Add the restrictions to the passenger, in the right order, from his
        request */

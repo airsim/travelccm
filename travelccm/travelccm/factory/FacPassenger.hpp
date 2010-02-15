@@ -6,11 +6,14 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <string>
-// TRAVELCCM 
+// StdAir
+#include <stdair/basic/PassengerType.hpp>
+// TravelCCM
 #include <travelccm/factory/FacBomAbstract.hpp>
 #include <travelccm/factory/FacRequest.hpp>
 
 namespace TRAVELCCM {
+
   // Forward declarations.
   class Passenger;
   class Request;
@@ -34,7 +37,7 @@ namespace TRAVELCCM {
         <br>This new object is added to the list of instantiated objects.
         @return Passenger& The newly created object. */
     Passenger& create ();
-    Passenger& create (std::string);
+    Passenger& create (const stdair::PassengerType&);
 
     /** Link the passenger with his restriction holder. */
     void linkPassengerWithRestrictionHolder (Passenger&, RestrictionHolder&);
@@ -59,4 +62,3 @@ namespace TRAVELCCM {
 
 }
 #endif // __TRAVELCCM_FAC_FACPASSENGER_HPP
-

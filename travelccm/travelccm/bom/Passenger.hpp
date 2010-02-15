@@ -6,7 +6,10 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <string>
-// TRAVELCCM 
+// StdAir
+#include <stdair/STDAIR_Types.hpp>
+#include <stdair/basic/PassengerType.hpp>
+// TravelCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/bom/BomAbstract.hpp>
 
@@ -49,7 +52,7 @@ namespace TRAVELCCM {
     void begin();
 
     /** Get the type of the passenger  */
-    const std::string getPassengerType() const;
+    const stdair::PassengerType& getPassengerType() const;
 
     /** to get the ordered list of restrictions of the passenger,
         regarding his type */
@@ -88,10 +91,10 @@ namespace TRAVELCCM {
 
 
   private:
-    /** A passenger is caracterized by both its type and its request
-        when simulated; from those characteristics we will build his
-        departureTimePreferencePattern and his restriction list */
-    std::string _passengerType;
+    /** A passenger is caracterised by both its type and its request
+        when simulated; from those characteristics we will build his/her
+        departureTimePreferencePattern and his/her restriction list. */
+    stdair::PassengerType _passengerType;
     Request* _request;
     DepartureTimePreferencePattern* _departureTimePreferencePattern;
     RestrictionHolder* _passengerRestrictions;
@@ -101,7 +104,7 @@ namespace TRAVELCCM {
     /** Default constructors. */
     Passenger ();
     Passenger (const Passenger&);
-    Passenger (const std::string&);
+    Passenger (const stdair::PassengerType&);
 
     /** Destructor. */
     ~Passenger();

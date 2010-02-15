@@ -12,6 +12,11 @@
 #include <travelccm/bom/Request.hpp>
 #include <travelccm/service/ServiceAbstract.hpp>
 
+// Forward declarations
+namespace stdair {
+  struct PassengerType;
+}
+
 namespace TRAVELCCM {
 
   // Forward declarations.
@@ -62,9 +67,9 @@ namespace TRAVELCCM {
     
   private:
     /** To create the passenger */
-    void createPassenger (const std::string&);
+    void createPassenger (const stdair::PassengerType&);
 
-    /** To intialize the different field of the passenger, that is the
+    /** To intialise the different field of the passenger, that is the
         departure time preference pattern and the restriction holder.
         To be called after the creation of the passenger inevitably.  */
     void intializePassenger();

@@ -43,10 +43,10 @@ namespace TRAVELCCM {
   }
 
   // ////////////////////////////////////////////////////////////////////
-  Passenger& FacPassenger::create (std::string passType) {
+  Passenger& FacPassenger::create (const stdair::PassengerType& iPaxType) {
     Passenger* aPassenger_ptr = NULL;
 
-    aPassenger_ptr = new Passenger (passType);
+    aPassenger_ptr = new Passenger (iPaxType);
     assert (aPassenger_ptr != NULL);
 
     // The new object is added to the Bom pool

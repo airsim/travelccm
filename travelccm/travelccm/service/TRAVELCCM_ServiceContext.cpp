@@ -4,6 +4,7 @@
 // STL
 #include <cassert>
 // StdAir
+#include <stdair/basic/PassengerType.hpp>
 #include <stdair/service/Logger.hpp>
 // TravelCCM Basic
 #include <travelccm/basic/BasConst_TRAVELCCM_Service.hpp>
@@ -73,8 +74,8 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_ServiceContext::
-  createPassenger (const std::string& passengerType) {
-    _passenger = &FacPassenger::instance().create (passengerType);
+  createPassenger (const stdair::PassengerType& iPaxType) {
+    _passenger = &FacPassenger::instance().create (iPaxType);
   }
 
   // //////////////////////////////////////////////////////////////////////
@@ -89,10 +90,11 @@ namespace TRAVELCCM {
       linkPassengerWithRestrictionHolder (*_passenger, lRestrictionHolder);
     
     // Set the departure time preference pattern of the passenger
-    const std::string& passengerType = _passenger->getPassengerType();
+    const stdair::PassengerType& lPaxType = _passenger->getPassengerType();
     
     DepartureTimePreferencePattern& lDepartureTimePreferencePattern =
-      FacDepartureTimePreferencePattern::instance().create (passengerType);
+      FacDepartureTimePreferencePattern::instance().
+      create (lPaxType.getTypeAsString());
     
     FacPassenger::instance().
       linkPassengerWithDepartureTimePreferencePattern (*_passenger,
@@ -205,7 +207,7 @@ namespace TRAVELCCM {
     assert (_passenger != NULL);
 
     const Request& iRequest = _passenger->getPassengerRequest();
-    const std::string iPassengerType = _passenger->getPassengerType();
+    const stdair::PassengerType& iPassengerType = _passenger->getPassengerType();
 
     // filtrate to keep only the travel solution with the highest matching
     // indicator.
@@ -238,7 +240,7 @@ namespace TRAVELCCM {
     assert (_passenger != NULL);
     Request& request = _passenger->getPassengerRequest();
 
-    const std::string& passengerType = _passenger->getPassengerType();
+    const stdair::PassengerType& passengerType = _passenger->getPassengerType();
     
     // retrieve the characteristics of the fare in the Request class
     const bool refundability = request.getRefundability();
@@ -248,7 +250,7 @@ namespace TRAVELCCM {
     const std::string& preferredCabin = request.getPreferredCabin();
     const DateTime_T& departureTime = request.getDepartureTime();
 
-    if (passengerType == "B") {
+    if (passengerType.getType() == stdair::PassengerType::BUSINESS) {
       // there is always a departure time request so we always add a time
       // restriction
       addRestriction("timePreference", departureTime);
@@ -273,7 +275,7 @@ namespace TRAVELCCM {
         addRestriction ("changeability");
       }
       
-    } else if (passengerType == "L") {
+    } else if (passengerType.getType()  == stdair::PassengerType::LEISURE) {
       if (changeability) {
         addRestriction ("changeability");
       }

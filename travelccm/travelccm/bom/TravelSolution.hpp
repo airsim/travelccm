@@ -6,11 +6,16 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <string>
-// Boost (Extended STL)
-#include <boost/date_time/gregorian/gregorian.hpp>
-// TRAVELCCM
+// STDAIR
+#include <stdair/STDAIR_Types.hpp>
+// TravelCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/bom/BomAbstract.hpp>
+
+// Forward declarations
+namespace stdair {
+  struct PassengerType;
+}
 
 namespace TRAVELCCM {
 
@@ -85,7 +90,7 @@ namespace TRAVELCCM {
        the solution.
        The base number represents the number of choice possible for a given
        constraint. Generally it is 2 since each restriction can be met or not */
-    int CalculateMatchingNumber (std::string passengerType,
+    int CalculateMatchingNumber (const stdair::PassengerType& passengerType,
                                  const Request& iRequest, int baseNumber) const;
 
   private:
@@ -115,9 +120,9 @@ namespace TRAVELCCM {
         choice model, that is its leg, its schedule, its refundability,
         the airline, the cabin, the fare, the lags, saturday night stay,
         the change fee... */
-    std::string _departureAirport;
-    std::string _arrivalAirport;
-    boost::gregorian::date _departureDate;
+    stdair::AirportCode_T _departureAirport;
+    stdair::AirportCode_T _arrivalAirport;
+    stdair::Date_T _departureDate;
     Duration_T _departureTime;
     Duration_T _arrivalTime;
     Duration_T _duration;
@@ -130,7 +135,6 @@ namespace TRAVELCCM {
     bool _saturdayNightStay;
     bool _changeable;
     std::string id;
-    
   };
 
 }

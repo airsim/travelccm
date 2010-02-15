@@ -1,16 +1,18 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// C
-#include <assert.h>
 // STL
+#include <cassert>
 #include <sstream>
 #include <iostream>
 #include <iomanip>
 #include <stdexcept>
-// BOOST
+// Boost
 #include <boost/date_time/posix_time/posix_time.hpp>
-// TRAVELCCM
+// StdAir
+#include <stdair/basic/PassengerType.hpp>
+#include <stdair/service/Logger.hpp>
+// TravelCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/basic/BasConst_TimePattern.hpp>
 #include <travelccm/bom/DepartureTimePreferencePattern.hpp>
@@ -18,10 +20,12 @@
 namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
-  DepartureTimePreferencePattern:: DepartureTimePreferencePattern
-  (const PatternId_T& iDepartureTimePreferencePatternId)
-    :_departureTimePreferencePatternId (iDepartureTimePreferencePatternId) {
-    if (_departureTimePreferencePatternId == "B" ) {
+  DepartureTimePreferencePattern::
+  DepartureTimePreferencePattern (const PatternId_T& iPaxType)
+    :_departureTimePreferencePatternId (iPaxType) {
+    
+    if (_departureTimePreferencePatternId[0]
+        == stdair::PassengerType::getTypeLabel(stdair::PassengerType::BUSINESS)){
       /*for the moment, we consider that a business passenger is ready to leave
         up to 10h sooner or later his preferred departure time, and 1h for a
         business passenger. */
@@ -36,12 +40,13 @@ namespace TRAVELCCM {
       // in the passenger class)
       for (i = 0; i < 25 ; i++) {
         Duration_T timeOfDay(i,0,0);
-        std::pair<Duration_T,DurationPair_T> patternElement(timeOfDay,
-                                                            timeInterval);
-        _departureTimePreferencePattern.insert(patternElement);
+        std::pair<Duration_T, DurationPair_T> patternElement (timeOfDay,
+                                                              timeInterval);
+        _departureTimePreferencePattern.insert (patternElement);
       }
-    }
-    else if (_departureTimePreferencePatternId == "L") {
+      
+    } else if (_departureTimePreferencePatternId[0]
+               == stdair::PassengerType::getTypeLabel(stdair::PassengerType::LEISURE)) {
       Duration_T lowerBound(10,0,0);
       Duration_T upperBound(10,0,0);
       DurationPair_T timeInterval(lowerBound, upperBound);

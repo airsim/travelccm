@@ -46,7 +46,7 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   void CCM::
-  getBestTravelSolutionByMatchingIndicator (const std::string iPassengerType,
+  getBestTravelSolutionByMatchingIndicator (const stdair::PassengerType& iPaxType,
                                             const Request& iRequest,
                                             TravelSolutionHolder* travelSolutionHolder_ptr) {
     assert (travelSolutionHolder_ptr != NULL);
@@ -59,7 +59,7 @@ namespace TRAVELCCM {
       &travelSolutionHolder_ptr->getCurrentTravelSolution();
 
     const int matchingIndicator =
-      oBestTravelSolution_ptr->CalculateMatchingNumber (iPassengerType,iRequest,
+      oBestTravelSolution_ptr->CalculateMatchingNumber (iPaxType, iRequest,
                                                         baseNumber);
 
     while (travelSolutionHolder_ptr->hasNotReachedEnd()) {
@@ -67,7 +67,7 @@ namespace TRAVELCCM {
         travelSolutionHolder_ptr->getCurrentTravelSolution();
       
       const int lCurrentMatchingIndicator =
-        lCurrentTravelSolution.CalculateMatchingNumber (iPassengerType, iRequest,
+        lCurrentTravelSolution.CalculateMatchingNumber (iPaxType, iRequest,
                                                         baseNumber);
       
       // If the current travel solution has a better matching indicator then
