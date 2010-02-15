@@ -119,22 +119,6 @@ AC_SUBST(PYTHON_LIBS)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_ADD_LIBS)
 
-# --------------------------------------------------------------------
-# Support for MySQL (C client API): http://www.mysql.org
-# --------------------------------------------------------------------
-AX_MYSQL
-AC_SUBST(MYSQL_VERSION)
-AC_SUBST(MYSQL_CFLAGS)
-AC_SUBST(MYSQL_LIBS)
-
-# --------------------------------------------------------------------
-# Support for SOCI http://soci.sourceforge.net
-# --------------------------------------------------------------------
-AX_SOCI
-AC_SUBST(SOCI_VERSION)
-AC_SUBST(SOCI_CFLAGS)
-AC_SUBST(SOCI_LIBS)
-
 # -----------------------------------------------------------
 # MPICH2: http://www.mcs.anl.gov/research/projects/mpich2
 # Note: Boost.MPI depends on MPICH2, rather than on OpenMPI

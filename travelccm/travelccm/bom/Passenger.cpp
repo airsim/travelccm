@@ -18,14 +18,14 @@ namespace TRAVELCCM {
 
   // ////////////////////////////////////////////////////////////////////
   Passenger::Passenger ()
-    : _passengerType ("NONE"),  _passengerRestrictions (NULL),
-      _request (NULL),  _departureTimePreferencePattern (NULL) {
+    : _passengerType ("NONE"), _request (NULL),
+      _departureTimePreferencePattern (NULL), _passengerRestrictions (NULL) {
   }
 
   // ////////////////////////////////////////////////////////////////////
   Passenger::Passenger (const std::string& passType)
-    : _passengerType (passType),  _passengerRestrictions (NULL),
-      _request (NULL),  _departureTimePreferencePattern (NULL)  {
+    : _passengerType (passType), _request (NULL),
+      _departureTimePreferencePattern (NULL), _passengerRestrictions (NULL)  {
     
     /* For the moment, only 2 different types of passengers are implemented;
        business and leisure.
