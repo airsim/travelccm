@@ -7,5 +7,7 @@ noinst_LTLIBRARIES= libbas.la
 libbas_la_SOURCES= $(bas_h_sources) $(bas_cc_sources) 
 libbas_la_CXXFLAGS = $(BOOST_CFLAGS)
 
-#pkgincludedir = $(includedir)/@PACKAGE@/basic
+# Headers to be exported/installed
+pkgincludedir = $(includedir)/travelccm/basic
 #pkginclude_HEADERS = $(bas_h_sources)
+pkginclude_HEADERS = BasTravelCCMType.hpp
