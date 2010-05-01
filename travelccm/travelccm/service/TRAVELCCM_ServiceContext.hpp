@@ -8,7 +8,7 @@
 #include <string>
 // TravelCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
-#include <travelccm/basic/BasTravelCCMType.hpp>
+#include <travelccm/BasTravelCCMType.hpp>
 #include <travelccm/bom/Request.hpp>
 #include <travelccm/service/ServiceAbstract.hpp>
 

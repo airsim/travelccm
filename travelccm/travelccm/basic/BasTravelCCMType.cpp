@@ -5,7 +5,7 @@
 #include <cassert>
 #include <sstream>
 // TravelCCM
-#include <travelccm/basic/BasTravelCCMType.hpp>
+#include <travelccm/BasTravelCCMType.hpp>
 
 namespace TRAVELCCM {
 

@@ -6,13 +6,13 @@
 // //////////////////////////////////////////////////////////////////////
 // TRAVELCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
-#include <travelccm/basic/BasTravelCCMType.hpp>
 #include <travelccm/factory/FacServiceAbstract.hpp>
 
 namespace TRAVELCCM {
 
   /** Forward declarations. */
   class TRAVELCCM_ServiceContext;
+  struct BasTravelCCMType;
 
   /** Factory for Bucket. */
   class FacTRAVELCCMServiceContext : public FacServiceAbstract {

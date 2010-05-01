@@ -9,7 +9,7 @@
 #include <stdair/basic/BasLogParams.hpp>
 // TravelCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
-#include <travelccm/basic/BasTravelCCMType.hpp>
+#include <travelccm/BasTravelCCMType.hpp>
 
 // Forward declarations
 namespace stdair {
