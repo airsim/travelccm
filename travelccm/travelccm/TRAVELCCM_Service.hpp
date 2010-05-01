@@ -9,7 +9,7 @@
 #include <stdair/basic/BasLogParams.hpp>
 // TravelCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
-#include <travelccm/BasTravelCCMType.hpp>
+#include <travelccm/TravelCCMType.hpp>
 
 // Forward declarations
 namespace stdair {
@@ -33,9 +33,9 @@ namespace TRAVELCCM {
         <br>Moreover, a reference on an output stream is given, so
         that log outputs can be directed onto that stream.       
         @param const stdair::BasLogParams& Parameters for the output log stream.
-        @param const BasTravelCCMType& Type of the customer-choice
+        @param const TravelCCMType& Type of the customer-choice
                model type (e.g., Preference-based or Logit). */
-    TRAVELCCM_Service (const stdair::BasLogParams&, const BasTravelCCMType&);
+    TRAVELCCM_Service (const stdair::BasLogParams&, const TravelCCMType&);
     
     /** Constructor.
         <br>The init() method is called; see the corresponding documentation
@@ -46,9 +46,9 @@ namespace TRAVELCCM {
         methods in the calling chain (for instance, when the TRAVELCCM_Service
         is itself being initialised by another library service such as
         DSIM_Service).
-        @param const BasTravelCCMType& Type of the customer-choice
+        @param const TravelCCMType& Type of the customer-choice
                model type (e.g., Preference-based or Logit). */
-    TRAVELCCM_Service (const BasTravelCCMType&);
+    TRAVELCCM_Service (const TravelCCMType&);
     
     /** Destructor. */
     ~TRAVELCCM_Service();
@@ -122,9 +122,9 @@ namespace TRAVELCCM {
     void logInit (const stdair::BasLogParams&);
 
     /** Initialise.
-        @param const BasTravelCCMType& Type of the customer-choice
+        @param const TravelCCMType& Type of the customer-choice
                model type (e.g., Preference-based or Logit). */
-    void init (const BasTravelCCMType&);
+    void init (const TravelCCMType&);
     
     /** Finaliser. */
     void finalise ();

@@ -8,7 +8,7 @@
 #include <string>
 // TravelCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
-#include <travelccm/BasTravelCCMType.hpp>
+#include <travelccm/TravelCCMType.hpp>
 #include <travelccm/bom/Request.hpp>
 #include <travelccm/service/ServiceAbstract.hpp>
 
@@ -45,14 +45,14 @@ namespace TRAVELCCM {
     RestrictionHolder& getRestrictionHolder() const;
 
     /** Get the customer-choice model type. */
-    const BasTravelCCMType& getTravelCCMType () const {
+    const TravelCCMType& getTravelCCMType () const {
       return _ccmType;
     }
 
     
     // ///////// Setters //////////
     /** Set the customer-choice model type. */
-    void setTravelCCMType (const BasTravelCCMType& iCCMType) {
+    void setTravelCCMType (const TravelCCMType& iCCMType) {
       _ccmType = iCCMType;
     }
 
@@ -121,7 +121,7 @@ namespace TRAVELCCM {
     // /////// Construction / initialisation ////////
     /** Constructors. */
     TRAVELCCM_ServiceContext ();
-    TRAVELCCM_ServiceContext (const BasTravelCCMType&);
+    TRAVELCCM_ServiceContext (const TravelCCMType&);
     TRAVELCCM_ServiceContext (const TRAVELCCM_ServiceContext&);
 
     /** Destructor. */
@@ -140,7 +140,7 @@ namespace TRAVELCCM {
     TravelSolutionHolder* _travelSolutionHolder;
 
     /** Airline code. */
-    BasTravelCCMType _ccmType;
+    TravelCCMType _ccmType;
   };
 
 }

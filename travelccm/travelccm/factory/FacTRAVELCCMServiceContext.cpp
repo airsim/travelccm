@@ -31,7 +31,7 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   TRAVELCCM_ServiceContext& FacTRAVELCCMServiceContext::
-  create (const BasTravelCCMType& iCCMType) {
+  create (const TravelCCMType& iCCMType) {
     TRAVELCCM_ServiceContext* aServiceContext_ptr = NULL;
 
     aServiceContext_ptr = new TRAVELCCM_ServiceContext (iCCMType);

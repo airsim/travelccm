@@ -45,7 +45,7 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   TRAVELCCM_ServiceContext::
-  TRAVELCCM_ServiceContext (const BasTravelCCMType& iCCMType) :
+  TRAVELCCM_ServiceContext (const TravelCCMType& iCCMType) :
     _passenger (NULL), _travelSolutionHolder (NULL), _ccmType (iCCMType) {
 
     // Set the travel solution holder

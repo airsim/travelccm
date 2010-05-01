@@ -1,5 +1,5 @@
-#ifndef __STDAIR_BAS_BASTRAVELCCMTYPE_HPP
-#define __STDAIR_BAS_BASTRAVELCCMTYPE_HPP
+#ifndef __TRAVELCCM_TRAVELCCMTYPE_HPP
+#define __TRAVELCCM_TRAVELCCMTYPE_HPP
 
 // //////////////////////////////////////////////////////////////////////
 // Import section
@@ -12,7 +12,7 @@
 namespace TRAVELCCM {
 
   /** Structure defining the customer-choice model type. */
-  struct BasTravelCCMType : public stdair::StructAbstract {
+  struct TravelCCMType : public stdair::StructAbstract {
     friend class TRAVELCCM_ServiceContext;
   public:    
     typedef enum {
@@ -58,16 +58,16 @@ namespace TRAVELCCM {
     
   public:
     /** Main Constructor. */
-    BasTravelCCMType (const EN_CCMType& iCCMType);
+    TravelCCMType (const EN_CCMType& iCCMType);
 
     /** Destructor. */
-    ~BasTravelCCMType();
+    ~TravelCCMType();
 
   private:
     /** Default Constructor. */
-    BasTravelCCMType ();
+    TravelCCMType ();
     /** Default copy constructor. */
-    BasTravelCCMType (const BasTravelCCMType&);
+    TravelCCMType (const TravelCCMType&);
     
     
   private:
@@ -77,4 +77,4 @@ namespace TRAVELCCM {
   };
   
 }
-#endif // __STDAIR_BAS_BASTRAVELCCMTYPE_HPP
+#endif // __TRAVELCCM_TRAVELCCMTYPE_HPP

@@ -5,56 +5,56 @@
 #include <cassert>
 #include <sstream>
 // TravelCCM
-#include <travelccm/BasTravelCCMType.hpp>
+#include <travelccm/TravelCCMType.hpp>
 
 namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
-  const std::string BasTravelCCMType::CCMTypes[BasTravelCCMType::LAST_VALUE] =
+  const std::string TravelCCMType::CCMTypes[TravelCCMType::LAST_VALUE] =
     {"Pref-based", "Logit"};
     
   // //////////////////////////////////////////////////////////////////////
-  BasTravelCCMType::BasTravelCCMType () : _type (PREF_BASED) {
+  TravelCCMType::TravelCCMType () : _type (PREF_BASED) {
     assert (false);
   }
   
   // //////////////////////////////////////////////////////////////////////
-  BasTravelCCMType::BasTravelCCMType (const BasTravelCCMType& iCCMType)
+  TravelCCMType::TravelCCMType (const TravelCCMType& iCCMType)
   : _type (iCCMType._type) {
   }
   
   // //////////////////////////////////////////////////////////////////////
-  BasTravelCCMType::BasTravelCCMType (const EN_CCMType& iCCMType)
+  TravelCCMType::TravelCCMType (const EN_CCMType& iCCMType)
     : _type (iCCMType) {
   }
   
   // //////////////////////////////////////////////////////////////////////
-  BasTravelCCMType::~BasTravelCCMType () {
+  TravelCCMType::~TravelCCMType () {
   }
   
   // //////////////////////////////////////////////////////////////////////
-  void BasTravelCCMType::toStream (std::ostream& ioOut) const {
+  void TravelCCMType::toStream (std::ostream& ioOut) const {
     ioOut << toString();
   }
 
   // //////////////////////////////////////////////////////////////////////
-  void BasTravelCCMType::fromStream (std::istream&) {
+  void TravelCCMType::fromStream (std::istream&) {
   }
 
   // //////////////////////////////////////////////////////////////////////
-  const std::string BasTravelCCMType::describe() const {
+  const std::string TravelCCMType::describe() const {
     return toString();
   }
   
   // //////////////////////////////////////////////////////////////////////
-  std::string BasTravelCCMType::toShortString() const {
+  std::string TravelCCMType::toShortString() const {
     std::ostringstream oStr;
     oStr << CCMTypes[_type];
     return oStr.str();
   }
     
   // //////////////////////////////////////////////////////////////////////
-  std::string BasTravelCCMType::toString() const {
+  std::string TravelCCMType::toString() const {
     std::ostringstream oStr;
     oStr << CCMTypes[_type];
     return oStr.str();

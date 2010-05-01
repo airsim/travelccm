@@ -31,7 +31,7 @@ namespace TRAVELCCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
-  TRAVELCCM_Service::TRAVELCCM_Service (const BasTravelCCMType& iCCMType) 
+  TRAVELCCM_Service::TRAVELCCM_Service (const TravelCCMType& iCCMType) 
     : _travelccmServiceContext (NULL) {
 
     // Initialise the context
@@ -40,7 +40,7 @@ namespace TRAVELCCM {
 
   // //////////////////////////////////////////////////////////////////////
   TRAVELCCM_Service::TRAVELCCM_Service (const stdair::BasLogParams& iLogParams,
-                                        const BasTravelCCMType& iCCMType) 
+                                        const TravelCCMType& iCCMType) 
     : _travelccmServiceContext (NULL) {
     
     // Set the log file
@@ -60,7 +60,7 @@ namespace TRAVELCCM {
   }
 
   // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_Service::init (const BasTravelCCMType& iCCMType) {
+  void TRAVELCCM_Service::init (const TravelCCMType& iCCMType) {
     // Initialise the context
     TRAVELCCM_ServiceContext& lTRAVELCCM_ServiceContext = 
       FacTRAVELCCMServiceContext::instance().create (iCCMType);

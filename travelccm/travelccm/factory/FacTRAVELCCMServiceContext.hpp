@@ -12,7 +12,7 @@ namespace TRAVELCCM {
 
   /** Forward declarations. */
   class TRAVELCCM_ServiceContext;
-  struct BasTravelCCMType;
+  struct TravelCCMType;
 
   /** Factory for Bucket. */
   class FacTRAVELCCMServiceContext : public FacServiceAbstract {
@@ -31,7 +31,7 @@ namespace TRAVELCCM {
     /** Create a new ServiceContext object.
         <br>This new object is added to the list of instantiated objects.
         @return ServiceContext& The newly created object. */
-    TRAVELCCM_ServiceContext& create (const BasTravelCCMType&);
+    TRAVELCCM_ServiceContext& create (const TravelCCMType&);
 
     
   protected:
