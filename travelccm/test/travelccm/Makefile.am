@@ -18,7 +18,7 @@ TravelChoiceTestSuite_SOURCES = TravelChoiceTestSuite.hpp \
 TravelChoiceTestSuite_CXXFLAGS= $(BOOST_CFLAGS) $(CPPUNIT_CFLAGS)
 TravelChoiceTestSuite_LDADD = 
 TravelChoiceTestSuite_LDFLAGS = $(BOOST_LIBS) $(CPPUNIT_LIBS) \
-	$(top_builddir)/extracppunit/libextracc-extracppunit.la \
+	$(top_builddir)/extracppunit/libextracppunit.la \
 	$(top_builddir)/stdair/core/libstdair.la \
 	$(top_builddir)/travelccm/core/libtravelccm.la
 
