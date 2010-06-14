@@ -9,8 +9,8 @@ Summary:        Travel Customer Choice Model C++ library
 
 Group:          System Environment/Libraries 
 License:        LGPLv2
-URL:            http://%{name}.sourceforge.net
-Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+URL:            http://sourceforge.net/projects/%{name}/
+Source0:        http://download.sourceforge.net/travel-ccm/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  boost-devel
@@ -86,9 +86,7 @@ make %{?_smp_mflags}
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
-# remove unpackaged files from the buildroot
-#rm -f $RPM_BUILD_ROOT%{_includedir}/%{name}/config.h
-#rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+# Remove unpackaged files from the buildroot
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib%{name}.la
 # chmod 644 doc/html/installdox doc/html/*.png doc/html/*.ico
 rm -rf %{mydocs} && mkdir -p %{mydocs}
