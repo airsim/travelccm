@@ -1,3 +1,4 @@
+# travelccm top source directory
 include $(top_srcdir)/Makefile.common
 include $(srcdir)/core/sources.mk
 
@@ -12,5 +13,5 @@ EXTRA_DIST =
 
 
 # Header files
-nobase_pkginclude_HEADERS = $(service_h_sources)
+nobase_pkginclude_HEADERS = $(travelccm_service_h_sources)
 #nobase_nodist_pkginclude_HEADERS = $(top_builddir)/@PACKAGE@/config.h

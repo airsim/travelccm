@@ -1,3 +1,4 @@
+# travelccm/core sub-directory
 include $(top_srcdir)/Makefile.common
 include $(srcdir)/sources.mk
 
@@ -11,13 +12,14 @@ SUBDIRS =
 # Library
 lib_LTLIBRARIES = libtravelccm.la
 
-libtravelccm_la_SOURCES = $(service_h_sources) $(service_cc_sources)
+libtravelccm_la_SOURCES = $(travelccm_service_h_sources) \
+		$(travelccm_service_cc_sources)
 libtravelccm_la_LIBADD = \
-	$(top_builddir)/travelccm/basic/libbas.la \
-	$(top_builddir)/travelccm/bom/libbom.la \
-	$(top_builddir)/travelccm/factory/libfac.la \
-	$(top_builddir)/travelccm/command/libcmd.la \
-	$(top_builddir)/travelccm/service/libsvc.la
+	$(top_builddir)/travelccm/basic/libtravelccmbas.la \
+	$(top_builddir)/travelccm/bom/libtravelccmbom.la \
+	$(top_builddir)/travelccm/factory/libtravelccmfac.la \
+	$(top_builddir)/travelccm/command/libtravelccmcmd.la \
+	$(top_builddir)/travelccm/service/libtravelccmsvc.la
 libtravelccm_la_LDFLAGS = \
 	$(BOOST_DATE_TIME_LIB) $(BOOST_PROGRAM_OPTIONS_LIB) \
 	$(top_builddir)/stdair/core/libstdair.la \
