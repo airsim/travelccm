@@ -52,7 +52,7 @@ snapshot: snapshot-src snapshot-html snapshot-tex
 
 
 snapshot-src:
-        $(MAKE) dist distdir=@PACKAGE_TARNAME@-`date +"%Y%m%d"`
+	$(MAKE) dist distdir=@PACKAGE_TARNAME@-`date +"%Y%m%d"`
 
 snapshot-html:
 	$(MAKE) -C doc dist-html html_tarname=@PACKAGE_TARNAME@-html-doc-`date +"%Y%m%d"`
@@ -73,3 +73,4 @@ upload-html: dist-html
 upload-tex: dist-tex
 	@UPLOAD_COMMAND@ @PACKAGE_TARNAME@-tex-@VERSION@.tar.gz \
 	@PACKAGE_TARNAME@-tex-@VERSION@.tar.bz2
+
