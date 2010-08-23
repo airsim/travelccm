@@ -10,10 +10,6 @@ AM_INIT_AUTOMAKE
 AM_PATH_CPPUNIT(1.10)
 AM_CONDITIONAL([HAVE_CPPUNIT], [test "x$CPPUNIT_LIBS" != x])
 
-# RPM release number
-RPM_RELEASE="1"
-AC_SUBST(RPM_RELEASE)
-
 # Shared library versioning
 GENERIC_LIBRARY_VERSION="0:4:0"
 #                        | | |
@@ -275,7 +271,6 @@ AC_CONFIG_FILES(
 	Makefile
 	travelccm-config
 	travelccm.pc
-	travelccm.spec
 	travelccm.m4
 	travelccm/Makefile
 	travelccm/basic/Makefile

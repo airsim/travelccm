@@ -1,14 +1,14 @@
 #
 %define mydocs __tmp_docdir
 #
-Name:           @PACKAGE@
-Version:        @VERSION@
-Release:        @RPM_RELEASE@%{?dist}
+Name:           travelccm
+Version:        0.4.0
+Release:        1%{?dist}
 
 Summary:        Travel Customer Choice Model C++ library
 
 Group:          System Environment/Libraries 
-License:        LGPLv2
+License:        LGPLv2+
 URL:            http://sourceforge.net/projects/travel-ccm/
 Source0:        http://downloads.sourceforge.net/travel-ccm/%{name}-%{version}.tar.bz2
 %{?el5:BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)}
@@ -18,7 +18,7 @@ BuildRequires:  cppunit-devel
 #Requires:       
 
 %description
-@PACKAGE_NAME@ aims at providing a clean API, and the corresponding
+%{name} aims at providing a clean API, and the corresponding
 C++ implementation, for choosing one item among a set of travel
 solutions, given demand-related characteristics (e.g.,
 Willingness-To-Pay, preferred airline, preferred cabin, etc.).
@@ -84,16 +84,25 @@ find . -type f -name '*.[hc]pp' -exec chmod 644 {} \;
 make %{?_smp_mflags}
 
 %install
+# On Fedora, the BuildRoot is automatically cleaned. Which is not the case for
+# RedHat. See: https://fedoraproject.org/wiki/Packaging/Guidelines#BuildRoot_tag
+%if 0%{?rhel}
 rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
+%endif
+make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
+
 # Remove unpackaged files from the buildroot
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib%{name}.la
 # chmod 644 doc/html/installdox doc/html/*.png doc/html/*.ico
 rm -rf %{mydocs} && mkdir -p %{mydocs}
 mv $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/html %{mydocs}
 
+# The clean section is no longer needed.
+# See: https://fedoraproject.org/wiki/Packaging/Guidelines#.25clean
+%if 0%{?fedora} < 13
 %clean
 rm -rf $RPM_BUILD_ROOT
+%endif
 
 %post -p /sbin/ldconfig
 
@@ -108,12 +117,12 @@ echo ""
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS ChangeLog COPYING NEWS README
-%{_bindir}/%{name}
+%{_bindir}/%{name}/
 %{_libdir}/lib*.so.*
 
 %files devel
 %defattr(-,root,root,-)
-%{_includedir}/%{name}
+%{_includedir}/%{name}/
 %{_bindir}/%{name}-config
 %{_libdir}/lib%{name}.so
 %{_libdir}/pkgconfig/%{name}.pc
@@ -127,5 +136,6 @@ echo ""
 
 
 %changelog
-* Thu Sep 10 2009 Denis Arnaud <denis.arnaud_fedora@m4x.org> 0.4.0-1
+* Mon Aug 23 2010 Denis Arnaud <denis.arnaud_fedora@m4x.org> 0.4.0-1
 - Initial RPM release
+

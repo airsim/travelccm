@@ -21,7 +21,7 @@ endif
 MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure \
 			config-h.in sic/stamp-h.in autogen.sh bootstrap
 
-#EXTRA_DIST = @PACKAGE@.spec @PACKAGE@.m4 @PACKAGE@.pc Makefile.common 
+#EXTRA_DIST = @PACKAGE@.m4 @PACKAGE@.pc Makefile.common 
 EXTRA_DIST =
 
 # Build in these directories:
@@ -49,7 +49,7 @@ snapshot: snapshot-src snapshot-html
 
 
 snapshot-src:
-        $(MAKE) dist distdir=@PACKAGE_TARNAME@-`date +"%Y%m%d"`
+	$(MAKE) dist distdir=@PACKAGE_TARNAME@-`date +"%Y%m%d"`
 
 snapshot-html:
 	$(MAKE) -C doc dist-html html_tarname=@PACKAGE_TARNAME@-html-doc-`date +"%Y%m%d"`
