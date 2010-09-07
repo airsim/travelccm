@@ -21,6 +21,5 @@ libtravelccm_la_LIBADD = \
 	$(top_builddir)/travelccm/command/libtravelccmcmd.la \
 	$(top_builddir)/travelccm/service/libtravelccmsvc.la
 libtravelccm_la_LDFLAGS = \
-	$(BOOST_DATE_TIME_LIB) $(BOOST_PROGRAM_OPTIONS_LIB) \
-	$(top_builddir)/stdair/core/libstdair.la \
+	$(BOOST_DATE_TIME_LIB) $(BOOST_PROGRAM_OPTIONS_LIB) $(STDAIR_LIBS) \
 	-version-info $(GENERIC_LIBRARY_VERSION)

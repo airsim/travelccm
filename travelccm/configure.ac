@@ -109,14 +109,10 @@ fi
 # -----------------------------------------------------------------------------
 # Support for ExtraCC (Extra-CruiseControl): http://sf.net/projects/extracc
 # -----------------------------------------------------------------------------
-# Note: the ExtraCC is now imported as a Subversion external reference,
-#       thus directly accessible within the extracppunit directory.
-#       When that library will be widely avaible on Linux distributions,
-#       the external reference can be removed and the following line uncommented.
-#AM_PATH_EXTRACC
-#AC_SUBST(EXTRACC_VERSION)
-#AC_SUBST(EXTRACC_CFLAGS)
-#AC_SUBST(EXTRACC_LIBS)
+AM_PATH_EXTRACC
+AC_SUBST(EXTRACC_VERSION)
+AC_SUBST(EXTRACC_CFLAGS)
+AC_SUBST(EXTRACC_LIBS)
 
 # -----------------------------------------------------------
 # Python
@@ -176,6 +172,14 @@ AX_SOCI([3.0])
 AC_SUBST(SOCI_VERSION)
 AC_SUBST(SOCI_CFLAGS)
 AC_SUBST(SOCI_LIBS)
+
+# -----------------------------------------------------------------------------
+# Support for StdAir (): http://sf.net/projects/stdair
+# -----------------------------------------------------------------------------
+AM_PATH_STDAIR
+AC_SUBST(STDAIR_VERSION)
+AC_SUBST(STDAIR_CFLAGS)
+AC_SUBST(STDAIR_LIBS)
 
 
 # -------------------------------------------------------------------
@@ -332,16 +336,6 @@ AC_CONFIG_FILES(
 	travelccm-config
 	travelccm.pc
 	travelccm.m4
-	stdair/Makefile
-	stdair/basic/Makefile
-	stdair/bom/Makefile
-	stdair/dbadaptor/Makefile
-	stdair/factory/Makefile
-	stdair/command/Makefile
-	stdair/config/Makefile
-	stdair/service/Makefile
-	stdair/core/Makefile
-	stdair/batches/Makefile
 	travelccm/Makefile
 	travelccm/basic/Makefile
 	travelccm/bom/Makefile
@@ -360,10 +354,8 @@ AC_CONFIG_FILES(
 	doc/local/index.doc
 	doc/doxygen_html.cfg
 	doc/sourceforge/howto_release_travelccm.html
-	extracppunit/Makefile
 	test/Makefile
 	test/samples/Makefile
-	test/stdair/Makefile
 	test/travelccm/Makefile
 )
 AC_OUTPUT
@@ -465,6 +457,11 @@ ${MPICH2_OUTPUT}
     o SOCI_VERSION .... : ${SOCI_VERSION}
     o SOCI_CFLAGS ..... : ${SOCI_CFLAGS}
     o SOCI_LIBS ....... : ${SOCI_LIBS}
+
+  - StdAir ............ :
+    o STDAIR_VERSION .. : ${STDAIR_VERSION}
+    o STDAIR_CFLAGS ... : ${STDAIR_CFLAGS}
+    o STDAIR_LIBS ..... : ${STDAIR_LIBS}
 
   - ExtraCC ........... :
     o EXTRACC_VERSION . : ${EXTRACC_VERSION}
