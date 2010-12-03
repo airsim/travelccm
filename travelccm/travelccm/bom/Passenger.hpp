@@ -7,34 +7,29 @@
 // STL
 #include <string>
 // StdAir
-#include <stdair/STDAIR_Types.hpp>
+// StdAir
+#include <stdair/stdair_basic_types.hpp>
+#include <stdair/stdair_date_time_types.hpp>
 #include <stdair/basic/PassengerType.hpp>
 // TravelCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/bom/BomAbstract.hpp>
 
 namespace TRAVELCCM {
-  //forward declaration
+
+  // Forward declaration
   class Restriction;
   class RestrictionHolder;
   class Request;
   class DepartureTimePreferencePattern;
 
-  /** this class gathers the information on the passenger who do the booking
-      request. It stores the required information to know the customer's choice
+  /** This class gathers the information on the passenger who do the booking
+      request.
+      <br>It stores the required information to know the customer's choice
       of a travel solution. */
   class Passenger : public BomAbstract {
     friend class FacPassenger;
   public:
-
-    // /////////// Display support methods /////////
-    /** Dump a Business Object into an output stream.
-        @param ostream& the output stream. */
-    void toStream (std::ostream& ioOut) const;
-
-    /** Read a Business Object from an input stream.
-        @param istream& the input stream. */
-    void fromStream (std::istream& ioIn);
 
     /////////////////////// Getters ////////////////
     /** Get the serialised version of the Business Object. */
@@ -48,17 +43,18 @@ namespace TRAVELCCM {
         at the same level). */
     const std::string describeShortKey() const;
 
-    /** Intialize the pointer at the beginning of the retriction holder */
+    /** Intialise the pointer at the beginning of the retriction holder.
+     <br>TODO: replace with an external iterator. */
     void begin();
 
     /** Get the type of the passenger  */
     const stdair::PassengerType& getPassengerType() const;
 
-    /** to get the ordered list of restrictions of the passenger,
+    /** Get the ordered list of restrictions of the passenger,
         regarding his type */
     RestrictionHolder& getPassengerRestrictions () ;
     
-    /** to get the request done by a passenger */
+    /** Get the request done by a passenger */
     Request& getPassengerRequest () ;
 
     /** Get the two points in the map of DepartureTimePreferencePattern which
@@ -81,24 +77,24 @@ namespace TRAVELCCM {
         in which he is ready to leave */
     const DateTimePair_T getDepartureWindow () const;
 
-    // functions unsed to lighten the operations on the duration times
-    /** retrieve the middle duration time regarding the formula:
+    // /////////// Display support methods /////////
+    /** Dump a Business Object into an output stream.
+        @param ostream& the output stream. */
+    void toStream (std::ostream& ioOut) const;
+
+    /** Read a Business Object from an input stream.
+        @param istream& the input stream. */
+    void fromStream (std::istream& ioIn);
+
+    // //// Functions used to lighten the operations on the duration times ////
+    /** Retrieve the middle duration time regarding the formula:
         (1 - ratio) * 1stDT + ratio * 2ndDT */
     static const Duration_T computeMiddleDuration (long, long, double);
 
     /** Add a restriction to the restriction holder. */
     void addRestriction (const Restriction&);
 
-
   private:
-    /** A passenger is caracterised by both its type and its request
-        when simulated; from those characteristics we will build his/her
-        departureTimePreferencePattern and his/her restriction list. */
-    stdair::PassengerType _passengerType;
-    Request* _request;
-    DepartureTimePreferencePattern* _departureTimePreferencePattern;
-    RestrictionHolder* _passengerRestrictions;
-    
     /** Constructors are private so as to force the usage of the Factory
         layer. */
     /** Default constructors. */
@@ -109,6 +105,14 @@ namespace TRAVELCCM {
     /** Destructor. */
     ~Passenger();
 
+  private:
+    /** A passenger is caracterised by both its type and its request
+        when simulated; from those characteristics we will build his/her
+        departureTimePreferencePattern and his/her restriction list. */
+    stdair::PassengerType _passengerType;
+    Request* _request;
+    DepartureTimePreferencePattern* _departureTimePreferencePattern;
+    RestrictionHolder* _passengerRestrictions;
   };
 
 }

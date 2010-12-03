@@ -6,8 +6,10 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <string>
-// STDAIR
-#include <stdair/STDAIR_Types.hpp>
+#include <iosfwd>
+// StdAir
+#include <stdair/stdair_basic_types.hpp>
+#include <stdair/stdair_date_time_types.hpp>
 // TravelCCM
 #include <travelccm/TRAVELCCM_Types.hpp>
 #include <travelccm/bom/BomAbstract.hpp>

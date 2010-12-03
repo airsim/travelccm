@@ -3,7 +3,8 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <cassert>
-#include <iostream>
+#include <sstream>
+#include <iomanip>
 #include <iomanip>
 // StdAir
 #include <stdair/service/Logger.hpp>
