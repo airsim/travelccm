@@ -1,5 +1,5 @@
 #
-%define mydocs __tmp_docdir
+%global mydocs __tmp_docdir
 #
 Name:           travelccm
 Version:        99.99.99
@@ -14,8 +14,9 @@ Source0:        http://downloads.sourceforge.net/travel-ccm/%{name}-%{version}.t
 %{?el5:BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)}
 
 BuildRequires:  boost-devel
-BuildRequires:  cppunit-devel
-#Requires:       
+BuildRequires:  soci-mysql-devel
+BuildRequires:  extracc-devel
+
 
 %description
 %{name} aims at providing a clean API, and the corresponding
@@ -54,27 +55,23 @@ development documentation for %{name}. If you would like to develop
 programs using %{name}, you will need to install %{name}-devel.
 
 %package doc
-Summary:        HTML documentation for the @PACKAGE_NAME@ library
+Summary:        HTML documentation for the %{name} library
 Group:          Documentation
-%if 0%{?fedora} >= 10
-BuildArch:      noarch
-BuildRequires:  texlive-latex, texlive-dvips
-%endif
-%if 0%{?fedora} < 10
-BuildRequires:  tetex-latex, tetex-dvips
-%endif
+%{?fedora:BuildArch:      noarch}
+BuildRequires:  tex(latex)
 BuildRequires:  doxygen, ghostscript
 
 %description doc
-This package contains the documentation in the HTML format of the @PACKAGE_NAME@
-library. The documentation is the same as at the @PACKAGE_NAME@ web page.
+This package contains the documentation in the HTML format of the %{name}
+library. The documentation is the same as at the %{name} web page.
 
 
 %prep
 %setup -q
-# find ./doc -type f -perm 755 -exec chmod 644 {} \;
-# Fix some permissions and formats
+# The INSTALL package is not relevant for RPM package users
+# (e.g., see https://bugzilla.redhat.com/show_bug.cgi?id=489233#c4)
 rm -f INSTALL
+# Fix some permissions and formats
 chmod -x AUTHORS ChangeLog COPYING NEWS README
 find . -type f -name '*.[hc]pp' -exec chmod 644 {} \;
 
@@ -86,20 +83,17 @@ make %{?_smp_mflags}
 %install
 # On Fedora, the BuildRoot is automatically cleaned. Which is not the case for
 # RedHat. See: https://fedoraproject.org/wiki/Packaging/Guidelines#BuildRoot_tag
-%if 0%{?rhel}
-rm -rf $RPM_BUILD_ROOT
-%endif
+%{?rhel:rm -rf $RPM_BUILD_ROOT}
+
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 
 # Remove unpackaged files from the buildroot
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib%{name}.la
-# chmod 644 doc/html/installdox doc/html/*.png doc/html/*.ico
-rm -rf %{mydocs} && mkdir -p %{mydocs}
+
+mkdir -p %{mydocs}
 mv $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/html %{mydocs}
 
-# The clean section is no longer needed.
-# See: https://fedoraproject.org/wiki/Packaging/Guidelines#.25clean
-%if 0%{?fedora} < 13
+%if 0%{?rhel}
 %clean
 rm -rf $RPM_BUILD_ROOT
 %endif
@@ -108,11 +102,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %postun -p /sbin/ldconfig
 
-%post devel
-echo ""
-
-%preun devel 
-echo ""
 
 %files
 %defattr(-,root,root,-)
@@ -132,7 +121,7 @@ echo ""
 %files doc
 %defattr(-,root,root,-)
 %doc %{mydocs}/html
-%doc AUTHORS ChangeLog COPYING NEWS README
+%doc COPYING
 
 
 %changelog
@@ -141,4 +130,3 @@ echo ""
 
 * Mon Aug 23 2010 Denis Arnaud <denis.arnaud_fedora@m4x.org> 0.5.0-1
 - Initial RPM release
-
