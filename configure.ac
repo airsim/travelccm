@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script
 #-------------------------------------------------------------------
 AC_PREREQ(2.59)
-AC_COPYRIGHT([Copyright (C) 2007-2009  Denis Arnaud <denis_arnaud@users.sourceforge.net>])
+AC_COPYRIGHT([Copyright (C) 2007-2011  Denis Arnaud <denis_arnaud@users.sourceforge.net>])
 AC_INIT([TRAVELCCM],[0.4.0],[denis_arnaud@users.sourceforge.net],[travelccm])
 AC_CONFIG_HEADER([travelccm/config.h])
 AC_CONFIG_SRCDIR([travelccm/basic/BasConst.cpp])
