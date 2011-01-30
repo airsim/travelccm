@@ -15,7 +15,6 @@ Source0:        http://downloads.sourceforge.net/travel-ccm/%{name}-%{version}.t
 
 BuildRequires:  boost-devel
 BuildRequires:  soci-mysql-devel
-BuildRequires:  extracc-devel
 
 
 %description
