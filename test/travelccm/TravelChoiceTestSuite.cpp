@@ -34,7 +34,6 @@ struct UnitTestConfig {
     boost_utf::unit_test_log.set_format (boost_utf::XML);
     boost_utf::unit_test_log.set_threshold_level (boost_utf::log_test_units);
     //boost_utf::unit_test_log.set_threshold_level (boost_utf::log_successful_tests);
-
   }
   /** Destructor. */
   ~UnitTestConfig() {
