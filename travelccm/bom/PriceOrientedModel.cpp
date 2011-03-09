@@ -47,6 +47,7 @@ namespace TRAVELCCM {
           lClassAvailabilityMapHolder.begin();
         stdair::ClassList_StringList_T::const_iterator itClassList =
           lClassPath.begin();
+        assert (lClassAvailabilityMapHolder.size() > 0 && lClassPath.size() > 0);
 
         for (; itCAMH != lClassAvailabilityMapHolder.end(),
                itClassList != lClassPath.end(); ++itCAMH, ++itClassList) {
@@ -56,7 +57,21 @@ namespace TRAVELCCM {
           lFirstClass.append (lCurrentClassList, 0, 1);
           const stdair::ClassAvailabilityMap_T::const_iterator itClassAvl =
             lClassAvlMap.find (lFirstClass);
+
+          // DEBUG
+          if (itClassAvl == lClassAvlMap.end()) {
+            std::ostringstream ostr;
+            for (stdair::ClassAvailabilityMap_T::const_iterator it =
+                   lClassAvlMap.begin(); it != lClassAvlMap.end(); ++it) {
+              ostr << it->first << ", " << it->second << "    ";
+            }
+
+            STDAIR_LOG_DEBUG ("Can not find the class: " << lFirstClass
+                              << " within the following map: " << ostr.str());
+                        
+          }
           assert (itClassAvl != lClassAvlMap.end());
+
           const stdair::Availability_T& lAvl = itClassAvl->second;
           if (lAvl < lPartySize) {
             lAvlSuff = false;
