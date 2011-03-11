@@ -336,6 +336,7 @@ AC_CONFIG_FILES(
 	doc/doxygen_html.cfg
 	doc/sourceforge/howto_release_travelccm.html
 	samples/Makefile
+	samples/RDS01/Makefile
 	test/Makefile
 	test/travelccm/Makefile
 )
