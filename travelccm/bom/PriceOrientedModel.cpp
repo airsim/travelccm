@@ -3,17 +3,18 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <cassert>
-#include <fstream>
+#include <sstream>
 // StdAir
-#include <stdair/stdair_types.hpp>
+//#include <stdair/stdair_types.hpp>
 #include <stdair/bom/BookingRequestStruct.hpp>
 #include <stdair/bom/TravelSolutionStruct.hpp>
 #include <stdair/bom/FareOptionStruct.hpp>
 #include <stdair/service/Logger.hpp>
-// TRAVEL-CCM
+// TravelCCM
 #include <travelccm/bom/PriceOrientedModel.hpp>
 
 namespace TRAVELCCM {
+
   // ////////////////////////////////////////////////////////////////////
   const stdair::TravelSolutionStruct* PriceOrientedModel::
   chooseTravelSolution (stdair::TravelSolutionList_T& ioTravelSolutionList,
@@ -23,8 +24,8 @@ namespace TRAVELCCM {
     // Get the willingness-to-pay of the customer
     const stdair::WTP_T& lWTP = iBookingRequest.getWTP();
 
-    stdair::Fare_T lLowestFare = std::numeric_limits<stdair::Fare_T>::max();
     // Browse the travel solution list and choose the cheapest one.
+    stdair::Fare_T lLowestFare = std::numeric_limits<stdair::Fare_T>::max();
     for (stdair::TravelSolutionList_T::iterator itTS =
            ioTravelSolutionList.begin(); itTS != ioTravelSolutionList.end();
          ++itTS) {
