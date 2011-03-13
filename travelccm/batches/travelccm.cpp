@@ -159,6 +159,9 @@ int main (int argc, char* argv[]) {
   const stdair::BookingRequestStruct& lBookingRequest =
     travelccmService.buildSampleBookingRequest();
 
+  // DEBUG
+  STDAIR_LOG_DEBUG ("Booking request: " << lBookingRequest.display());
+
   // Build the sample BOM tree
   stdair::TravelSolutionList_T lTSList;
   travelccmService.buildSampleTravelSolutions (lTSList);
@@ -168,22 +171,19 @@ int main (int argc, char* argv[]) {
   STDAIR_LOG_DEBUG (lCSVDump);
   
   // Choose a travel solution
-  const stdair::TravelSolutionStruct* lTS_ptr = NULL;
-  /* TODO: uncomment
   const stdair::TravelSolutionStruct* lTS_ptr =
     travelccmService.chooseTravelSolution (lTSList, lBookingRequest);
-  */
-
-  // DEBUG
-  STDAIR_LOG_DEBUG ("Booking request: " << lBookingRequest.display());
 
   if (lTS_ptr != NULL) {
     // DEBUG
-    STDAIR_LOG_DEBUG ("Travel solution: " << lTS_ptr->display());
+    STDAIR_LOG_DEBUG ("Chosen travel solution: " << lTS_ptr->display());
 
   } else {
     // DEBUG
-    STDAIR_LOG_DEBUG ("No travel solution found");
+    STDAIR_LOG_DEBUG ("No travel solution can be found for "
+                      << lBookingRequest.display()
+                      << " within the following list of travel solutions");
+    STDAIR_LOG_DEBUG (lCSVDump);
   }
 
   // Close the Log outputFile
