@@ -1,0 +1,20 @@
+#
+# Config file for the TraDemGen package. It defines the following variables:
+#  TRADEMGEN_INCLUDE_DIRS - include directories for TraDemGen
+#  TRADEMGEN_LIBRARY_DIRS - library directories for TraDemGen (normally not used!)
+#  TRADEMGEN_BINARY_DIRS  - binary directories for TraDemGen (normally not used!)
+#  TRADEMGEN_LIBRARIES    - libraries to link against
+#  TRADEMGEN_EXECUTABLES  - the TraDemGen binaries/executables
+
+# Tell the user project where to find TraDemGen headers and libraries
+set (TRADEMGEN_INCLUDE_DIRS "@TRADEMGEN_INCLUDE_DIRS@")
+set (TRADEMGEN_LIBRARY_DIRS "@TRADEMGEN_LIB_DIR@")
+set (TRADEMGEN_BINARY_DIRS "@TRADEMGEN_BIN_DIR@")
+
+# Library dependencies for TraDemGen (contains definitions for the TraDemGen IMPORTED
+# targets)
+include ("@TRADEMGEN_CMAKE_DIR@/trademgen-library-depends.cmake")
+
+# These are the TraDemGen IMPORTED targets, created by trademgen-library-depends.cmake
+set (TRADEMGEN_LIBRARIES trademgenlib trademgenuicllib)
+set (TRADEMGEN_EXECUTABLES trademgen)

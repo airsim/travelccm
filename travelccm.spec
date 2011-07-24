@@ -5,7 +5,7 @@ Name:           travelccm
 Version:        99.99.99
 Release:        1%{?dist}
 
-Summary:        Travel Customer Choice Model C++ library
+Summary:        C++ Travel Customer Choice Model Library
 
 Group:          System Environment/Libraries 
 License:        LGPLv2+
