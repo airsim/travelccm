@@ -76,9 +76,6 @@ test "x$enable_exceptions" != xno && enable_exceptions=yes
 # Set the data directory for TravelCCM
 pkgdatadir="${datadir}/travelccm"
 AC_SUBST(pkgdatadir)
-# Set the directory for data samples exported by TravelCCM
-sampledir="${pkgdatadir}/samples"
-AC_SUBST(sampledir)
 
 # Check for info pages
 AC_ARG_ENABLE(info-doc, 
@@ -338,8 +335,6 @@ AC_CONFIG_FILES(
 	doc/local/index.doc
 	doc/doxygen_html.cfg
 	doc/sourceforge/howto_release_travelccm.html
-	samples/Makefile
-	samples/RDS01/Makefile
 	test/Makefile
 	test/travelccm/Makefile
 )

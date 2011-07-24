@@ -30,7 +30,7 @@ MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure \
 EXTRA_DIST =
 
 # Build in these directories:
-SUBDIRS = travelccm man samples $(HTML_DOC_DIR) $(TEST_DIR)
+SUBDIRS = travelccm man $(HTML_DOC_DIR) $(TEST_DIR)
 
 
 # Configuration helpers
