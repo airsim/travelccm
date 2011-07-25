@@ -327,6 +327,8 @@ AC_CONFIG_FILES(
 	travelccm/config/Makefile
 	travelccm/batches/Makefile
 	man/Makefile
+	man/doxygen_man1.cfg
+	man/doxygen_man3.cfg
 	doc/Makefile
 	doc/images/Makefile
 	doc/tutorial/Makefile
