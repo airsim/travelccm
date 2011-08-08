@@ -8,13 +8,14 @@ include (config/project_config_embeddable.cmake)
 ##
 # Project info
 set_project_names (travelccm TravelCCM)
+set_project_brief ("C++ Travel Customer Choice Model Library")
 set_project_versions (99 99 99)
 
 ##
 # Project options
 # The parameters are:
 #  * whether or not the documentation must be built and installed
-set_project_options (off)
+set_project_options (on)
 
 
 #####################################
@@ -22,7 +23,6 @@ set_project_options (off)
 #####################################
 #
 packaging_init (${PROJECT_NAME})
-packaging_set_description ("C++ Travel Customer Choice Model Library")
 packaging_set_summary (
 "${PROJECT_NAME} aims at providing a clean API, and the corresponding 
 C++ implementation, for choosing one item among a set of travel solutions,
