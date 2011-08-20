@@ -1,57 +1,51 @@
 /*!
-\page airinv
-	  C++ Simulated Airline Inventory Management System library
+\page travelccm
+      Binary executable for the C++ Travel Customer Choice Model Library
 
 \section sec_synopsis SYNOPSIS
 
-<b>airinv</b> <tt>[--prefix] [-v|--version] [-h|--help] [-b|--builtin] [-i|--input <path-to-input>] [-l|--log <path-to-output-log-file>]</tt>
+<b>travelccm</b> <tt>[--prefix] [-v|--version] [-h|--help] [-b|--builtin] [-i|--input <path-to-input>] [-l|--log <path-to-output-log-file>]</tt>
 
 \section sec_description DESCRIPTION
 
-\e airinv is a small program showing how to use the AirInv library.
+\e travelccm is a small program showing how to use the Travelccm library.
 
-\e airinv accepts the following options:
+\e travelccm accepts the following options:
 
  \b --prefix<br>
-    Show the AirInv installation prefix.
+    Show the Travelccm installation prefix.
 
  \b -v, \b --version<br>
-    Print the currently installed version of AirInv on the standard output.
+    Print the currently installed version of Travelccm on the standard output.
 
  \b -h, \b --help<br>
     Produce that message and show usage.
 
  \b -b, \b --builtin<br>
     The sample BOM tree can be either built-in or parsed from an input
-    file.  When that option is selected, an input file must then be
-    given with the -i/--input option. When that option is not selected,
-    the \b airinv program builds a simple use case directly from internal
-    hard-coded parameters (demand distribution details and resource/cabin
-    capacities).
-
- \b -r, \b --airinv<br>
-    The sample BOM tree corresponds to a typical usage by AirInv
-
- \b -c, \b --crs<br>
-    The sample BOM tree corresponds to a typical usage by SimCRS
+    file.  That latter must then be given with the -i/--input option
 
  \b -i, \b --input <path-to-input-file><br>
-    Path (absolute or relative) of the (CVS) input file specifying the demand
-    distribution parameters and resource (cabin) capacities.<br>
+    Path (absolute or relative) of the (CSV) input file specifying
+    the demand rule sets.<br>
+
+ \b -o, \b --output <path-to-output-file><br>
+    Path (absolute or relative) of the (CSV) output file for the
+    generated booking requests.<br>
 
  \b -l, \b --log <path-to-output-log-file><br>
     Path (absolute or relative) of the output log file.
 
-See the output of the <tt>`airinv --help'</tt> command for default options.
+See the output of the <tt>`travelccm --help'</tt> command for default options.
 
 
 \section sec_see_also SEE ALSO
-\b airinv-config(1), \b airinv-library(3)
+\b travelccm-config(1), \b travelccm-library(3)
 
 
 \section sec_support SUPPORT
 
-Please report any bugs to https://sourceforge.net/apps/trac/airinv/report
+Please report any bugs to https://sourceforge.net/apps/trac/travel-ccm/report
 
 
 \section sec_copyright COPYRIGHT

@@ -38,7 +38,7 @@ http://sourceforge.net/projects/air-sched), and yields, as output, the
 chosen item.
 
 The output can then be used by other systems, for instance to book the
-corresponding travel or to visualise it on a map and calendar and to
+corresponding travel or to visualize it on a map and calendar and to
 share it with others.
 
 Install the %{name} package if you need a library for high-level
