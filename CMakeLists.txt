@@ -87,9 +87,11 @@ install_basic_documentation ()
 ##########################################
 ##            Documentation             ##
 ##########################################
-if (${INSTALL_DOC} STREQUAL "ON")
-  add_subdirectory (doc)
-endif (${INSTALL_DOC} STREQUAL "ON")
+handle_html_doc ()
+
+##
+# Subdirs
+add_subdirectory (man)
 
 
 #####################################
