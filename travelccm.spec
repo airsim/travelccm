@@ -41,37 +41,40 @@ The output can then be used by other systems, for instance to book the
 corresponding travel or to visualize it on a map and calendar and to
 share it with others.
 
-Install the %{name} package if you need a library for high-level
-customer-choice modeling functionality.
+%{name} makes an extensive use of existing open-source libraries for
+increased functionality, speed and accuracy. In particular the
+Boost (C++ Standard Extensions: http://www.boost.org) library is used.
+
+Install the %{name} package if you need a library of basic C++ objects
+for Customer-Choice Modeling (CCM), mainly for simulation purpose.
 
 %package        devel
-Summary:        Header files, libraries and development documentation for %{name}
+Summary:        Header files, libraries and development helper tools for %{name}
 Group:          Development/Libraries
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       pkgconfig
 
 %description    devel
-This package contains the header files, static libraries and
-development documentation for %{name}. If you would like to develop
+This package contains the header files, shared libraries and
+development helper tools for %{name}. If you would like to develop
 programs using %{name}, you will need to install %{name}-devel.
 
-%package doc
+%package        doc
 Summary:        HTML documentation for the %{name} library
 Group:          Documentation
 %{?fedora:BuildArch:      noarch}
 BuildRequires:  tex(latex)
 BuildRequires:  doxygen, ghostscript
 
-%description doc
-This package contains the documentation in the HTML format of the %{name}
-library. The documentation is the same as at the %{name} web page.
+%description    doc
+This package contains HTML pages, as well as a PDF reference manual,
+for %{name}. All that documentation is generated thanks to Doxygen
+(http://doxygen.org). The content is the same as what can be browsed
+online (http://%{name}.org).
 
 
 %prep
 %setup -q
-# Fix some permissions and formats
-chmod -x AUTHORS ChangeLog COPYING NEWS README
-find . -type f -name '*.[hc]pp' -exec chmod -x {} \;
 
 
 %build
@@ -101,7 +104,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc AUTHORS ChangeLog COPYING NEWS README
 %{_bindir}/%{name}
-%{_libdir}/lib*.so.*
+%{_libdir}/lib%{name}.so.*
 %{_mandir}/man1/%{name}.1.*
 
 %files devel

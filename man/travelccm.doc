@@ -27,11 +27,7 @@
 
  \b -i, \b --input <path-to-input-file><br>
     Path (absolute or relative) of the (CSV) input file specifying
-    the demand rule sets.<br>
-
- \b -o, \b --output <path-to-output-file><br>
-    Path (absolute or relative) of the (CSV) output file for the
-    generated booking requests.<br>
+    the customer-choice rule sets.<br>
 
  \b -l, \b --log <path-to-output-log-file><br>
     Path (absolute or relative) of the output log file.
