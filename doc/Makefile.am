@@ -26,7 +26,7 @@ docdir = @docdir@
 html_tarname = @PACKAGE_TARNAME@-doc-@PACKAGE_VERSION@
 pdf_tarname = @PACKAGE_TARNAME@-pdf-@PACKAGE_VERSION@
 
-noinst_DATA = sourceforge/howto_release_travelccm.html.in
+noinst_DATA =
 EXTRA_DIST = $(noinst_DATA)
 
 # Targets
