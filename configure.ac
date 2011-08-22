@@ -332,7 +332,6 @@ AC_CONFIG_FILES(
 	doc/Makefile
 	doc/images/Makefile
 	doc/tutorial/Makefile
-	doc/tutorial/src/Makefile
 	doc/local/Makefile
 	doc/local/index.doc
 	doc/doxygen_html.cfg
