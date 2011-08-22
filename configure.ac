@@ -333,9 +333,7 @@ AC_CONFIG_FILES(
 	doc/images/Makefile
 	doc/tutorial/Makefile
 	doc/local/Makefile
-	doc/local/index.doc
 	doc/doxygen_html.cfg
-	doc/sourceforge/howto_release_travelccm.html
 	test/Makefile
 	test/travelccm/Makefile
 )
