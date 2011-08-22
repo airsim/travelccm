@@ -1,7 +1,6 @@
 # travelccm doc sub-directory
 include $(top_srcdir)/doc/local/sources.mk
 include $(top_srcdir)/doc/tutorial/sources.mk
-include $(top_srcdir)/doc/tutorial/src/sources.mk
 # StdAir
 #include $(top_srcdir)/stdair/basic/sources.mk
 #include $(top_srcdir)/stdair/bom/sources.mk
