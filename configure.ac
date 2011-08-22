@@ -323,8 +323,9 @@ AC_CONFIG_FILES(
 	travelccm/factory/Makefile
 	travelccm/command/Makefile
 	travelccm/service/Makefile
+  travelccm/config/Makefile
+	travelccm/config/travelccm-paths.hpp
 	travelccm/core/Makefile
-	travelccm/config/Makefile
 	travelccm/batches/Makefile
 	man/Makefile
 	man/doxygen_man1.cfg
