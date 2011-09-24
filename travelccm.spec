@@ -6,7 +6,7 @@ Name:           travelccm
 Version:        99.99.99
 Release:        1%{?dist}
 
-Summary:        C++ Travel Customer Choice Model Library
+Summary:        C++ Travel Customer Choice Model (CCM) Library
 
 Group:          System Environment/Libraries 
 License:        LGPLv2+
@@ -62,7 +62,9 @@ programs using %{name}, you will need to install %{name}-devel.
 %package        doc
 Summary:        HTML documentation for the %{name} library
 Group:          Documentation
-%{?fedora:BuildArch:      noarch}
+%if 0%{?fedora} || 0%{?rhel} > 5
+BuildArch:      noarch
+%endif
 BuildRequires:  tex(latex)
 BuildRequires:  doxygen, ghostscript
 
@@ -129,8 +131,12 @@ rm -rf $RPM_BUILD_ROOT
 * Sat Sep 17 2011 Denis Arnaud <denis.arnaud_fedora@m4x.org> 99.99.99-1
 - Upstream integration
 
+* Sat Sep 24 2011 Denis Arnaud <denis.arnaud_fedora@m4x.org> 0.5.0-2
+- Integrated feedback from review requests: #732218, #728649 and #702987
+
 * Sat Aug 20 2011 Denis Arnaud <denis.arnaud_fedora@m4x.org> 0.5.0-1
 - Upstream integration
 
 * Mon Aug 23 2010 Denis Arnaud <denis.arnaud_fedora@m4x.org> 0.4.0-1
 - Initial RPM release
+
