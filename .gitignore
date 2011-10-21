@@ -1,9 +1,6 @@
 tmp
 /build/
-.deps
-.libs
 Makefile.in
-Makefile
 INSTALL
 aclocal.m4
 autom4te.cache
@@ -18,18 +15,7 @@ config/ltsugar.m4
 config/ltversion.m4
 config/lt~obsolete.m4
 config/missing
-/configure
+configure
 config.h.in*
 *_results.xml
-/config.log
-/config.status
-doc/doxygen_html.cfg
-doc/local/index.doc
-doc/sourceforge/howto_release_travelccm.html
-/libtool
-/travelccm-config
-/travelccm.m4
-/travelccm.pc
-travelccm/config.h
-travelccm/stamp-h1
 

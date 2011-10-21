@@ -1,12 +1,15 @@
-## bom sub-directory
+## travelccm/bom sub-directory
 include $(top_srcdir)/Makefile.common
 include $(srcdir)/sources.mk
 
-noinst_LTLIBRARIES= libbom.la
+#
+noinst_LTLIBRARIES = libtravelccmbom.la
 
-libbom_la_SOURCES = $(bom_h_sources) $(bom_cc_sources) 
-libbom_la_CXXFLAGS = $(BOOST_CFLAGS) 
-libbom_la_LDFLAGS =
+libtravelccmbom_la_SOURCES = $(travelccm_bom_h_sources) \
+		$(travelccm_bom_cc_sources) 
+libtravelccmbom_la_CXXFLAGS = $(BOOST_CFLAGS) $(STDAIR_CFLAGS)
+libtravelccmbom_la_LDFLAGS =
 
+#
 #pkgincludedir = $(includedir)/@PACKAGE@/bom
-#pkginclude_HEADERS = $(bom_h_sources)
+#pkginclude_HEADERS = $(travelccm_bom_h_sources)

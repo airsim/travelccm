@@ -1,17 +1,23 @@
 
-Building the library and test binary from Subversion repository:
+Building the library and test binary from Git repository:
 ----------------------------------------------------------------
 The Sourceforge Subversion repository is to be found here:
-svn co https://travelccm.svn.sourceforge.net/svnroot/travelccm/trunk/travelccm travelccmsvn
+git clone ssh://travel-ccm.git.sourceforge.net/gitroot/travel-ccm/travel-ccm travelccmgit
+cd travelccmgit
+git checkout trunk
 
-Then, you need the following packages (Fedora Core 6 names here, 
+Then, you need the following packages (Fedora/RedHat/CentOS names here, 
 but names may vary according to distributions):
-  * libtool, autoconf, automake
+  * cmake
   * gcc-c++
+  * stdair-devel
   * boost-devel
-  * doxygen
+  * zeromq-devel
+  * readline-devel
+  * soci-mysql-devel
+  * python-devel
   * gettext-devel (optional)
-  * tetex-latex (optional)
+  * doxygen, ghostscript, graphviz and tetex-latex (optional)
   * rpm-build (optional)
 
 Building the library and test binary from the tarball:
@@ -19,12 +25,22 @@ Building the library and test binary from the tarball:
 The latest stable source tarball (travelccm*.tar.gz or .bz2) can be found here:
 http://sourceforge.net/project/showfiles.php?group_id=261639
 
-Then, as usual, you can just type the following sequence:
-"./configure --prefix=/home/travelccm/dev/deliveries/travelccm-0.4.0 && make && make check"
-Of course, if you want to install the library (libtravelccm*.so*), 
-just type: "make install".
+Then, as usual:
+* To configure the project, type something like:
+  mkdir build && cd build
+  cmake -DCMAKE_INSTALL_PREFIX=/home/user/dev/deliveries/travelccm-0.5.0 \
+   -DWITH_STDAIR_PREFIX=/home/user/dev/deliveries/stdair-stable \
+   -DCMAKE_BUILD_TYPE:STRING=Debug -DINSTALL_DOC:BOOL=ON ..
+* To build the project, type:
+  make
+* To test the project, type:
+  make check
+* To install the library (libtravelccm*.so*) and the binary (travelccm),
+  just type:
+  make install
+* To package the source files, type:
+  make dist
+* To package the binary and the (HTML and PDF) documentation:
+  make package
 
-See the INSTALL file for more details.
-
-Denis Arnaud (May 2009)
-
+Denis Arnaud (August 2011)

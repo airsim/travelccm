@@ -1,270 +1,312 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
-// C
-#include <assert.h>
 // STL
-#include <iomanip>
-#include <sstream>
-#include <iostream>
-// TRAVELCCM
-#include <travelccm/basic/BasConst_TRAVELCCM_Service.hpp>
+#include <cassert>
+// Boost
+#include <boost/make_shared.hpp>
+// StdAir
+#include <stdair/basic/BasChronometer.hpp>
+#include <stdair/basic/BasFileMgr.hpp>
+#include <stdair/bom/BomManager.hpp> 
+#include <stdair/bom/BookingRequestStruct.hpp> 
+#include <stdair/factory/FacBomManager.hpp>
+#include <stdair/service/Logger.hpp>
+#include <stdair/STDAIR_Service.hpp>
+// TravelCCM
 #include <travelccm/factory/FacTRAVELCCMServiceContext.hpp>
-#include <travelccm/command/Simulator.hpp>
+#include <travelccm/command/ChoiceManager.hpp>
 #include <travelccm/service/TRAVELCCM_ServiceContext.hpp>
-#include <travelccm/service/Logger.hpp>
 #include <travelccm/TRAVELCCM_Service.hpp>
-#include <travelccm/bom/TravelSolutionHolder.hpp>
-#include <travelccm/bom/RestrictionHolder.hpp>
 
 namespace TRAVELCCM {
 
-  // //////////////////////////////////////////////////////////////////////
-  TRAVELCCM_Service::TRAVELCCM_Service () {
-    // Initialise the context
-    TRAVELCCM_ServiceContext& lTRAVELCCM_ServiceContext = 
-      FacTRAVELCCMServiceContext::instance().create ();
-    _travelccmServiceContext = &lTRAVELCCM_ServiceContext;
+  // ////////////////////////////////////////////////////////////////////
+  TRAVELCCM_Service::TRAVELCCM_Service() : _travelccmServiceContext (NULL) {
+    assert (false);
   }
 
-  // //////////////////////////////////////////////////////////////////////
-  TRAVELCCM_Service::TRAVELCCM_Service (const TRAVELCCM_Service& iService) :
-    _travelccmServiceContext (iService._travelccmServiceContext) {
+  // ////////////////////////////////////////////////////////////////////
+  TRAVELCCM_Service::TRAVELCCM_Service (const TRAVELCCM_Service& iService)
+  : _travelccmServiceContext (NULL) {
+    assert (false);
   }
 
-  // //////////////////////////////////////////////////////////////////////
-  TRAVELCCM_Service::TRAVELCCM_Service (std::ostream& ioLogStream) {
-    // Initialise the context
-    init (ioLogStream);
+  // ////////////////////////////////////////////////////////////////////
+  TRAVELCCM_Service::TRAVELCCM_Service (const stdair::BasLogParams& iLogParams,
+                                        const stdair::BasDBParams& iDBParams)
+    : _travelccmServiceContext (NULL) {
+    
+    // Initialise the STDAIR service handler
+    stdair::STDAIR_ServicePtr_T lSTDAIR_Service_ptr =
+      initStdAirService (iLogParams, iDBParams);
+    
+    // Initialise the service context
+    initServiceContext();
+
+    // Add the StdAir service context to the AIRINV service context
+    // \note AIRINV owns the STDAIR service resources here.
+    const bool ownStdairService = true;
+    addStdAirService (lSTDAIR_Service_ptr, ownStdairService);
+    
+    // Initialise the (remaining of the) context
+    initTravelCCMService();
   }
 
-  // //////////////////////////////////////////////////////////////////////
-  TRAVELCCM_Service::~TRAVELCCM_Service () {
+  // ////////////////////////////////////////////////////////////////////
+  TRAVELCCM_Service::TRAVELCCM_Service (const stdair::BasLogParams& iLogParams)
+    : _travelccmServiceContext (NULL) {
+    
+    // Initialise the STDAIR service handler
+    stdair::STDAIR_ServicePtr_T lSTDAIR_Service_ptr =
+      initStdAirService (iLogParams);
+    
+    // Initialise the service context
+    initServiceContext();
+
+    // Add the StdAir service context to the AIRINV service context
+    // \note AIRINV owns the STDAIR service resources here.
+    const bool ownStdairService = true;
+    addStdAirService (lSTDAIR_Service_ptr, ownStdairService);
+    
+    // Initialise the (remaining of the) context
+    initTravelCCMService();
   }
 
-  // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_Service::init (std::ostream& ioLogStream) {
-    // Set the log file
-    logInit (LOG::DEBUG, ioLogStream);
+  // ////////////////////////////////////////////////////////////////////
+  TRAVELCCM_Service::
+  TRAVELCCM_Service (stdair::STDAIR_ServicePtr_T ioSTDAIR_Service_ptr)
+    : _travelccmServiceContext (NULL) {
+        
+    // Initialise the service context
+    initServiceContext();
 
+    // Store the STDAIR service object within the (AIRINV) service context
+    // \note AirInv does not own the STDAIR service resources here.
+    const bool doesNotOwnStdairService = false;
+    addStdAirService (ioSTDAIR_Service_ptr, doesNotOwnStdairService);
+
+    // Initialise the (remaining of the) context
+    initTravelCCMService();
+  }
+
+  // ////////////////////////////////////////////////////////////////////
+  TRAVELCCM_Service::~TRAVELCCM_Service() {
+    // Delete/Clean all the objects from memory
+    finalise();
+  }
+  
+  // ////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_Service::finalise() {
+    assert (_travelccmServiceContext != NULL);
+    // Reset the (Boost.)Smart pointer pointing on the STDAIR_Service object.
+    _travelccmServiceContext->reset();
+  }
+
+  // ////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_Service::initServiceContext() {
     // Initialise the context
     TRAVELCCM_ServiceContext& lTRAVELCCM_ServiceContext = 
       FacTRAVELCCMServiceContext::instance().create();
     _travelccmServiceContext = &lTRAVELCCM_ServiceContext;
   }
   
-  // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_Service::logInit (const LOG::EN_LogLevel iLogLevel,
-                                   std::ostream& ioLogOutputFile) {
-    Logger::instance().setLogParameters (iLogLevel, ioLogOutputFile);
-  }
-
-  // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_Service::createPassenger(std::string passengerType) {
-    _travelccmServiceContext->createPassenger(passengerType);
-  }
-
-  // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_Service::initializePassenger() {
-    _travelccmServiceContext->intializePassenger();
-  }
-
-  // //////////////////////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////////////////////
   void TRAVELCCM_Service::
-  addTravelSolution  (const std::string& iDepartureAirport,
-                      const std::string& iArrivalAirport,
-                      const Date_T& iDepartureDate,
-                      const Duration_T& iDepartureTime,
-                      const Duration_T& iArrivalTime,
-                      const Duration_T& iDuration,
-                      const bool iRefundability,
-                      const std::string& iAirlineCode,
-                      const std::string& iCabinCode,
-                      const int iFlightNumber, double iFare,
-                      int iStopsNumber,  bool iSNS, bool iChangeability,
-                      const std::string& id) {
+  addStdAirService (stdair::STDAIR_ServicePtr_T ioSTDAIR_Service_ptr,
+                    const bool iOwnStdairService) {
+    // Retrieve the Travelccm service context
     assert (_travelccmServiceContext != NULL);
+    TRAVELCCM_ServiceContext& lTRAVELCCM_ServiceContext =
+      *_travelccmServiceContext;
 
-    _travelccmServiceContext->addTravelSolution (iDepartureAirport,
-                                                 iArrivalAirport, iDepartureDate,
-                                                 iDepartureTime, iArrivalTime,
-                                                 iDuration, iRefundability,
-                                                 iAirlineCode, iCabinCode,
-                                                 iFlightNumber,
-                                                 iFare, iStopsNumber, iSNS,
-                                                 iChangeability, id);
+    // Store the STDAIR service object within the (TRAVELCCM) service context
+    lTRAVELCCM_ServiceContext.setSTDAIR_Service (ioSTDAIR_Service_ptr,
+                                                 iOwnStdairService);
+  }
+
+  // ////////////////////////////////////////////////////////////////////
+  stdair::STDAIR_ServicePtr_T TRAVELCCM_Service::
+  initStdAirService (const stdair::BasLogParams& iLogParams,
+                     const stdair::BasDBParams& iDBParams) {
+
+    /**
+     * Initialise the STDAIR service handler.
+     *
+     * \note The track on the object memory is kept thanks to the Boost
+     * Smart Pointers component.
+     */
+    stdair::STDAIR_ServicePtr_T oSTDAIR_Service_ptr = 
+      boost::make_shared<stdair::STDAIR_Service> (iLogParams, iDBParams);
+    assert (oSTDAIR_Service_ptr != NULL);
+
+    return oSTDAIR_Service_ptr;
+  }
+  
+  // ////////////////////////////////////////////////////////////////////
+  stdair::STDAIR_ServicePtr_T TRAVELCCM_Service::
+  initStdAirService (const stdair::BasLogParams& iLogParams) {
+
+    /**
+     * Initialise the STDAIR service handler.
+     *
+     * \note The track on the object memory is kept thanks to the Boost
+     * Smart Pointers component.
+     */
+    stdair::STDAIR_ServicePtr_T oSTDAIR_Service_ptr = 
+      boost::make_shared<stdair::STDAIR_Service> (iLogParams);
+    assert (oSTDAIR_Service_ptr != NULL);
+
+    return oSTDAIR_Service_ptr;
+  }
+  
+  // ////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_Service::initTravelCCMService() {
+    // Do nothing at this stage. A sample BOM tree may be built by
+    // calling the buildSampleBom() method
   }
   
   // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_Service::addRestriction (const std::string& iRestrictionType) {
-    assert (_travelccmServiceContext != NULL);
-    _travelccmServiceContext->addRestriction (iRestrictionType);
-  }
+  void TRAVELCCM_Service::buildSampleBom() {
 
-  // //////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_Service::addRestriction (const std::string& iRestrictionType,
-                                          const std::string& iNamePreference) {
+    // Retrieve the TravelCCM service context
+    if (_travelccmServiceContext == NULL) {
+      throw stdair::NonInitialisedServiceException ("The TravelCCM service has "
+                                                    "not been initialised");
+    }
     assert (_travelccmServiceContext != NULL);
-    _travelccmServiceContext->addRestriction (iRestrictionType, iNamePreference);
+
+    // Retrieve the TravelCCM service context and whether it owns the Stdair
+    // service
+    TRAVELCCM_ServiceContext& lTRAVELCCM_ServiceContext =
+      *_travelccmServiceContext;
+    const bool doesOwnStdairService =
+      lTRAVELCCM_ServiceContext.getOwnStdairServiceFlag();
+
+    // Retrieve the StdAir service object from the (TravelCCM) service context
+    stdair::STDAIR_Service& lSTDAIR_Service =
+      lTRAVELCCM_ServiceContext.getSTDAIR_Service();
+
+    /**
+     * 1. Have StdAir build the whole BOM tree, only when the StdAir service is
+     *    owned by the current component (TravelCCM here)
+     */
+    if (doesOwnStdairService == true) {
+      //
+      lSTDAIR_Service.buildSampleBom();
+    }
+
+    /**
+     * 2. Delegate the complementary building of objects and links by the
+     *    appropriate levels/components
+     * 
+     * \note: Currently, no more things to do by TravelCCM at that stage,
+     *        as there is no child
+     */
+
+    /**
+     * 3. Build the complementary objects/links for the current component (here,
+     *    TravelCCM)
+     *
+     * \note: Currently, no more things to do by TravelCCM at that stage.
+     */
   }
 
   // //////////////////////////////////////////////////////////////////////
   void TRAVELCCM_Service::
-  addRequest (bool refundability, bool changeability, bool saturdayNightStay,
-              std::string preferredAirline, std::string preferredCabin,
-              DateTime_T departureTime) {
-    assert (_travelccmServiceContext != NULL);
-    _travelccmServiceContext->addAndLinkRequest(refundability, changeability,
-                                                saturdayNightStay, preferredAirline,
-                                                preferredCabin, departureTime);
-  }
+  buildSampleTravelSolutions (stdair::TravelSolutionList_T& ioTSList) {
 
-  // //////////////////////////////////////////////////////////////////////
-  TravelSolutionHolder& TRAVELCCM_Service::getChoosenTravelSolutions() {
-
-    // Retrieve the travel solution holder in the service context.
-    TravelSolutionHolder& travelSolutionHolder =
-      _travelccmServiceContext->getTravelSolutionHolder();
-    // Retrieve the passenger
-    Passenger& passenger = _travelccmServiceContext->getPassenger();
-    
-    // Initialise the different pointers at the beginning of the different lists
-    passenger.begin();
-    travelSolutionHolder.begin();
-
-    // launch the algorithm of preferred choices
-    Simulator::simulate (passenger, travelSolutionHolder);
-    
-    return travelSolutionHolder;
-  }
-
-  // //////////////////////////////////////////////////////////////////////
-  const TravelSolution* TRAVELCCM_Service::
-  getBestTravelSolution (TravelSolutionHolder& ioTravelSolutionHolder) {
-    if (ioTravelSolutionHolder.isVoid())
-      return NULL;
-    else {
-      ioTravelSolutionHolder.begin();
-      const TravelSolution* oBestTravelSolution_ptr =
-        &ioTravelSolutionHolder.getCurrentTravelSolution();
-      while (ioTravelSolutionHolder.hasNotReachedEnd()) {
-        const TravelSolution& lCurrentTravelSolution =
-          ioTravelSolutionHolder.getCurrentTravelSolution();
-        bool isCheaper =
-          lCurrentTravelSolution.isCheaper(*oBestTravelSolution_ptr);
-        if (isCheaper == true) {
-          oBestTravelSolution_ptr = &lCurrentTravelSolution ;
-        }
-        bool hasTheSamePrice =
-          lCurrentTravelSolution.hasTheSamePrice (*oBestTravelSolution_ptr);
-        if (hasTheSamePrice == true) {
-          int randomIndicator = rand () % 2;
-          // we change only when we cast a 0, if more than two travel solutions
-          // have the same price, they do not have the same probability!!
-          if (randomIndicator == 0)
-            oBestTravelSolution_ptr = &lCurrentTravelSolution ;
-        }
-        ioTravelSolutionHolder.iterate();
-      }
-      return oBestTravelSolution_ptr;
+    // Retrieve the TRAVELCCM service context
+    if (_travelccmServiceContext == NULL) {
+      throw stdair::NonInitialisedServiceException ("The Travelccm service has "
+                                                    "not been initialised");
     }
-  }
-
-  // //////////////////////////////////////////////////////////////////////
-  const TravelSolution* TRAVELCCM_Service::
-  getBestTravelSolutionByMatchingIndicator () {
     assert (_travelccmServiceContext != NULL);
-    return _travelccmServiceContext->getBestAndCheapestTravelSolutionByMatchingIndicator();
-  }
 
-  // ///////////////////////////////////////////////////////////////////////
-  void TRAVELCCM_Service::addRestrictionsFromRequest () {
-    _travelccmServiceContext->addAndOrderRestrictionsFromRequest ();
+    TRAVELCCM_ServiceContext& lTRAVELCCM_ServiceContext =
+      *_travelccmServiceContext;
+  
+    // Retrieve the STDAIR service object from the (TRAVELCCM) service context
+    stdair::STDAIR_Service& lSTDAIR_Service =
+      lTRAVELCCM_ServiceContext.getSTDAIR_Service();
+
+    // Delegate the BOM building to the dedicated service
+    lSTDAIR_Service.buildSampleTravelSolutions (ioTSList);
   }
 
   // //////////////////////////////////////////////////////////////////////
-  std::string TRAVELCCM_Service::getBestTravelSolutionId() {
-    TravelSolutionHolder& lTravelSolutionHolder = getChoosenTravelSolutions();
-    const TravelSolution* lBestTravelSolution_ptr =
-      getBestTravelSolution(lTravelSolutionHolder);
-    if (lBestTravelSolution_ptr == NULL)
-      return "";
-    else {
-      std::string id = lBestTravelSolution_ptr->getId();
-      return id;
+  stdair::BookingRequestStruct TRAVELCCM_Service::
+  buildSampleBookingRequest (const bool isForCRS) {
+
+    // Retrieve the TRAVELCCM service context
+    if (_travelccmServiceContext == NULL) {
+      throw stdair::NonInitialisedServiceException ("The Travelccm service has "
+                                                    "not been initialised");
     }
+    assert (_travelccmServiceContext != NULL);
+
+    TRAVELCCM_ServiceContext& lTRAVELCCM_ServiceContext =
+      *_travelccmServiceContext;
+  
+    // Retrieve the STDAIR service object from the (TRAVELCCM) service context
+    stdair::STDAIR_Service& lSTDAIR_Service =
+      lTRAVELCCM_ServiceContext.getSTDAIR_Service();
+
+    // Delegate the BOM building to the dedicated service
+    return lSTDAIR_Service.buildSampleBookingRequest (isForCRS);
   }
-    
+
   // //////////////////////////////////////////////////////////////////////
-  bool TRAVELCCM_Service::simulate()  {
-    // add travel solutions to the travelsolution holder
-    assert(_travelccmServiceContext != NULL);
+  std::string TRAVELCCM_Service::csvDisplay() const {
 
-    // AF404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
-    /*
-    addTravelSolution ("NCE","LHR", Date_T(2009,05,1), Duration_T(12,00,00),
-                       Duration_T(14,00,00), Duration_T(02,00,00), false,
-                       "AF", "ECO", 404, 200, 0, false, false, "T1");
-    
-    // AF404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
-    addTravelSolution ("NCE","LHR", Date_T(2009,05,1), Duration_T(12,00,00),
-                       Duration_T(14,00,00), Duration_T(02,00,00), true, "AF",
-                       "ECO", 404, 200, 0, false, false, "T2");
-    
-    // BA404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
-    addTravelSolution ("NCE","LHR", Date_T(2009,06,1), Duration_T(12,00,00),
-                       Duration_T(14,00,00), Duration_T(02,00,00), false, "BA",
-                       "ECO", 404, 200, 0, true, false, "T3");
-    
-    // BA404, NCE-LHR, 01-JUN-09 12:00 -> 14:00 (02:00), Eco
-    addTravelSolution ("NCE","LHR", Date_T(2009,06,1), Duration_T(12,00,00),
-                       Duration_T(14,00,00), Duration_T(02,00,00), true, "BA",
-                       "ECO", 404, 200, 0, true, false, "T4");
+    // Retrieve the TRAVELCCM service context
+    if (_travelccmServiceContext == NULL) {
+      throw stdair::NonInitialisedServiceException ("The TravelccmMaster service"
+                                                    " has not been initialised");
+    }
+    assert (_travelccmServiceContext != NULL);
 
-    _travelccmServiceContext->createPassenger("L");
-    _travelccmServiceContext->intializePassenger();
-    */
+    TRAVELCCM_ServiceContext& lTRAVELCCM_ServiceContext =
+      *_travelccmServiceContext;
+  
+    // Retrieve the STDAIR service object from the (TRAVELCCM) service context
+    stdair::STDAIR_Service& lSTDAIR_Service =
+      lTRAVELCCM_ServiceContext.getSTDAIR_Service();
 
-    /** Add a request for the passenger */
-    /*
-    Date_T date(2009, 6, 1);
-    Duration_T duration(8, 30, 0);
-    DateTime_T dateTime(date, duration);
-    addRequest (false, true, false, "NONE", "NONE", dateTime);
-    */
-    /** Add the restrictions stem from the previous request */
-    _travelccmServiceContext->addAndOrderRestrictionsFromRequest();
+    // Delegate the BOM building to the dedicated service
+    return lSTDAIR_Service.csvDisplay();
+  }
+  
+  // //////////////////////////////////////////////////////////////////////
+  std::string TRAVELCCM_Service::
+  csvDisplay (const stdair::TravelSolutionList_T& iTravelSolutionList) const {
+    // Retrieve the TRAVELCCM service context
+    if (_travelccmServiceContext == NULL) {
+      throw stdair::NonInitialisedServiceException ("The TravelccmMaster service"
+                                                    " has not been initialised");
+    }
+    assert (_travelccmServiceContext != NULL);
 
-    // Retrieve the travel solution holder in the service context.
-    TravelSolutionHolder& travelSolutionHolder =
-      _travelccmServiceContext->getTravelSolutionHolder();
+    TRAVELCCM_ServiceContext& lTRAVELCCM_ServiceContext =
+      *_travelccmServiceContext;
+  
+    // Retrieve the STDAIR service object from the (TRAVELCCM) service context
+    stdair::STDAIR_Service& lSTDAIR_Service =
+      lTRAVELCCM_ServiceContext.getSTDAIR_Service();
 
-    // Retrieve the restriction holder in the service context.
-    Passenger& passenger = _travelccmServiceContext->getPassenger();
-
-    // Initialise the different pointers at the beginning of the different lists
-    passenger.begin();
-    travelSolutionHolder.begin();
-
-    TRAVELCCM_LOG_DEBUG (travelSolutionHolder.numberOfTravelSolutions());
-    TRAVELCCM_LOG_DEBUG ("TravelSolutionHolder: "
-                         << travelSolutionHolder.toString());
-    RestrictionHolder& passengerRestrictions =
-      passenger.getPassengerRestrictions();
-    TRAVELCCM_LOG_DEBUG ("RestrictionHolder: "
-                         << passengerRestrictions.toString());
-
-    // Call the underlying Use Case (command)
-    bool isNotVoid =
-      Simulator::simulate (passenger, travelSolutionHolder);
-
-    /* We will need the different restrictions and their order so the first
-       argument of the function orderedPreference will probably change
-    */
-    TRAVELCCM_LOG_DEBUG ("TravelSolutionHolder: "
-                         << travelSolutionHolder.toString());
-
-    return isNotVoid;
+    // Delegate the BOM building to the dedicated service
+    return lSTDAIR_Service.csvDisplay (iTravelSolutionList);
   }
 
+  // ////////////////////////////////////////////////////////////////////
+  const stdair::TravelSolutionStruct* TRAVELCCM_Service::
+  chooseTravelSolution (stdair::TravelSolutionList_T& ioTravelSolutionList,
+                        const stdair::BookingRequestStruct& iBookingRequest) {
+
+    const stdair::TravelSolutionStruct* oTravelSolution_ptr = 
+      ChoiceManager::chooseTravelSolution (ioTravelSolutionList,
+                                           iBookingRequest);
+    return oTravelSolution_ptr;
+  }
+  
 }

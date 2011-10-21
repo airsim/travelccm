@@ -1,0 +1,128 @@
+/*!
+\mainpage TravelCCM Documentation
+
+\htmlonly
+<!-- start of main block -->
+<div style="width: 100%;">
+<!-- start of right margin -->
+<div style="float:right; width:200px; background-color: #eeeeff; 
+     border: 1px solid #b0b0b0; margin: 0 0 10px 20px; padding: 10px; 
+     font-size: 90%;">
+\endhtmlonly
+
+\section getting_started Getting Started
+
+- \ref features
+- \ref installation
+- \ref linking
+- \ref users_guide
+- \ref tutorials
+- \ref copyright
+- \ref help_wanted
+- \ref howto_release
+- \ref authors
+
+\section at_sourceforge TravelCCM at SourceForge
+- <a href="http://sourceforge.net/projects/travel-ccm/">Project page</a>
+- <a href="http://sourceforge.net/project/showfiles.php?group_id=261639">Download TravelCCM</a>
+- <a href="https://sourceforge.net/apps/trac/travel-ccm/newticket">Open a ticket
+  for a bug or feature</a>
+- <a href="http://sourceforge.net/mail/?group_id=261639">Mailing lists</a>
+- <a href="https://sourceforge.net/apps/phpbb/travel-ccm/">Forums</a>
+  - <a href="https://sourceforge.net/apps/phpbb/travel-ccm/viewforum.php?f=1">Discuss
+  about Development issues</a>
+  - <a href="https://sourceforge.net/apps/phpbb/travel-ccm/viewforum.php?f=2">Ask
+  for Help</a>
+  - <a href="https://sourceforge.net/apps/phpbb/travel-ccm/viewforum.php?f=3">Discuss
+  TravelCCM</a>
+
+
+\section development TravelCCM Development
+- <a href="http://travel-ccm.git.sourceforge.net/git/gitweb.cgi?p=travel-ccm/travel-ccm;a=tree;h=refs/heads/trunk;hb=trunk">Git Repository</a> (Subversion is deprecated)
+- \ref coding_rules
+- \ref documentation
+- \ref test
+
+
+\section external_libs External Libraries
+- <a href="http://www.boost.org">Boost (C++ STL extensions)</a>
+- <a href="http://www.python.org/">Python</a>
+- <a href="http://dev.mysql.com/">MySQL client</a>
+- <a href="http://soci.sourceforge.net/">SOCI (C++ DB API)</a>
+
+
+\section social_sponsorship Support TravelCCM
+\htmlonly
+<table width="100%">
+ <tr>
+  <td align="left" valign="middle">
+   <a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="denis_arnaud">Tweet</a>
+   <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  </td>
+  <td align="right" valign="middle">
+   <g:plusone></g:plusone> 
+  </td>
+ </tr>
+</table>
+\endhtmlonly
+
+\htmlonly
+</div>
+<!-- end of right margin -->
+\endhtmlonly
+
+
+\section about About TravelCCM
+
+TravelCCM aims at providing a clean API, and the corresponding
+C++ implementation, for choosing one item among a set of travel
+solutions, given demand-related characteristics (e.g.,
+Willingness-To-Pay, preferred airline, preferred cabin, etc.).  \ref N
+
+The TravelCCM C++ library implements some simple Customer Choice Models
+(CCM), as referenced in the literature (PhD dissertations at MIT, for
+instance: http://dspace.mit.edu).
+
+The TravelCCM C++ library exposes a simple, clean and object-oriented,
+API. For instance, the choose() method takes, as input, both a
+structure representing the travel request (e.g., from Washington, DC,
+US, to Beijing, China, on the 25th of May) and a list of travel
+solutions (as provided by the Airline Schedule Manager project:
+http://sourceforge.net/projects/air-sched), and yields, as output, the
+chosen item.
+
+The output can then be used by other systems, for instance to book the
+corresponding travel or to visualise it on a map and calendar and to
+share it with others.
+
+TravelCCM makes an extensive use of existing open-source libraries for
+increased functionality, speed and accuracy. In particular <a
+href="http://www.boost.org">Boost</a> (<em>C++ STL Extensions</em>) library
+is used.
+
+The TravelCCM project originates from the department of Operational Research 
+and Innovation at <a href="http://www.amadeus.com">Amadeus</a>, Sophia 
+Antipolis, France. TravelCCM is released under the terms of the <a 
+href="http://www.gnu.org/licenses/lgpl.html">GNU Lesser General Public
+License</a> (LGPLv2.1) for you to enjoy.
+
+TravelCCM should work on
+<a href="http://en.wikipedia.org/wiki/GNU/Linux">GNU/Linux</a>,
+<a href="http://www.sun.com/software/solaris/">Sun Solaris</a>,
+Microsoft Windows (with <a href="http://www.cygwin.com/">Cygwin</a>,
+<a href="http://www.mingw.org/">MinGW/MSYS</a>, or 
+<a href="http://msdn.microsoft.com/visualc/">Microsoft Visual C++ .NET</a>) and
+<a href="http://www.apple.com/macosx/">Mac OS X</a> operating systems.
+
+
+\note
+\anchor N
+(N) - The TravelCCM library is \b NOT intended, in any way, to be used by
+airlines for production systems.
+
+\htmlonly
+</div>
+<!-- end of main block -->
+\endhtmlonly
+
+*/

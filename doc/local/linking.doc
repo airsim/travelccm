@@ -1,21 +1,35 @@
 /*! 
-\page linking Linking with TRAVELCCM
+\page linking Linking with TravelCCM
 
 \section toc Table of Contents
 - \ref intro
+- \ref dependencies
 - \ref pkgconfig
-- \ref travelccmconfig
+- \ref travelccm_config
+- \ref autotools
 - \ref dynamiclinking
 
 
 \section intro Introduction
 
-Since version 0.2.0, there are two convenient methods of linking your
-programs with the TRAVELCCM library. The first one employs the \c
+There are two convenient methods of linking your
+programs with the TravelCCM library. The first one employs the \c
 `pkg-config' command (see <a href="http://pkgconfig.freedesktop.org/">
-http://pkgconfig.freedesktop.org/</a>), wheres the second one uses \c
+http://pkgconfig.freedesktop.org/</a>), whereas the second one uses \c
 `travelccm-config' script. These methods are shortly described below.
 
+\section dependencies Dependencies
+
+The TravelCCM library depends on several other C++ components.
+
+\subsection stdairdep StdAir
+Among them, as for now, only StdAir has been packaged. The support for StdAir
+is taken in charge by a dedicated M4 macro file (namely, <tt>`stdair.m4'</tt>), 
+from the configuration script (generated thanks to <tt>`configure.ac'</tt>).
+
+\image html travelccm_dependencies.png "TravelCCM Dependencies"
+\image rtf travelccm_dependencies.png "TravelCCM Dependencies"
+\image latex travelccm_dependencies.png "TravelCCM Dependencies" width=15cm
 
 \section pkgconfig Using the pkg-config command
 
@@ -24,61 +38,73 @@ libraries. It helps you insert the correct compiler and linker
 options. The syntax of the \c `pkg-config' is as follows:
 
 \code
-% pkg-config <options> <library_name>  
+pkg-config <options> <library_name>  
 \endcode
 
-For instance, assuming that you need to compile an TRAVELCCM based program
+For instance, assuming that you need to compile an TravelCCM based program
 <tt>`my_prog.cpp'</tt>, you should use the following command:
 
 \code
-% g++ `pkg-config --cflags travelccm` -o my_prog my_prog.cpp `pkg-config --libs travelccm`
+g++ `pkg-config --cflags travelccm` -o my_prog my_prog.cpp `pkg-config --libs travelccm`
 \endcode  
 
 For more information see the \c `pkg-config' man pages.
 
 
-\section travelccmconfig Using the travelccm-config script
+\section travelccm_config Using the travelccm-config script
 
-TRAVELCCM provides a shell script called \c `travelccm-config`, which is
-installed by default in <tt>`$prefix/bin'</tt>
-(<tt>`/usr/local/bin'</tt>) directory. It can be used to simplify
-compilation and linking of TRAVELCCM based programs. The usage of this
+TravelCCM provides a shell script called \c `travelccm-config`, which is
+installed by default in \c `$prefix/bin'
+(\c `/usr/local/bin') directory. It can be used to simplify
+compilation and linking of TravelCCM based programs. The usage of this
 script is quite similar to the usage of the \c `pkg-config' command.
 
-Assuming that you need to compile the program <tt>`my_prog.cpp'</tt>
+Assuming that you need to compile the program \c `my_prog.cpp'
 you can now do that with the following command:
 
 \code
-% g++ `travelccm-config --cflags` -o my_prog my_prog.cpp `travelccm-config --libs`
+g++ `travelccm-config --cflags` -o my_prog_opt my_prog.cpp `travelccm-config --libs`
 \endcode
 
 A list of \c `travelccm-config' options can be obtained by typing:
 
 \code
-% travelccm-config --help
+travelccm-config --help
 \endcode
 
 If the \c `travelccm-config' command is not found by your shell, you should add
-its location <tt>`$prefix/bin'</tt> to the PATH environment variable, e.g.:
+its location \c `$prefix/bin' to the \c PATH environment variable, e.g.:
 
 \code
-% export PATH=/usr/local/bin:$PATH
+export PATH=/usr/local/bin:$PATH
 \endcode
 
 
-\section dynamiclinking Using TRAVELCCM with dynamic linking
+\section autotools M4 macro for the GNU Autotools
 
-When using static linking some of the library routines in TRAVELCCM are
+A M4 macro file is delivered with TravelCCM, namely `travelccm.m4', which
+can be found in, e.g., `/usr/share/aclocal'. When used by a
+`configure' script, thanks to he <tt>`AM_PATH_TravelCCM'</tt> macro
+(specified in the M4 macro file), the following Makefile variables are
+then defined:
+- <tt>`TravelCCM_VERSION'</tt> (e.g., defined to 0.23.0)
+- <tt>`TravelCCM_CFLAGS'</tt> (e.g., defined to <tt>`-I${prefix}/include'</tt>)
+- <tt>`TravelCCM_LIBS'</tt> (e.g., defined to <tt>`-L${prefix}/lib -ltravelccm'</tt>)
+
+
+\section dynamiclinking Using TravelCCM with dynamic linking
+
+When using static linking some of the library routines in TravelCCM are
 copied into your executable program. This can lead to unnecessary
 large executables. To avoid having too large executable files you may
 use dynamic linking instead. Dynamic linking means that the actual
 linking is performed when the program is executed. This requires that
-the system is able to locate the shared TRAVELCCM library file during your
-program execution. If you install the TRAVELCCM library using a non-standard
+the system is able to locate the shared TravelCCM library file during your
+program execution. If you install the TravelCCM library using a non-standard
 prefix, the \c `LD_LIBRARY_PATH' environment variable might be used to
 inform the linker of the dynamic library location, e.g.:
 \code
-export LD_LIBRARY_PATH=<TRAVELCCM installation prefix>/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=<TravelCCM installation prefix>/lib:$LD_LIBRARY_PATH
 \endcode
 
 */

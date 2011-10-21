@@ -2,16 +2,21 @@
 #-------------------------------------------------------------------
 AC_PREREQ(2.59)
 AC_COPYRIGHT([Copyright (C) 2007-2011  Denis Arnaud <denis_arnaud@users.sourceforge.net>])
-AC_INIT([TRAVELCCM],[0.4.0],[denis_arnaud@users.sourceforge.net],[travelccm])
+AC_INIT([TRAVELCCM],[0.5.0],[denis_arnaud@users.sourceforge.net],[travelccm])
 AC_CONFIG_HEADER([travelccm/config.h])
 AC_CONFIG_SRCDIR([travelccm/basic/BasConst.cpp])
 AC_CONFIG_AUX_DIR([config])
+AC_CONFIG_MACRO_DIR([config])
 AM_INIT_AUTOMAKE
 AM_PATH_CPPUNIT(1.10)
 AM_CONDITIONAL([HAVE_CPPUNIT], [test "x$CPPUNIT_LIBS" != x])
 
+# Package name
+PACKAGE_PRETTY_NAME="TravelCCM"
+AC_SUBST(PACKAGE_PRETTY_NAME)
+
 # Shared library versioning
-GENERIC_LIBRARY_VERSION="0:4:0"
+GENERIC_LIBRARY_VERSION="0:5:0"
 #                        | | |
 #                 +------+ | +---+
 #                 |        |     |
@@ -68,6 +73,10 @@ AC_ARG_ENABLE(exceptions,
                          [Define if you want exceptions handling])])
 test "x$enable_exceptions" != xno && enable_exceptions=yes
 
+# Set the data directory for TravelCCM
+pkgdatadir="${datadir}/travelccm"
+AC_SUBST(pkgdatadir)
+
 # Check for info pages
 AC_ARG_ENABLE(info-doc, 
               [AS_HELP_STRING([--disable-info-doc],
@@ -106,17 +115,53 @@ if test -z "${CXXFLAGS}"; then
 fi
 
 
-# --------------------------------------------------------
-# Boost (STL Extensions: http://www.boost.org)
-# --------------------------------------------------------
-AX_BOOST([1.33])
-AC_SUBST(BOOST_VERSION)
-AC_SUBST(BOOST_CFLAGS)
-AC_SUBST(BOOST_LIBS)
-AC_SUBST(BOOST_DATE_TIME_LIB)
-AC_SUBST(BOOST_PROGRAM_OPTIONS_LIB)
-AC_SUBST(BOOST_FILESYSTEM_LIB)
+# -----------------------------------------------------------
+# Python
+# -----------------------------------------------------------
+PGAC_CHECK_PYTHON_EMBED_SETUP
+AC_SUBST(PYTHON_VERSION)
+AC_SUBST(PYTHON_LIBS)
+AC_SUBST(PYTHON_CFLAGS)
+AC_SUBST(PYTHON_ADD_LIBS)
 
+# -----------------------------------------------------------
+# OpenMPI: http://www.open-mpi.org
+# -----------------------------------------------------------
+#AX_OPENMPI
+#AC_SUBST(MPIGEN_VERSION)
+#AC_SUBST(MPIGEN_CFLAGS)
+#AC_SUBST(MPIGEN_LIBS)
+
+# -----------------------------------------------------------
+# MPICH2: http://www.mcs.anl.gov/research/projects/mpich2
+# -----------------------------------------------------------
+#AX_MPICH2
+#AC_SUBST(MPIGEN_VERSION)
+#AC_SUBST(MPIGEN_CFLAGS)
+#AC_SUBST(MPIGEN_LIBS)
+
+# ---------------------------------------------------------------
+# Boost (STL Extensions): http://www.boost.org
+# ---------------------------------------------------------------
+AX_BOOST([1.33])
+
+# --------------------------------------------------------------------
+# Support for MySQL (C client API): http://www.mysql.org
+# --------------------------------------------------------------------
+AX_MYSQL
+
+# --------------------------------------------------------
+# SOCI (Database API: http://soci.sourceforge.net)
+# --------------------------------------------------------
+AX_SOCI([3.0])
+
+# -----------------------------------------------------------------------------
+# Support for StdAir (): http://sf.net/projects/stdair
+# -----------------------------------------------------------------------------
+AM_PATH_STDAIR([0.34.0])
+# Set the directory for data samples exported by StdAir
+sampledir="${STDAIR_SAMPLE_DIR}"
+AC_SUBST(sampledir)
 
 # -------------------------------------------------------------------
 # Support for documentation
@@ -282,6 +327,8 @@ AC_CONFIG_FILES(
 	travelccm/config/Makefile
 	travelccm/batches/Makefile
 	man/Makefile
+	man/doxygen_man1.cfg
+	man/doxygen_man3.cfg
 	doc/Makefile
 	doc/images/Makefile
 	doc/tutorial/Makefile
@@ -291,8 +338,29 @@ AC_CONFIG_FILES(
 	doc/doxygen_html.cfg
 	doc/sourceforge/howto_release_travelccm.html
 	test/Makefile
-	test/com/Makefile)
+	test/travelccm/Makefile
+)
 AC_OUTPUT
+
+# OpenMPI
+if test "x$HAVE_OPENMPI" = "x1"; then
+   OPENMPI_OUTPUT="  - OPENMPI ................ :
+    o OPENMPI_VERSION ...... : ${MPIGEN_VERSION}
+    o OPENMPI_CFLAGS ....... : ${MPIGEN_CFLAGS}
+    o OPENMPI_LIBS ......... : ${MPIGEN_LIBS}"
+else
+   OPENMPI_OUTPUT="  - OPENMPI ................ : No"
+fi
+
+# MPICH2
+if test "x$HAVE_MPICH2" = "x1"; then
+   MPICH2_OUTPUT="  - MPICH2 ................. :
+    o MPICH2_VERSION ....... : ${MPIGEN_VERSION}
+    o MPICH2_CFLAGS ........ : ${MPIGEN_CFLAGS}
+    o MPICH2_LIBS .......... : ${MPIGEN_LIBS}"
+else
+   MPICH2_OUTPUT="  - MPICH2 ................. : No"
+fi
 
 echo "
 ------------------------------------------------------------------------------
@@ -300,55 +368,90 @@ $PACKAGE-$VERSION library configuration:
 ------------------------------------------------------------------------------
 
 Directories:
-  - prefix ............ : ${prefix}
-  - exec_prefix ....... : ${exec_prefix}
-  - includedir ........ : ${includedir}
-  - libdir ............ : ${libdir}
-  - docdir ............ : ${docdir}
-  - mandir ............ : ${mandir}
-  - infodir ........... : ${infodir}
+  - prefix ................. : ${prefix}
+  - exec_prefix ............ : ${exec_prefix}
+  - includedir ............. : ${includedir}
+  - libdir ................. : ${libdir}
+  - datarootdir ............ : ${datarootdir}
+  - datadir ................ : ${datadir}
+  - pkgdatadir ............. : ${pkgdatadir}
+  - sampledir .............. : ${sampledir}
+  - docdir ................. : ${docdir}
+  - mandir ................. : ${mandir}
+  - infodir ................ : ${infodir}
 
 Switches:
-  - exceptions ........ : ${enable_exceptions}
-  - use-nls ........... : ${USE_NLS}
-  - info-doc .......... : ${enable_info_doc}
-  - html-doc .......... : ${enable_html_doc}
-  - shared ............ : ${enable_shared}
-  - static ............ : ${enable_static}
+  - exceptions ............. : ${enable_exceptions}
+  - use-nls ................ : ${USE_NLS}
+  - info-doc ............... : ${enable_info_doc}
+  - html-doc ............... : ${enable_html_doc}
+  - shared ................. : ${enable_shared}
+  - static ................. : ${enable_static}
 
 Documentation tools:
-  - texinfo ........... : ${texinfo_ok}
-  - doxygen ........... : ${doxygen_ok}
-  - latex ............. : ${latex_ok}
-  - dvips ............. : ${dvips_ok}
-  - ghostscript ....... : ${gs_ok}
+  - texinfo ................ : ${texinfo_ok}
+  - doxygen ................ : ${doxygen_ok}
+  - latex .................. : ${latex_ok}
+  - dvips .................. : ${dvips_ok}
+  - ghostscript ............ : ${gs_ok}
 
 Testing tools:
-  - diff .............. : ${diff_ok}
-  - sed ............... : ${sed_ok}
+  - diff ................... : ${diff_ok}
+  - sed .................... : ${sed_ok}
 
 Compiler/linker flags/libs/defs:
-  - CXX ............... : ${CXX}
-  - CFLAGS ............ : ${CFLAGS}
-  - CXXFLAGS .......... : ${CXXFLAGS}
-  - CPPFLAGS .......... : ${CPPFLAGS}
-  - FFLAGS ............ : ${FFLAGS}
-  - LDFLAGS ........... : ${LDFLAGS}
-  - LIBS .............. : ${LIBS}
+  - CXX .................... : ${CXX}
+  - CXXFLAGS ............... : ${CXXFLAGS}
+  - CPPFLAGS ............... : ${CPPFLAGS}
+  - LDFLAGS ................ : ${LDFLAGS}
+  - LIBS ................... : ${LIBS}
 
 External libraries:
-  - Boost ............. :
-    o BOOST_VERSION ... : ${BOOST_VERSION}
-    o BOOST_CFLAGS .... : ${BOOST_CFLAGS}
-    o BOOST_LIBS ...... : ${BOOST_LIBS}
-    o BOOST_DT_LIB .... : ${BOOST_DATE_TIME_LIB}
-    o BOOST_PO_LIB .... : ${BOOST_PROGRAM_OPTIONS_LIB}
-    o BOOST_FS_LIB .... : ${BOOST_FILESYSTEM_LIB}
+${OPENMPI_OUTPUT}
 
-  - CPPUNIT ........... :
-    o CPPUNIT_VERSION . : ${CPPUNIT_VERSION}
-    o CPPUNIT_CFLAGS .. : ${CPPUNIT_CFLAGS}
-    o CPPUNIT_LIBS .... : ${CPPUNIT_LIBS}
+${MPICH2_OUTPUT}
+
+  - Python .................. :
+    o PYTHON_VERSION ........ : ${PYTHON_VERSION}
+    o PYTHON_CFLAGS ......... : ${PYTHON_CFLAGS}
+    o PYTHON_LIBS ........... : ${PYTHON_LIBS} 
+    o PYTHON_ADD_LIBS ....... : ${PYTHON_ADD_LIBS} 
+
+  - Boost .................. :
+    o BOOST_VERSION ........ : ${BOOST_VERSION}
+    o BOOST_CFLAGS ......... : ${BOOST_CFLAGS}
+    o BOOST_LIBS ........... : ${BOOST_LIBS}
+    o BOOST_UTF_LIB ........ : ${BOOST_UNIT_TEST_FRAMEWORK_LIB}
+    o BOOST_DATE_TIME_LIB .. : ${BOOST_DATE_TIME_LIB}
+    o BOOST_PO_LIB ......... : ${BOOST_PROGRAM_OPTIONS_LIB}
+    o BOOST_SYSTEM_LIB ..... : ${BOOST_SYSTEM_LIB}
+    o BOOST_FILESYSTEM_LIB . : ${BOOST_FILESYSTEM_LIB}
+    o BOOST_THREAD_LIB ..... : ${BOOST_THREAD_LIB}
+    o BOOST_PYTHON_LIB ..... : ${BOOST_PYTHON_LIB}
+    o BOOST_ASIO_LIB ....... : ${BOOST_ASIO_LIB}
+    o BOOST_MPI_LIB ........ : ${BOOST_MPI_LIB}
+    o BOOST_MPI_PYTHON_LIB . : ${BOOST_MPI_PYTHON_LIB}
+    o BOOST_IOSTREAMS_LIB .. : ${BOOST_IOSTREAMS_LIB}
+    o BOOST_SIGNALS_LIB .... : ${BOOST_SIGNALS_LIB}
+    o BOOST_SERIAL_LIB ..... : ${BOOST_SERIALIZATION_LIB}
+    o BOOST_WSERIAL_LIB .... : ${BOOST_WSERIALIZATION_LIB}
+    o BOOST_REGEX_LIB ...... : ${BOOST_REGEX_LIB}
+
+  - MySQL .................. :
+    o MYSQL_VERSION ........ : ${MYSQL_VERSION}
+    o MYSQL_CFLAGS ......... : ${MYSQL_CFLAGS}
+    o MYSQL_LIBS ........... : ${MYSQL_LIBS} 
+
+  - Soci ................... :
+    o SOCI_VERSION ......... : ${SOCI_VERSION}
+    o SOCI_CFLAGS .......... : ${SOCI_CFLAGS}
+    o SOCI_LIBS ............ : ${SOCI_LIBS}
+
+  - StdAir ................. :
+    o STDAIR_VERSION ....... : ${STDAIR_VERSION}
+    o STDAIR_CFLAGS ........ : ${STDAIR_CFLAGS}
+    o STDAIR_LIBS .......... : ${STDAIR_LIBS}
+    o STDAIR_SAMPLE_DIR .... : ${STDAIR_SAMPLE_DIR}
 
 ------------------------------------------------------------------------------
 Now type 'make && make install' to build and install $PACKAGE-$VERSION library

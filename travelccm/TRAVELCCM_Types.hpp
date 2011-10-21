@@ -5,70 +5,37 @@
 // Import section
 // //////////////////////////////////////////////////////////////////////
 // STL
-#include <vector>
-#include <list>
-// Boost (Extended STL)
-#include <boost/date_time/gregorian/gregorian.hpp>
+#include <string>
 // Boost
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/shared_ptr.hpp>
+// StdAir
+#include <stdair/stdair_exceptions.hpp>
 
 namespace TRAVELCCM {
 
-   // ///////// Exceptions ///////////
-  class RootException : public std::exception {
-  };
-
-  class FileNotFoundException : public RootException {
-  };
-  
-  class NonInitialisedServiceException : public RootException {
-  };
-
-  class MemoryAllocationException : public RootException {
-  };
-
-  class ObjectNotFoundException : public RootException {
-  };
-
-  class DocumentNotFoundException : public RootException {
-  };
+  /// Forward declarations
+  class TRAVELCCM_Service;
 
 
-  // /////////////// Log /////////////
-  /** Level of logs. */
-  namespace LOG {
-    typedef enum {
-      CRITICAL = 0,
-      ERROR,
-      NOTIFICATION,
-      WARNING,
-      DEBUG,
-      VERBOSE,
-      LAST_VALUE
-    } EN_LogLevel;
-  }
+  // ///////// Exceptions ///////////
+  /**
+   * TravelCCM specific root exception.
+   */
+  class CustomerChoiceException : public stdair::RootException {
+  public:
+    /**
+     * Constructor.
+     */
+    CustomerChoiceException (const std::string& iWhat)
+      : stdair::RootException (iWhat) {}
+  };
+
 
   // //////// Type definitions /////////
-  /** Define the Duration (e.g., elapsed in-flight time). */
-  typedef boost::posix_time::time_duration Duration_T;
+  /**
+   * Pointer on the TRAVELCCM Service handler.
+   */
+  typedef boost::shared_ptr<TRAVELCCM_Service> TRAVELCCM_ServicePtr_T;
 
-  /** Define the Date (e.g., flight-date departure date). */
-  typedef boost::gregorian::date Date_T;
-  
-  /** Define an accurate time (date +time). */
-  typedef boost::posix_time::ptime DateTime_T;
-
-  /** Define an identity of a pattern. */
-  typedef std::string PatternId_T;
-
-  /** Define a pair of Duration_T. */
-  typedef std::pair<Duration_T, Duration_T> DurationPair_T;
-
-  /** Define a pair of DateTime_T. */
-  typedef std::pair<DateTime_T, DateTime_T> DateTimePair_T;
-
-  /** Define a map between a time of the day and a DurationPair_T. */
-  typedef std::map<const Duration_T, const DurationPair_T> DepartureTimePreferencePattern_T;
-    
 }
 #endif // __TRAVELCCM_TRAVELCCM_TYPES_HPP
