@@ -1,20 +1,23 @@
 #
-# Config file for the TraDemGen package. It defines the following variables:
-#  TRADEMGEN_INCLUDE_DIRS - include directories for TraDemGen
-#  TRADEMGEN_LIBRARY_DIRS - library directories for TraDemGen (normally not used!)
-#  TRADEMGEN_BINARY_DIRS  - binary directories for TraDemGen (normally not used!)
-#  TRADEMGEN_LIBRARIES    - libraries to link against
-#  TRADEMGEN_EXECUTABLES  - the TraDemGen binaries/executables
+# Config file for the TravelCCM package. It defines the following variables:
+#  TRAVELCCM_VERSION      - version of TravelCCM
+#  TRAVELCCM_BINARY_DIRS  - binary directories for TravelCCM
+#  TRAVELCCM_INCLUDE_DIRS - include directories for TravelCCM
+#  TRAVELCCM_LIBRARY_DIRS - library directories for TravelCCM (normally not used!)
+#  TRAVELCCM_LIBRARIES    - libraries to link against
+#  TRAVELCCM_EXECUTABLES  - the TravelCCM binaries/executables
 
-# Tell the user project where to find TraDemGen headers and libraries
-set (TRADEMGEN_INCLUDE_DIRS "@TRADEMGEN_INCLUDE_DIRS@")
-set (TRADEMGEN_LIBRARY_DIRS "@TRADEMGEN_LIB_DIR@")
-set (TRADEMGEN_BINARY_DIRS "@TRADEMGEN_BIN_DIR@")
+# Tell the user project where to find TravelCCM headers and libraries
+set (TRAVELCCM_VERSION "@PACKAGE_VERSION@")
+set (TRAVELCCM_BINARY_DIRS "@TRAVELCCM_BIN_DIR@")
+set (TRAVELCCM_INCLUDE_DIRS "@TRAVELCCM_INCLUDE_DIRS@")
+set (TRAVELCCM_LIBRARY_DIRS "@TRAVELCCM_LIB_DIR@")
 
-# Library dependencies for TraDemGen (contains definitions for the TraDemGen IMPORTED
-# targets)
-include ("@TRADEMGEN_CMAKE_DIR@/trademgen-library-depends.cmake")
+# Library dependencies for TravelCCM (contains definitions for the TravelCCM
+# IMPORTED targets)
+include ("@TRAVELCCM_CMAKE_DIR@/travelccm-library-depends.cmake")
 
-# These are the TraDemGen IMPORTED targets, created by trademgen-library-depends.cmake
-set (TRADEMGEN_LIBRARIES trademgenlib trademgenuicllib)
-set (TRADEMGEN_EXECUTABLES trademgen)
+# These are the TravelCCM IMPORTED targets, created by
+# travelccm-library-depends.cmake
+set (TRAVELCCM_LIBRARIES travelccmlib)
+set (TRAVELCCM_EXECUTABLES travelccm)
