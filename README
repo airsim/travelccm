@@ -28,7 +28,7 @@ http://sourceforge.net/project/showfiles.php?group_id=261639
 Then, as usual:
 * To configure the project, type something like:
   mkdir build && cd build
-  cmake -DCMAKE_INSTALL_PREFIX=/home/user/dev/deliveries/travelccm-0.5.1 \
+  cmake -DCMAKE_INSTALL_PREFIX=/home/user/dev/deliveries/travelccm-0.5.2 \
    -DWITH_STDAIR_PREFIX=/home/user/dev/deliveries/stdair-stable \
    -DCMAKE_BUILD_TYPE:STRING=Debug -DINSTALL_DOC:BOOL=ON ..
 * To build the project, type:
@@ -43,4 +43,5 @@ Then, as usual:
 * To package the binary and the (HTML and PDF) documentation:
   make package
 
-Denis Arnaud (August 2011)
+Denis Arnaud (November 2011)
+
