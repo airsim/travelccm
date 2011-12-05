@@ -53,12 +53,18 @@ Building the library and test binary from the tarball:
 The latest stable source tarball (travelccm*.tar.gz or .bz2) can be found here:
 http://sourceforge.net/project/showfiles.php?group_id=261639
 
+To customise the following to your environment, you can alter the path
+to the installation directory:
+export INSTALL_BASEDIR=/home/user/dev/deliveries
+export LIBSUFFIX_4_CMAKE="-DLIB_SUFFIX=64"
+
 Then, as usual:
 * To configure the project, type something like:
   mkdir build && cd build
-  cmake -DCMAKE_INSTALL_PREFIX=/home/user/dev/deliveries/travelccm-0.5.2 \
-   -DWITH_STDAIR_PREFIX=/home/user/dev/deliveries/stdair-stable \
-   -DCMAKE_BUILD_TYPE:STRING=Debug -DINSTALL_DOC:BOOL=ON ..
+  cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_BASEDIR}/travelccm-0.5.2 \
+   -DWITH_STDAIR_PREFIX=${INSTALL_BASEDIR}/stdair-stable \
+   -DCMAKE_BUILD_TYPE:STRING=Debug -DINSTALL_DOC:BOOL=ON \
+   ${LIBSUFFIX_4_CMAKE} ..
 * To build the project, type:
   make
 * To test the project, type:
@@ -66,10 +72,17 @@ Then, as usual:
 * To install the library (libtravelccm*.so*) and the binary (travelccm),
   just type:
   make install
+  cd ${INSTALL_BASEDIR}
+  rm -f travelccm-stable && ln -s travelccm-0.5.2 travelccm-stable
+  cd -
 * To package the source files, type:
   make dist
 * To package the binary and the (HTML and PDF) documentation:
   make package
+* To run the local binary version:
+  ./travelccm/travelccm -b
+* To run the installed version:
+  ${INSTALL_BASEDIR}/travelccm-stable/bin/travelccm -b
 
-Denis Arnaud (November 2011)
+Denis Arnaud (December 2011)
 
