@@ -61,7 +61,7 @@ export LIBSUFFIX_4_CMAKE="-DLIB_SUFFIX=64"
 Then, as usual:
 * To configure the project, type something like:
   mkdir build && cd build
-  cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_BASEDIR}/travelccm-0.5.2 \
+  cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_BASEDIR}/travelccm-0.5.3 \
    -DWITH_STDAIR_PREFIX=${INSTALL_BASEDIR}/stdair-stable \
    -DCMAKE_BUILD_TYPE:STRING=Debug -DINSTALL_DOC:BOOL=ON \
    ${LIBSUFFIX_4_CMAKE} ..
@@ -73,7 +73,7 @@ Then, as usual:
   just type:
   make install
   cd ${INSTALL_BASEDIR}
-  rm -f travelccm-stable && ln -s travelccm-0.5.2 travelccm-stable
+  rm -f travelccm-stable && ln -s travelccm-0.5.3 travelccm-stable
   cd -
 * To package the source files, type:
   make dist
