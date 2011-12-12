@@ -70,7 +70,7 @@ As a result, you should obtain a similar report:
 [ 96%] Built target travelccmlib
 [100%] Built target AirlineScheduleTestSuitetst
 Scanning dependencies of target check_travelccmtst
-Test project /home/dan/dev/sim/travelccm/travelccmgithub/build/test/travelccm
+Test project /home/user/dev/sim/travelccm/travelccmgithub/build/test/travelccm
     Start 1: AirlineScheduleTestSuitetst
 1/1 Test #1: AirlineScheduleTestSuitetst ......   Passed    0.15 sec
 
@@ -224,7 +224,7 @@ corresponding to <a
 href="http://stdair.git.sourceforge.net/git/gitweb.cgi?p=stdair/stdair;a=blob_plain;f=samples/schedule03.csv;hb=trunk">schedule01.csv</a>
 parsed by
 <a
-href="http://airinv.git.sourceforge.net/git/gitweb.cgi?p=airinv/airinv;a=blob_plain;f=airinv/batches/parseInventory.cpp;hb=trunk">AIRINV::parseInventory</a>)
+href="http://travel-ccm.git.sourceforge.net/git/gitweb.cgi?p=travel-ccm/travel-ccm;a=blob_plain;f=travelccm/batches/travelccm.cpp;hb=trunk">TRAVELCCM::travelccm</a>)
 should look like:
 
 \include bomTreeDisplay.ref
