@@ -7,7 +7,7 @@
 #include <stdair/bom/TravelSolutionStruct.hpp>
 #include <stdair/bom/BookingRequestStruct.hpp>
 // TravelCCM
-#include <travelccm/bom/HardRestrictionModel.hpp>
+#include <travelccm/bom/HybridModel.hpp>
 #include <travelccm/command/ChoiceManager.hpp>
 
 namespace TRAVELCCM {
@@ -19,7 +19,7 @@ namespace TRAVELCCM {
     // Return the cheapest solution which satisfies the hard restrictions
     // such as change fees and non refundable.
     const stdair::TravelSolutionStruct* oTravelSolution_ptr = 
-      HardRestrictionModel::chooseTravelSolution (ioTravelSolutionList,
+      HybridModel::chooseTravelSolution (ioTravelSolutionList,
                                                 iBookingRequest);
     return oTravelSolution_ptr;
   }
