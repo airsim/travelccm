@@ -128,8 +128,8 @@ namespace TRAVELCCM {
               << "' is not chosen because either its fare with disutility ("
               << lFOFare + lHybridDisutility << ") is greater than the " 
               << "lowest fare (" << lLowestFare << ") or than the WTP (" 
-              << lWTP << "), or because its fare (" << lFOFare << ") 
-              << is greater than the WTP (" << lWTP
+              << lWTP << "), or because its fare (" << lFOFare << ") " 
+              << "is greater than the WTP (" << lWTP
               << "), or because the party size (" << lPartySize
               << ") is greater than the availability (" << lFOAvl
               << ")");
