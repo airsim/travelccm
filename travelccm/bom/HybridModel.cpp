@@ -106,15 +106,15 @@ namespace TRAVELCCM {
 
             // DEBUG
             
-              STDAIR_LOG_DEBUG ("The travel solution (TS) '" << lTS
-              << "' is chosen because its fare with disutility (" 
-              << lFOFare + lHybridDisutility
-              << ") is lower than the lowest fare (" << lLowestFare
-              << ") and because its fare ("<< lFOFare
-              << ") is lower than the WTP (" << lWTP
-              << "), and because the party size (" << lPartySize
-              << ") is lower than the availability (" << lFOAvl
-              << ")");
+            //  STDAIR_LOG_DEBUG ("The travel solution (TS) '" << lTS
+            //  << "' is chosen because its fare with disutility (" 
+            //  << lFOFare + lHybridDisutility
+            //  << ") is lower than the lowest fare (" << lLowestFare
+            //  << ") and because its fare ("<< lFOFare
+            //  << ") is lower than the WTP (" << lWTP
+            //  << "), and because the party size (" << lPartySize
+            //  << ") is lower than the availability (" << lFOAvl
+            //  << ")");
             
 
             lLowestFare = lFOFare + lHybridDisutility;
@@ -124,15 +124,15 @@ namespace TRAVELCCM {
           } else {
             // DEBUG
             
-              STDAIR_LOG_DEBUG ("The travel solution (TS) '" << lTS
-              << "' is not chosen because either its fare with disutility ("
-              << lFOFare + lHybridDisutility << ") is greater than the " 
-              << "lowest fare (" << lLowestFare << ") or than the WTP (" 
-              << lWTP << "), or because its fare (" << lFOFare << ") " 
-              << "is greater than the WTP (" << lWTP
-              << "), or because the party size (" << lPartySize
-              << ") is greater than the availability (" << lFOAvl
-              << ")");
+            //  STDAIR_LOG_DEBUG ("The travel solution (TS) '" << lTS
+            //  << "' is not chosen because either its fare with disutility ("
+            //  << lFOFare + lHybridDisutility << ") is greater than the " 
+            //  << "lowest fare (" << lLowestFare << ") or than the WTP (" 
+            //  << lWTP << "), or because its fare (" << lFOFare << ") " 
+            //  << "is greater than the WTP (" << lWTP
+            //  << "), or because the party size (" << lPartySize
+            //  << ") is greater than the availability (" << lFOAvl
+            //  << ")");
             
           }
         }
