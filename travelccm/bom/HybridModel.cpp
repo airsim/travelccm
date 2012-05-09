@@ -49,8 +49,8 @@ namespace TRAVELCCM {
     
     //TODO move this constraints in const file
     //TODO create a type for penalty (or two)
-    const stdair::Fare_T lPenaltyForChangeFees = 0.15 ;
-    const stdair::Fare_T lPenaltyForNonRefundable = 0.15;
+    const stdair::Fare_T lDisutilityForChangeFees = 0.15 ;
+    const stdair::Fare_T lDisutilityForNonRefundable = 0.15;
 
     
     // Browse the travel solution list and choose the cheapest one
@@ -68,7 +68,7 @@ namespace TRAVELCCM {
 
         // Check if the hybrid restrictions are satisfied
         bool lHybridRestrictionsSatisfied = false;
-        stdair::Fare_T lHybridPenalty = 0;
+        stdair::Fare_T lHybridDisutility = 0;
         
         if (lIsPriceOriented == true) {
           lHybridRestrictionsSatisfied = true;
@@ -78,16 +78,16 @@ namespace TRAVELCCM {
         } else {
           if (lFO.getChangeFees() != lCustomerChangeFees) {
             if (lCustomerChangeFees == false) {
-              lHybridPenalty += 3 * lPenaltyForChangeFees * lFOFare;
+              lHybridDisutility += 3 * lDisutilityForChangeFees * lFOFare;
             } else {
-              lHybridPenalty -= lPenaltyForChangeFees * lFOFare;
+              lHybridDisutility -= lDisutilityForChangeFees * lFOFare;
             }
           }
           if (lFO.getNonRefundable() != lCustomerNonRefundable) {
             if (lCustomerNonRefundable == false) {
-              lHybridPenalty += 3 * lPenaltyForNonRefundable * lFOFare;
+              lHybridDisutility += 3 * lDisutilityForNonRefundable * lFOFare;
             } else {
-              lHybridPenalty -= lPenaltyForNonRefundable * lFOFare;
+              lHybridDisutility -= lDisutilityForNonRefundable * lFOFare;
             }
           }
           lHybridRestrictionsSatisfied = true;
@@ -100,40 +100,40 @@ namespace TRAVELCCM {
           
           const stdair::Availability_T& lFOAvl = lFO.getAvailability();
 
-          if (lFOFare + lHybridPenalty < lLowestFare 
-              && lFOFare + lHybridPenalty <= lWTP && lFOFare <= lWTP
+          if (lFOFare + lHybridDisutility < lLowestFare 
+              && lFOFare + lHybridDisutility <= lWTP && lFOFare <= lWTP
               && lFOAvl >= lPartySize) {
 
             // DEBUG
-            /*
+            
               STDAIR_LOG_DEBUG ("The travel solution (TS) '" << lTS
-              << "' is chosen because its fare with penalty (" 
-              << lFOFare + lHybridPenalty
+              << "' is chosen because its fare with disutility (" 
+              << lFOFare + lHybridDisutility
               << ") is lower than the lowest fare (" << lLowestFare
               << ") and because its fare ("<< lFOFare
               << ") is lower than the WTP (" << lWTP
               << "), and because the party size (" << lPartySize
               << ") is lower than the availability (" << lFOAvl
               << ")");
-            */
+            
 
-            lLowestFare = lFOFare + lHybridPenalty;
+            lLowestFare = lFOFare + lHybridDisutility;
             oChosenTS_ptr = &lTS;
             oChosenTS_ptr->setChosenFareOption (lFO);
 
           } else {
             // DEBUG
-            /*
+            
               STDAIR_LOG_DEBUG ("The travel solution (TS) '" << lTS
-              << "' is not chosen because either its fare with penalty ("
-              << lFOFare + lHybridPenalty << ") is greater than the 
-              << lowest fare (" << lLowestFare << ") or than the WTP (" 
+              << "' is not chosen because either its fare with disutility ("
+              << lFOFare + lHybridDisutility << ") is greater than the " 
+              << "lowest fare (" << lLowestFare << ") or than the WTP (" 
               << lWTP << "), or because its fare (" << lFOFare << ") 
               << is greater than the WTP (" << lWTP
               << "), or because the party size (" << lPartySize
               << ") is greater than the availability (" << lFOAvl
               << ")");
-            */
+            
           }
         }
       }
