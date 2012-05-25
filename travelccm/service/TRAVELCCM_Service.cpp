@@ -187,6 +187,10 @@ namespace TRAVELCCM {
     stdair::STDAIR_Service& lSTDAIR_Service =
       lTRAVELCCM_ServiceContext.getSTDAIR_Service();
 
+    // Retrieve the persistent BOM root object.
+    stdair::BomRoot& lPersistentBomRoot = 
+      lSTDAIR_Service.getPersistentBomRoot();
+
     /**
      * 1. Have StdAir build the whole BOM tree, only when the StdAir service is
      *    owned by the current component (TravelCCM here)
@@ -207,9 +211,67 @@ namespace TRAVELCCM {
     /**
      * 3. Build the complementary objects/links for the current component (here,
      *    TravelCCM)
-     *
-     * \note: Currently, no more things to do by TravelCCM at that stage.
+     */ 
+    buildComplementaryLinks (lPersistentBomRoot);
+
+    /**
+     * 4. Have StdAir clone the whole persistent BOM tree, only when the StdAir
+     *    service is owned by the current component (TravelCCM here)
      */
+    if (doesOwnStdairService == true) {
+      //
+      clonePersistentBom ();
+    }
+  } 
+
+  // ////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_Service::clonePersistentBom () {  
+
+    // Retrieve the TravelCCM service context
+    if (_travelccmServiceContext == NULL) {
+      throw stdair::NonInitialisedServiceException ("The TravelCCM service has "
+                                                    "not been initialised");
+    }
+    assert (_travelccmServiceContext != NULL);
+
+    // Retrieve the TravelCCM service context and whether it owns the Stdair
+    // service
+    TRAVELCCM_ServiceContext& lTRAVELCCM_ServiceContext =
+      *_travelccmServiceContext;
+    const bool doesOwnStdairService =
+      lTRAVELCCM_ServiceContext.getOwnStdairServiceFlag();
+
+    // Retrieve the StdAir service object from the (TravelCCM) service context
+    stdair::STDAIR_Service& lSTDAIR_Service =
+      lTRAVELCCM_ServiceContext.getSTDAIR_Service();
+
+    /**
+     * 1. Have StdAir cloned the whole BOM tree, only when the StdAir service is
+     * owned by the current component (TravelCCM here)
+     */
+    if (doesOwnStdairService == true) {
+      lSTDAIR_Service.clonePersistentBom ();
+    }  
+
+    /**
+     * 2. Delegate the complementary building of objects and links by the
+     *    appropriate levels/components
+     * 
+     * \note: Currently, no more things to do by TravelCCM at that stage,
+     *        as there is no child
+     */
+    
+    /**
+     * 3. Build the complementary objects/links for the current component (here,
+     *    DSIM)
+     */ 
+    stdair::BomRoot& lBomRoot = lSTDAIR_Service.getBomRoot();   
+    buildComplementaryLinks (lBomRoot);
+  }
+
+  // ////////////////////////////////////////////////////////////////////
+  void TRAVELCCM_Service::buildComplementaryLinks (stdair::BomRoot& ioBomRoot) {
+    // Currently, no more things to do by TravelCCM at that stage.
   }
 
   // //////////////////////////////////////////////////////////////////////
