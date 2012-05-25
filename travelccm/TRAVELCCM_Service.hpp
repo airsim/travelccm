@@ -13,7 +13,8 @@
 
 /// Forward declarations
 namespace stdair {
-  class STDAIR_Service;
+  class STDAIR_Service; 
+  class BomRoot;
   struct BasLogParams;
   struct BasDBParams;
   struct BookingRequestStruct;
@@ -89,7 +90,18 @@ namespace TRAVELCCM {
     /**
      * Build a sample BOM tree, and attach it to the BomRoot instance.
      */
-    void buildSampleBom();
+    void buildSampleBom(); 
+
+    /**
+     * Clone the persistent BOM object.
+     */
+    void clonePersistentBom ();
+
+    /**
+     * Build all the complementary links in the given bom root object.
+     * \note Do nothing for now.
+     */
+    void buildComplementaryLinks (stdair::BomRoot&);
 
     /**
      * Build a sample list of travel solutions.
