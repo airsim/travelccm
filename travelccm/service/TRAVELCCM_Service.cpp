@@ -333,10 +333,11 @@ namespace TRAVELCCM {
   
     // Retrieve the STDAIR service object from the (TRAVELCCM) service context
     stdair::STDAIR_Service& lSTDAIR_Service =
-      lTRAVELCCM_ServiceContext.getSTDAIR_Service();
+      lTRAVELCCM_ServiceContext.getSTDAIR_Service(); 
+    const stdair::BomRoot& lBomRoot = lSTDAIR_Service.getBomRoot();
 
     // Delegate the BOM building to the dedicated service
-    return lSTDAIR_Service.csvDisplay();
+    return lSTDAIR_Service.csvDisplay(lBomRoot);
   }
   
   // //////////////////////////////////////////////////////////////////////
