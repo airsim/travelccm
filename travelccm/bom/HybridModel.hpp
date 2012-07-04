@@ -16,7 +16,8 @@ namespace stdair {
 namespace TRAVELCCM {
   
   /**
-   * Class implementing the customer choice of cheapest solution.
+   * Class implementing the customer choice of cheapest solution 
+   * within disutility.
    */
   class HybridModel {
   public:    
@@ -24,18 +25,9 @@ namespace TRAVELCCM {
      * Choose the cheapest travel solution and the fare option
      * within the given list of travel solutions.
      * 
-     * We define 3 kinds of customers :
+     * Fare options which do not satisfy the restrictions of the customer 
+     * have a disutility for each unsatisfied restriction.
      * 
-     *    - the customer does not accept restrictions (change fees and 
-     *      non refundable). The fare option must satisfy the hard restriction.
-     *
-     *    - the customer accepts one restriction. Fare options which do not 
-     *      satisfy this restriction have a penalty and fare options which
-     *      satisfy the other restriction have a bonus.
-     *
-     *    - the customer accepts all restrictions. The fare option is 
-     *      the cheapest.
-     *
      * The returned pointer will be NULL if no travel solution is
      * chosen (e.g. Willingness-To-Pay too low).
      */
