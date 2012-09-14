@@ -7,6 +7,7 @@
 // StdAir
 #include <stdair/stdair_service_types.hpp>
 #include <stdair/bom/TravelSolutionTypes.hpp>
+#include <stdair/basic/PassengerChoiceModel.hpp>
 
 /// Forward declarations
 namespace stdair {
@@ -29,7 +30,8 @@ namespace TRAVELCCM {
      */
     static const stdair::TravelSolutionStruct*
     chooseTravelSolution (stdair::TravelSolutionList_T&,
-                          const stdair::BookingRequestStruct&);
+                          const stdair::BookingRequestStruct&,
+                          const stdair::PassengerChoiceModel::EN_PassengerChoiceModel&);
   };
 }
 #endif // __TRAVELCCM_CMD_CHOICEMANAGER_HPP

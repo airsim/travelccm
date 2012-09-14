@@ -5,6 +5,7 @@
 // Import section
 // //////////////////////////////////////////////////////////////////////
 // StdAir
+#include <stdair/basic/PassengerChoiceModel.hpp>
 #include <stdair/stdair_basic_types.hpp>
 #include <stdair/stdair_service_types.hpp>
 #include <stdair/bom/TravelSolutionTypes.hpp>
@@ -170,7 +171,9 @@ namespace TRAVELCCM {
      */
     const stdair::TravelSolutionStruct*
     chooseTravelSolution (stdair::TravelSolutionList_T&,
-                          const stdair::BookingRequestStruct&);
+                          const stdair::BookingRequestStruct&,
+                          const stdair::PassengerChoiceModel::EN_PassengerChoiceModel& iPassengerChoiceModel =
+                          stdair::PassengerChoiceModel::PRICE_ORIENTED);
     
 
   public:
