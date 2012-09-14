@@ -364,11 +364,13 @@ namespace TRAVELCCM {
   // ////////////////////////////////////////////////////////////////////
   const stdair::TravelSolutionStruct* TRAVELCCM_Service::
   chooseTravelSolution (stdair::TravelSolutionList_T& ioTravelSolutionList,
-                        const stdair::BookingRequestStruct& iBookingRequest) {
+                        const stdair::BookingRequestStruct& iBookingRequest,
+                        const stdair::PassengerChoiceModel::EN_PassengerChoiceModel& iPassengerChoiceModel) {
 
     const stdair::TravelSolutionStruct* oTravelSolution_ptr = 
       ChoiceManager::chooseTravelSolution (ioTravelSolutionList,
-                                           iBookingRequest);
+                                           iBookingRequest,
+                                           iPassengerChoiceModel);
     return oTravelSolution_ptr;
   }
   
