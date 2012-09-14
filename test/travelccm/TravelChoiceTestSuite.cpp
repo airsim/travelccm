@@ -18,6 +18,7 @@
 #include <stdair/basic/BasLogParams.hpp>
 #include <stdair/basic/BasDBParams.hpp>
 #include <stdair/basic/BasFileMgr.hpp>
+#include <stdair/basic/PassengerChoiceModel.hpp>
 #include <stdair/bom/TravelSolutionStruct.hpp>
 #include <stdair/bom/BookingRequestStruct.hpp>
 #include <stdair/service/Logger.hpp>
@@ -46,34 +47,18 @@ struct UnitTestConfig {
   }
 };
 
-
-// /////////////// Main: Unit Test Suite //////////////
-
-// Set the UTF configuration (re-direct the output to a specific file)
-BOOST_GLOBAL_FIXTURE (UnitTestConfig);
-
-// Start the test suite
-BOOST_AUTO_TEST_SUITE (master_test_suite)
-
+// //////////////////////////////////////////////////////////////////////
 /**
- * Test a simple simulation
+ * Choose a fare option among the list of travel solutions
  */
-BOOST_AUTO_TEST_CASE (simple_simulation_test) {
+void testTravelCCMHelper (const unsigned short iTestFlag,
+                          const stdair::PassengerChoiceModel::EN_PassengerChoiceModel& iPassengerChoiceModel,
+                          const unsigned int iExpectedPrice) {
 
-  // Input file name
-  /*
-    const stdair::Filename_T inputFileName (STDAIR_SAMPLE_DIR "/ccm_02.csv");
-  
-  // Check that the file path given as input corresponds to an actual file
-  const bool doesExistAndIsReadable =
-    stdair::BasFileMgr::doesExistAndIsReadable (lInputFilename);
-  BOOST_CHECK_MESSAGE (doesExistAndIsReadable == true,
-                       "The '" << lInputFilename
-                       << "' input file can not be open and read");
-  */
-  
   // Output log File
-  const stdair::Filename_T lLogFilename ("TravelChoiceTestSuite.log");
+  std::ostringstream oStr;
+  oStr << "TravelChoiceTestSuite_" << iTestFlag << ".log";
+  const stdair::Filename_T lLogFilename (oStr.str());
     
   // Set the log parameters
   std::ofstream logOutputFile;
@@ -86,6 +71,7 @@ BOOST_AUTO_TEST_CASE (simple_simulation_test) {
   
   // Build the BOM tree
   TRAVELCCM::TRAVELCCM_Service travelccmService (lLogParams);
+  travelccmService.buildSampleBom ();
 
   // DEBUG
   STDAIR_LOG_DEBUG ("Welcome to TravelCCM");
@@ -107,7 +93,7 @@ BOOST_AUTO_TEST_CASE (simple_simulation_test) {
   
   // Choose a travel solution
   const stdair::TravelSolutionStruct* lTS_ptr =
-    travelccmService.chooseTravelSolution (lTSList, lBookingRequest);
+    travelccmService.chooseTravelSolution (lTSList, lBookingRequest, iPassengerChoiceModel);
 
   // Check that a solution has been found
   BOOST_REQUIRE_MESSAGE (lTS_ptr != NULL,
@@ -116,8 +102,87 @@ BOOST_AUTO_TEST_CASE (simple_simulation_test) {
                          << " within the following list of travel solutions. "
                          << lCSVDump);
 
+  STDAIR_LOG_DEBUG (lTS_ptr->describe());
+
+  // Retrieve the chosen fare option
+  stdair::FareOptionStruct lFareOption = lTS_ptr->getChosenFareOption();
+
+  // DEBUG
+  std::ostringstream oMessageExpectedPrice;
+  oMessageExpectedPrice << "The price chosen by the passenger is: "
+                        << lFareOption.getFare() << " Euros. It is expected to be "
+                        << iExpectedPrice << " Euros.";
+  STDAIR_LOG_DEBUG (oMessageExpectedPrice.str());
+
+  // Check that the price corresponds to the expected one
+  BOOST_CHECK_EQUAL (std::floor (lFareOption.getFare() + 0.5), iExpectedPrice);
+
+  BOOST_CHECK_MESSAGE (std::floor (lFareOption.getFare() + 0.5)
+                       == iExpectedPrice, oMessageExpectedPrice.str());
+
   // Close the log file
   logOutputFile.close();
+
+}
+
+
+// /////////////// Main: Unit Test Suite //////////////
+
+// Set the UTF configuration (re-direct the output to a specific file)
+BOOST_GLOBAL_FIXTURE (UnitTestConfig);
+
+// Start the test suite
+BOOST_AUTO_TEST_SUITE (master_test_suite)
+
+/**
+ * Test the hard restriction model
+ */
+BOOST_AUTO_TEST_CASE (simple_hard_restriction_model_test) {
+
+  /**
+   * As of September 2012, the fare option chosen by the hard restriction model
+   * is valued to 1000 Euros.
+   */
+  const unsigned int lExpectedPrice = 1000;
+  
+  BOOST_CHECK_NO_THROW (testTravelCCMHelper
+                        (0,
+                         stdair::PassengerChoiceModel::HARD_RESTRICTION,
+                         lExpectedPrice));
+}
+
+/**
+ * Test the price oriented model
+ */
+BOOST_AUTO_TEST_CASE (simple_price_oriented_model_test) {
+
+  /**
+   * As of September 2012, the fare option chosen by the price oriented model
+   * is valued to 900 Euros.
+   */
+  const unsigned int lExpectedPrice = 900;
+  
+  BOOST_CHECK_NO_THROW (testTravelCCMHelper
+                        (1,
+                         stdair::PassengerChoiceModel::PRICE_ORIENTED,
+                         lExpectedPrice));
+}
+
+/**
+ * Test the hybrid model
+ */
+BOOST_AUTO_TEST_CASE (simple_hybrid_model_test) {
+
+  /**
+   * As of September 2012, the fare option chosen by the price oriented model
+   * is valued to 920 Euros.
+   */
+  const unsigned int lExpectedPrice = 920;
+  
+  BOOST_CHECK_NO_THROW (testTravelCCMHelper
+                        (2,
+                         stdair::PassengerChoiceModel::HYBRID,
+                         lExpectedPrice));
 }
 
 // End the test suite
