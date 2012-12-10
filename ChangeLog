@@ -1,3 +1,13 @@
+*  Dec 10 2012 Denis Arnaud <denis_arnaud at users dot sourceforge dot net> 1.00.0
+- Open source release
+- TravelCCM implements three different algorithms to calculate the travel
+  solution matching the best any customer simulated preferences.
+  1) PriceOrientedModel: choose the cheapest travel solution within the given
+  list of travel solutions.
+  2) HardRestrictionModel: choose the cheapest travel solution which satisfies
+  the restrictions such as change fees and non refundable.
+  3) HybridModel: choose the cheapest travel solution after having added
+  disutility values for each unsatisfied restriction.
 
 * Mon Dec 05 2011 Denis Arnaud <denis_arnaud at users dot sourceforge dot net> 0.5.3
 - [Doc] Improved a little bit the documentation

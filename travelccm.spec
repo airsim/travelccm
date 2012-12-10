@@ -3,7 +3,7 @@
 #
 Name:           travelccm
 %global sfname  travel-ccm
-Version:        0.5.3
+Version:        1.00.0
 Release:        1%{?dist}
 
 Summary:        C++ Travel Customer Choice Model (CCM) Library
@@ -128,6 +128,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Dec 05 2011 Denis Arnaud <denis.arnaud_fedora@m4x.org> 1.00.0-1
+- Open source release
+
 * Mon Dec 05 2011 Denis Arnaud <denis.arnaud_fedora@m4x.org> 0.5.3-1
 - Upstream integration
 
