@@ -263,7 +263,7 @@ namespace TRAVELCCM {
     
     /**
      * 3. Build the complementary objects/links for the current component (here,
-     *    DSIM)
+     *    TVLSIM)
      */ 
     stdair::BomRoot& lBomRoot = lSTDAIR_Service.getBomRoot();   
     buildComplementaryLinks (lBomRoot);

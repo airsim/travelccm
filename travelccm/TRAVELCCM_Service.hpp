@@ -74,7 +74,7 @@ namespace TRAVELCCM {
      * initialised with the proper log output stream by some other
      * methods in the calling chain (for instance, when the
      * TRAVELCCM_Service is itself being initialised by another
-     * library service such as DSIM_Service).
+     * library service such as TVLSIM_Service).
      *
      * @param stdair::STDAIR_ServicePtr_T Reference on the STDAIR service.
      */
