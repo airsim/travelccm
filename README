@@ -81,9 +81,9 @@ Then, as usual:
 * To package the binary and the (HTML and PDF) documentation:
   make package
 * To browse the (just installed, if enabled) HTML documentation:
-  midori file://${INSTALL_BASEDIR}/travelccm-stable/share/doc/travelccm-1.00.1/html/index.html
+  midori file://${INSTALL_BASEDIR}/travelccm-99.99.99/share/doc/travelccm-99.99.99/html/index.html
 * To browse the (just installed, if enabled) PDF documentation:
-  evince ${INSTALL_BASEDIR}/travelccm-stable/share/doc/travelccm-1.00.1/html/refman.pdf
+  evince ${INSTALL_BASEDIR}/travelccm-99.99.99/share/doc/travelccm-99.99.99/html/refman.pdf
 * To run the local binary version:
   ./travelccm/travelccm -b
 * To run the installed version:
