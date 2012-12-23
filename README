@@ -26,11 +26,15 @@ TravelCCM makes an extensive use of existing open-source libraries for
 increased functionality, speed and accuracy. In particular the
 Boost (C++ Standard Extensions: http://www.boost.org) library is used.
 
+TravelCCM is the one of the components of the Travel Market Simulator
+(http://www.travel-market-simulator). However, it may be used in a
+stand-alone mode.
+
 
 Building the library and test binary from Git repository:
 ----------------------------------------------------------------
 The Sourceforge Git repository may be cloned as following:
-git clone ssh://travel-ccm.git.sourceforge.net/gitroot/travel-ccm/travel-ccm travelccmgit
+git clone http://github.com/airsim/travelccm.git travelccmgit
 cd travelccmgit
 git checkout trunk
 
@@ -41,7 +45,7 @@ but names may vary according to distributions):
   * stdair-devel
   * boost-devel
   * zeromq-devel
-  * readline-devel
+  * readline-devel, ncurses-devel
   * soci-mysql-devel
   * python-devel
   * gettext-devel (optional)
@@ -63,8 +67,8 @@ Then, as usual:
   mkdir build && cd build
   cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_BASEDIR}/travelccm-99.99.99 \
    -DWITH_STDAIR_PREFIX=${INSTALL_BASEDIR}/stdair-stable \
-   -DCMAKE_BUILD_TYPE:STRING=Debug -DINSTALL_DOC:BOOL=ON \
-   ${LIBSUFFIX_4_CMAKE} ..
+   -DCMAKE_BUILD_TYPE:STRING=Debug -DENABLE_TEST:BOOL=ON -DINSTALL_DOC:BOOL=ON \
+   -DRUN_GCOV:BOOL=OFF ${LIBSUFFIX_4_CMAKE} ..
 * To build the project, type:
   make
 * To test the project, type:
@@ -76,10 +80,14 @@ Then, as usual:
   make dist
 * To package the binary and the (HTML and PDF) documentation:
   make package
+* To browse the (just installed, if enabled) HTML documentation:
+  midori file://${INSTALL_BASEDIR}/travelccm-stable/share/doc/travelccm-1.00.1/html/index.html
+* To browse the (just installed, if enabled) PDF documentation:
+  evince ${INSTALL_BASEDIR}/travelccm-stable/share/doc/travelccm-1.00.1/html/refman.pdf
 * To run the local binary version:
   ./travelccm/travelccm -b
 * To run the installed version:
   ${INSTALL_BASEDIR}/travelccm-99.99.99/bin/travelccm -b
 
-Denis Arnaud (December 2011)
+Denis Arnaud (December 2012)
 
