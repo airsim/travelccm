@@ -65,7 +65,7 @@ export LIBSUFFIX_4_CMAKE="-DLIB_SUFFIX=64"
 Then, as usual:
 * To configure the project, type something like:
   mkdir build && cd build
-  cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_BASEDIR}/travelccm-1.00.0 \
+  cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_BASEDIR}/travelccm-1.00.1 \
    -DWITH_STDAIR_PREFIX=${INSTALL_BASEDIR}/stdair-stable \
    -DCMAKE_BUILD_TYPE:STRING=Debug -DENABLE_TEST:BOOL=ON -DINSTALL_DOC:BOOL=ON \
    -DRUN_GCOV:BOOL=OFF ${LIBSUFFIX_4_CMAKE} ..
@@ -77,16 +77,16 @@ Then, as usual:
   just type:
   make install
   cd ${INSTALL_BASEDIR}
-  rm -f travelccm-stable && ln -s travelccm-1.00.0 travelccm-stable
+  rm -f travelccm-stable && ln -s travelccm-1.00.1 travelccm-stable
   cd -
 * To package the source files, type:
   make dist
 * To package the binary and the (HTML and PDF) documentation:
   make package
 * To browse the (just installed, if enabled) HTML documentation:
-  midori file://${INSTALL_BASEDIR}/travelccm-99.99.99/share/doc/travelccm-99.99.99/html/index.html
+  midori file://${INSTALL_BASEDIR}/travelccm-stable/share/doc/travelccm-1.00.1/html/index.html
 * To browse the (just installed, if enabled) PDF documentation:
-  evince ${INSTALL_BASEDIR}/travelccm-99.99.99/share/doc/travelccm-99.99.99/html/refman.pdf
+  evince ${INSTALL_BASEDIR}/travelccm-stable/share/doc/travelccm-1.00.1/html/refman.pdf
 * To run the local binary version:
   ./travelccm/travelccm -b
 * To run the installed version:
