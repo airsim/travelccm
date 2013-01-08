@@ -15,11 +15,24 @@
 #include <travelccm/bom/HardRestrictionModel.hpp>
 
 namespace TRAVELCCM {
+  
+  // ////////////////////////////////////////////////////////////////////
+  // Initialization of the static member
+  const HardRestrictionModel HardRestrictionModel::_hardRestrictionModel; 
+ 
+  // ////////////////////////////////////////////////////////////////////
+  HardRestrictionModel::HardRestrictionModel () : 
+    CustomerChoiceModel(stdair::PassengerChoiceModel::HARD_RESTRICTION) {
+  }  
+
+  // ////////////////////////////////////////////////////////////////////
+  HardRestrictionModel::~HardRestrictionModel () {
+  } 
 
   // ////////////////////////////////////////////////////////////////////
   const stdair::TravelSolutionStruct* HardRestrictionModel::
   chooseTravelSolution (stdair::TravelSolutionList_T& ioTSList,
-                        const stdair::BookingRequestStruct& iBookingRequest) {
+                        const stdair::BookingRequestStruct& iBookingRequest) const {
     stdair::TravelSolutionStruct* oChosenTS_ptr = NULL;
 
     // Retrieve the number of passengers
