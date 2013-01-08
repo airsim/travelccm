@@ -14,12 +14,25 @@
 // TravelCCM
 #include <travelccm/bom/PriceOrientedModel.hpp>
 
-namespace TRAVELCCM {
+namespace TRAVELCCM {  
+
+  // ////////////////////////////////////////////////////////////////////
+  // Initialization of the static member
+  const PriceOrientedModel PriceOrientedModel::_priceOrientedModel;  
+
+  // ////////////////////////////////////////////////////////////////////
+  PriceOrientedModel::PriceOrientedModel () : 
+    CustomerChoiceModel(stdair::PassengerChoiceModel::PRICE_ORIENTED) {
+  } 
+
+  // ////////////////////////////////////////////////////////////////////
+  PriceOrientedModel::~PriceOrientedModel () {
+  }
 
   // ////////////////////////////////////////////////////////////////////
   const stdair::TravelSolutionStruct* PriceOrientedModel::
   chooseTravelSolution (stdair::TravelSolutionList_T& ioTSList,
-                        const stdair::BookingRequestStruct& iBookingRequest) {
+                        const stdair::BookingRequestStruct& iBookingRequest) const {
     stdair::TravelSolutionStruct* oChosenTS_ptr = NULL;
 
     // Retrieve the number of passengers
