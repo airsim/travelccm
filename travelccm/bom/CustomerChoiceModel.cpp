@@ -48,10 +48,10 @@ namespace TRAVELCCM {
     if (itModel == lCustomerChoiceModelMap.end()) {  
       std::ostringstream oMessage;
       oMessage << "The passenger choice model '"
-	       << stdair::PassengerChoiceModel::getLabel(iPassengerChoiceModel)
+	       << stdair::PassengerChoiceModel::getLabel (iPassengerChoiceModel)
                << "' has not been implemented yet." << std::endl;
       STDAIR_LOG_ERROR(oMessage.str());
-      throw CustomerChoiceException(oMessage.str());
+      throw MissingCustomerChoiceModelException (oMessage.str());
     } else {
       lCustomerChoiceModel_ptr = itModel->second;
     } 

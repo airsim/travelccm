@@ -125,6 +125,79 @@ void testTravelCCMHelper (const unsigned short iTestFlag,
 
 }
 
+/**
+ * Choose a fare option among the list of travel solutions
+ */
+void testAllTravelCCMHelper (const unsigned short iTestFlag) {
+
+  // Output log File
+  std::ostringstream oStr;
+  oStr << "TravelChoiceTestSuite_" << iTestFlag << ".log";
+  const stdair::Filename_T lLogFilename (oStr.str());
+    
+  // Set the log parameters
+  std::ofstream logOutputFile;
+  // Open and clean the log outputfile
+  logOutputFile.open (lLogFilename.c_str());
+  logOutputFile.clear();
+  
+  // Initialise the service context
+  const stdair::BasLogParams lLogParams (stdair::LOG::DEBUG, logOutputFile);
+  
+  // Build the BOM tree
+  TRAVELCCM::TRAVELCCM_Service travelccmService (lLogParams);
+  travelccmService.buildSampleBom ();
+
+  // DEBUG
+  STDAIR_LOG_DEBUG ("Welcome to TravelCCM");
+
+  // Build a list of travel solutions
+  const stdair::BookingRequestStruct& lBookingRequest =
+    travelccmService.buildSampleBookingRequest();
+
+  // DEBUG
+  STDAIR_LOG_DEBUG ("Booking request: " << lBookingRequest.display());
+
+  // Build the sample BOM tree
+  stdair::TravelSolutionList_T lTSList;
+  travelccmService.buildSampleTravelSolutions (lTSList);
+
+  // DEBUG: Display the list of travel solutions
+  const std::string& lCSVDump = travelccmService.csvDisplay (lTSList);
+  STDAIR_LOG_DEBUG (lCSVDump);
+  
+  // Choose a travel solution with the hard restriction method.
+  const stdair::TravelSolutionStruct* lTS_HardRestriction_ptr =
+    travelccmService.chooseTravelSolution 
+    (lTSList, lBookingRequest, 
+     stdair::PassengerChoiceModel::HARD_RESTRICTION); 
+  
+  STDAIR_LOG_DEBUG ("Chosen travel solution with the Hard Restriction model: "
+		    + lTS_HardRestriction_ptr->describe()); 
+
+  // Choose a travel solution with the price oriented model
+  const stdair::TravelSolutionStruct* lTS_Price_Oriented_ptr =
+    travelccmService.chooseTravelSolution 
+    (lTSList, lBookingRequest, 
+     stdair::PassengerChoiceModel::PRICE_ORIENTED); 
+ 
+  STDAIR_LOG_DEBUG ("Chosen travel solution with the Price Oriented model: " 
+		    + lTS_Price_Oriented_ptr->describe());
+
+  // Choose a travel solution with the hybrid model
+  const stdair::TravelSolutionStruct* lTS_Hybrid_ptr =
+    travelccmService.chooseTravelSolution 
+    (lTSList, lBookingRequest, 
+     stdair::PassengerChoiceModel::HYBRID); 
+ 
+  STDAIR_LOG_DEBUG ("Chosen travel solution with the Hybrid model: " +
+		    lTS_Hybrid_ptr->describe());
+
+  // Close the log file
+  logOutputFile.close();
+
+}
+
 
 // /////////////// Main: Unit Test Suite //////////////
 
@@ -183,6 +256,14 @@ BOOST_AUTO_TEST_CASE (simple_hybrid_model_test) {
                         (2,
                          stdair::PassengerChoiceModel::HYBRID,
                          lExpectedPrice));
+}
+
+/**
+ * Test all models.
+ */
+BOOST_AUTO_TEST_CASE (all_models_test) {
+
+  BOOST_CHECK_NO_THROW (testAllTravelCCMHelper(3));
 }
 
 // End the test suite
