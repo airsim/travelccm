@@ -28,7 +28,21 @@ namespace TRAVELCCM {
      */
     CustomerChoiceException (const std::string& iWhat)
       : stdair::RootException (iWhat) {}
+  }; 
+
+  /**
+   * Customer choice model missing exception (if no algorithm corresponds to 
+   * the enum value).
+   */
+  class MissingCustomerChoiceModelException : public CustomerChoiceException {
+  public:
+    /**
+     * Constructor.
+     */
+    MissingCustomerChoiceModelException (const std::string& iWhat)
+      : CustomerChoiceException (iWhat) {}
   };
+
 
 
   // //////// Type definitions /////////
