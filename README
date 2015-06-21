@@ -34,7 +34,7 @@ stand-alone mode.
 Getting and installing from the Fedora/CentOS/RedHat distribution:
 ------------------------------------------------------------------
 Just use Yum:
-yum -y install trademgen-devel trademgen-doc
+yum -y install travelccm-devel travelccm-doc
 
 You can also get the RPM packages (which may work on Linux
 distributions like Suse and Mandriva) from the Fedora repository
@@ -45,7 +45,7 @@ http://fr2.rpmfind.net/linux/fedora/releases/22/Everything/)
 Building the library and test binary from Git repository:
 ----------------------------------------------------------------
 The Git repository may be cloned as following:
-$ git clone git@github.com:airsim/travelccm.git trademgengit # through SSH
+$ git clone git@github.com:airsim/travelccm.git travelccmgit # through SSH
 $ git clone https://github.com/airsim/travelccm.git # if the firewall filters SSH
 cd travelccmgit
 git checkout trunk
@@ -70,7 +70,7 @@ but names may vary according to distributions):
 
 Building the library and test binary from the tarball:
 ------------------------------------------------------
-The latest stable source tarball (trademgen*.tar.gz or .bz2) can be found here:
+The latest stable source tarball (travelccm*.tar.gz or .bz2) can be found here:
 https://sourceforge.net/projects/travel-ccm/files/
 
 
