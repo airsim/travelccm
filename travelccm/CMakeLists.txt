@@ -23,9 +23,10 @@ module_library_add_standard (".;basic;bom;factory;command;service")
 #  * If specified, the name to be given to the executable. If no such name
 #    is given as parameter, the executable is given the name of the current
 #    module.
-module_binary_add (batches)
+module_binary_add (batches travelccm)
 
 ##
 # Install the CMake import helper, so that third party projects can refer to it
 # (for libraries, header files and binaries)
 module_export_install ()
+
