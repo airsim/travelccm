@@ -7,6 +7,7 @@ include (config/project_config_embeddable.cmake)
 
 ##
 # Project info
+project (travelccm)
 set_project_names (travelccm TravelCCM)
 set_project_brief ("C++ Travel Customer Choice Model Library")
 set_project_versions (1 00 4)
