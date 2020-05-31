@@ -1,9 +1,10 @@
+C++ Travel Customer Choice Model Library
+========================================
 
-Summary:
---------
+# Summary
 TravelCCM aims at providing a clean API, and the corresponding
 C++ implementation, for choosing one item among a set of travel
-solutions, given demand-related characteristics (e.g.,
+solutions, given demand-related characteristics (_e.g._,
 Willingness-To-Pay, preferred airline, preferred cabin, etc.).
 
 The TravelCCM C++ library implements some simple Customer Choice Models
@@ -30,28 +31,26 @@ TravelCCM is the one of the components of the Travel Market Simulator
 (http://www.travel-market-simulator). However, it may be used in a
 stand-alone mode.
 
+# Installation
 
-Getting and installing from the Fedora/CentOS/RedHat distribution:
-------------------------------------------------------------------
+## On Fedora/CentOS/RedHat distribution
 Just use DNF:
 ```bash
-dnf -y install travelccm-devel travelccm-doc
+$ dnf -y install travelccm-devel travelccm-doc
 ```
 
 You can also get the RPM packages (which may work on Linux
 distributions like Suse and Mandriva) from the Fedora repository
-(_e.g._, for Fedora 30, 
-http://fr2.rpmfind.net/linux/fedora/releases/30/Everything/)
+(_e.g._, for Fedora 32, 
+https://fr2.rpmfind.net/linux/RPM/fedora/32/x86_64/)
 
 
-Building the library and test binary from Git repository:
-----------------------------------------------------------------
+## Building the library and test binary from Git repository
 The Git repository may be cloned as following:
 ```bash
 $ git clone git@github.com:airsim/travelccm.git travelccmgit # through SSH
 $ git clone https://github.com/airsim/travelccm.git # if the firewall filters SSH
-cd travelccmgit
-git checkout trunk
+$ cd travelccmgit
 ```
 
 Then, you need the following packages (Fedora/RedHat/CentOS names here, 
@@ -72,20 +71,17 @@ but names may vary according to distributions):
 * rpm-build (optional)
 
 
-Building the library and test binary from the tarball:
-------------------------------------------------------
+## Building the library and test binary from the tarball
 The latest stable source tarball (`travelccm*.tar.gz` or `.bz2`)
 can be found here:
 https://github.com/airsim/travelccm/releases
-https://github.com/airsim/travelccm/releases
-
 
 To customise the following to your environment, you can alter the path
 to the installation directory:
 ```bash
-export INSTALL_BASEDIR=/home/user/dev/deliveries
-export CCM_VER=1.00.4
-if [ -d /usr/lib64 ]; then LIBSUFFIX=64; fi
+export INSTALL_BASEDIR="${HOME}/dev/deliveries"
+export CCM_VER="1.00.5"
+if [ -d /usr/lib64 ]; then LIBSUFFIX="64"; fi
 export LIBSUFFIX_4_CMAKE="-DLIB_SUFFIX=$LIBSUFFIX"
 ```
 
