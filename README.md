@@ -86,13 +86,22 @@ export LIBSUFFIX_4_CMAKE="-DLIB_SUFFIX=$LIBSUFFIX"
 ```
 
 Then, as usual:
-* To configure the project, type something like:
+* To configure the project
+  * When dependencies are installed in standard directories (_e.g._, `/usr`):
 ```bash
   mkdir build && cd build
-  cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_BASEDIR}/travelccm-$CCM_VER \
+  cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_BASEDIR}/travelccm-${CCM_VER} \
+   -DCMAKE_BUILD_TYPE:STRING=Debug -DENABLE_TEST:BOOL=ON \
+   -DINSTALL_DOC:BOOL=ON -DRUN_GCOV:BOOL=OFF ..
+```
+  * When dependencies are installed in non-standard directories (_e.g._,
+    in the same base directory as of RMOL, that is, `${INSTALL_BASEDIR}`):
+```bash
+  mkdir build && cd build
+  cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_BASEDIR}/travelccm-${CCM_VER} \
    -DWITH_STDAIR_PREFIX=${INSTALL_BASEDIR}/stdair-stable \
-   -DCMAKE_BUILD_TYPE:STRING=Debug -DENABLE_TEST:BOOL=ON -DINSTALL_DOC:BOOL=ON \
-   -DRUN_GCOV:BOOL=OFF ${LIBSUFFIX_4_CMAKE} ..
+   -DCMAKE_BUILD_TYPE:STRING=Debug -DENABLE_TEST:BOOL=ON \
+   -DINSTALL_DOC:BOOL=ON -DRUN_GCOV:BOOL=OFF ..
 ```
 * To build the project, type:
 ```bash
