@@ -80,7 +80,7 @@ To customise the following to your environment, you can alter the path
 to the installation directory:
 ```bash
 export INSTALL_BASEDIR="${HOME}/dev/deliveries"
-export CCM_VER="1.00.13"
+export CCM_VER="1.00.14"
 ```
 
 Then, as usual:
